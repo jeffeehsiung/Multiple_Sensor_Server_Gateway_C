@@ -1,0 +1,13 @@
+#ingnore the default executable, e.g. a.out or files in the build folder
+a.out
+build/
+
+#ignore all zip files
+*.zip
+
+#ignore all intermediate files or other compiled output
+*.o
+*.so
+*.a
+
+#add any other files or filetypes you do not want to appear in your repo in this file
