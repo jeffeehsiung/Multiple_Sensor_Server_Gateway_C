@@ -1,5 +1,5 @@
 ex: main.c
-	gcc main.c -o ex
-	./ex
+	gcc main.c -o exo
+	./exo
 clean:
-	rm./ex ./*.o
+	rm ./exo ./ *.o
