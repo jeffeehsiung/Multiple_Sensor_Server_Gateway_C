@@ -2,7 +2,8 @@
 #include <ctype.h>
 #include <limits.h> 
 #include <stdint.h>
-
+#include <string.h>
+int strcmp(const char* str1, const char*str2);
 int main(){
 	char	first[MB_LEN_MAX];
 	char	second[MB_LEN_MAX];
@@ -19,16 +20,26 @@ int main(){
 		str[i]=toupper(second[i]);
 		i++;}
 	printf("your second name is: %s \n", str);
-	/* strcmp in c compares two strings char by char: 0 equal, >0 ASC|| left > right,<0 ASC|| left < right */
-	int res = strcmp(const char* second, const char* str);
+	/* strcmp in c compares two strings char by char in a case sensitive way: 0 equal, >0 ASC|| left > right,<0 ASC|| left < right */
+	int res = strcmp(second,str);
 	if(res == 0){
-		printf("second name and str are equal. \n");
+		printf("second name and str are equal in case sensitive. \n");
 	}
 	else if (res > 0){
-		printf("second name is > str. \n");
+		printf("second name is > str in ASCII(case). snd to str result: %d \n", res);
 	}
 	else{
-		printf("second name is < str. \n");
+		printf("second name is < str in ASCII(case). snd to str result: %d \n", res);
 	}
-	return 0;
+	/* strcasecmp() is similar to strcmp() but in a ccase insensitive way */
+	res = strcasecmp(second,str);
+	if(res == 0){
+		printf("second and str are equal, case insensitive. \n");
 	}
+	else if (res > 0){
+		printf("second > str in ASCII(no case). result: %d \n", res);
+	}
+	else{
+		printf("second < str in ASCII(no case). result: %d \n", res);
+	}
+	return 0;}
