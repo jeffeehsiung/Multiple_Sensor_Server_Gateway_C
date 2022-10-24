@@ -1,11 +1,10 @@
-/**
- * \author Jeffee Hsiung
- */
+#define _GNU_SOURCE
 
 #include "dplist.h"
 #include <check.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 
 typedef struct {
     int id;
@@ -19,7 +18,7 @@ int element_compare(void * x, void * y);
 void * element_copy(void * element) {
     my_element_t* copy = malloc(sizeof (my_element_t));
     char* new_name;
-    asprintf(&new_name,"%s",((my_element_t*)element)->name);
+    asprintf(&new_name,"%s",((my_element_t*)element)->name); //asprintf requires _GNU_SOURCE
     assert(copy != NULL);
     copy->id = ((my_element_t*)element)->id;
     copy->name = new_name;
@@ -51,7 +50,7 @@ START_TEST(test_ListFree)
         ck_assert_msg(list == NULL, "Failure: expected result to be NULL");
 
         // Test free NULL, use callback
-        dplist_t *list = NULL;
+        list = NULL;
         dpl_free(&list, true);
         ck_assert_msg(list == NULL, "Failure: expected result to be NULL");
 
