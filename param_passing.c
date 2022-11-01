@@ -33,6 +33,7 @@ int main(void){
 	d = date_struct(day, month, year); //pointer with content of dummys
 	printf("\ndate struct values: %d-%d-%d \n", d->day, d->month, d->year);
 	/* should not work since in the end the pointer in the function call points to dummy, a local function varaible that disappear after function call */
+	free(d);
 	return 0;
 }
 
