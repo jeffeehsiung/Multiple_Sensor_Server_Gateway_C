@@ -15,6 +15,7 @@
 #define DPLIST_NO_ERROR 0
 #define DPLIST_MEMORY_ERROR 1   //error due to mem alloc failure
 #define DPLIST_INVALID_ERROR 2  //error due to a list operation applied on a NULL list
+#define DPLIST_OUTOFBOUND_ERROR 3 //error due to index out of bound
 
 #ifdef DEBUG
 #define DEBUG_PRINTF(...) 									                                        \
@@ -116,58 +117,73 @@ dplist_t* dpl_insert_at_index(dplist_t* list, element_t element, int index) {
 
 dplist_t* dpl_remove_at_index(dplist_t* list, int index) {
     	dplist_node_t* list_node;
-	DPLIST_ERR_HANDLER(list == NULL,DPLIST_INVALID_ERROR);
-	DPLIST_ERR_HANDLER(index >= dpl_size(list), DPLIST_INVALID_ERROR);
+	if(list == NULL) return NULL; // If 'list' is is NULL, NULL is returned.
 	if(list->head != NULL){
-		list_node = dpt_get_reference_at_index(list,index);  //target node
+		list_node = dpt_get_reference_at_index(list,index);  // target node
 		assert(list_node != NULL);
-		list_node->prev->next = list_node->next;
-		list_node->next->prev = list_node->prev;
 		if(index <= 0){
 			assert(list_node->prev == NULL);
 			list_node->next->prev = NULL;
 			list->head = list_node->next;
 		}
-		list_node->element = NULL;//set data to NULL
+		else if (index >= dpl_size(list)){
+			assert(list_node->next == NULL);
+			list_node->prev->next = NULL;
+		}
+		else{
+			list_node->prev->next = list_node->next;
+			list_node->next->prev = list_node->prev;
+		}
+		list_node->element = NULL; // set data to NULL
 		free(list_node);
 	} 
 	list_node = NULL;
-	return  list;
+	return list;
 
 }
 
-int dpl_size(dplist_t*list) {
-	dplist_node_t* list_node; //ptr to node
+int dpl_size(dplist_t* list) {
+	dplist_node_t* list_node; // ptr to node
+	if(list == NULL) return -1; // If 'list' is is NULL, -1 is returned.
 	if(list->head == NULL) return 0;
 	list_node = list->head; 
 	int counter = 1; 
-	while(list_node->next != NULL) //node.next is not null
+	while(list_node->next != NULL) // node.next is not null
 	{
-	list_node = list_node->next;
-	counter++;
+		list_node = list_node->next;
+		counter++;
 	}
 	return counter;
 }
 
-dplist_node_t* dpl_get_reference_at_index(dplist_t* list, int index) {
+dplist_node_t* dpl_get_reference_at_index(dplist_t* list, int index){
     	int count;
     	dplist_node_t* dummy;
     	DPLIST_ERR_HANDLER(list == NULL, DPLIST_INVALID_ERROR);
     	if (list->head == NULL) return NULL;
-	if(index <= 0){dummy = list->head;}
     	for (dummy = list->head, count = 0; dummy->next != NULL; dummy = dummy->next, count++) {
-        	if (count >= index) return dummy;
+        		if (count >= index || dummy->next == NULL) return dummy; // added || to tackle if index >= size
     	}
     	return dummy; //dummy = head pointing to node at the index
 }
 
 element_t dpl_get_element_at_index(dplist_t *list, int index) {
-
+	dplist_node_t* ref_at_index;
+	if(list->head != NULL){
+		ref_at_index = dpl_get_reference_at_index(list,index);
+		return ref_at_index->element;
+	}
+	return 0;
 
 }
 
 int dpl_get_index_of_element(dplist_t *list, element_t element) {
-
-    //TODO: add your code here
-
+	if(list != NULL && list->head != NULL){
+		int count = 0;
+		dplist_node_t* list_node;
+		for(list_node = list->head, count = 0; list_node->next != NULL; list_node = list_node->next, count++){
+			if(list_node->element == element) return count; 
+		}
+	}
+	return -1;
 }
