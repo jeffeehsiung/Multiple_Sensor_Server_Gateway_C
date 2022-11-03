@@ -6,6 +6,7 @@
 #include <check.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 
 void setup(void) {
     // Implement pre-test setup
@@ -17,7 +18,7 @@ void teardown(void) {
 START_TEST(test_ListFree)
     {
         // Test free NULL
-        dplist_t *list = NULL;
+        dplist_t* list = NULL;
         dpl_free(&list);
         ck_assert_msg(list == NULL, "Failure: expected result to be NULL");
 
@@ -25,8 +26,14 @@ START_TEST(test_ListFree)
         list = dpl_create();
         dpl_free(&list);
         ck_assert_msg(list == NULL, "Failure: expected result to be NULL");
-        // TODO : Test free with one element
-
+        // Test free with one element
+	//dplist_node_t node;
+	//element_t = '1';
+	//node.element = 1;
+	//list = dpl_create();
+	//list->head = node;
+	//dpl_free(&list);
+	//ck_assert_msg(list == NULL, "Failure: expected result to be NULL");
         // TODO : Test free with multiple element
 
     }

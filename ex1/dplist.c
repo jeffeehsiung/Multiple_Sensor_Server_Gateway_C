@@ -15,7 +15,6 @@
 #define DPLIST_NO_ERROR 0
 #define DPLIST_MEMORY_ERROR 1   //error due to mem alloc failure
 #define DPLIST_INVALID_ERROR 2  //error due to a list operation applied on a NULL list
-#define DPLIST_OUTOFBOUND_ERROR 3 //error due to index out of bound
 
 #ifdef DEBUG
 #define DEBUG_PRINTF(...) 									                                        \
@@ -57,10 +56,11 @@ dplist_t* dpl_create() {
     	return list; 
 }
 
-void dpl_free(dplist_t** list) { // pointer of pointers to  dplist
+void dpl_free(dplist_t** list) { // pointer of pointers to  dplist)
 	if (list != NULL){ 
 		if((*list)->head != NULL){// dplist.head != null
 			(*list)->head = NULL; // set dplist.head to null
+			*list = NULL;
 		};
 		free(*list); //free the dplist block on heap
 		list = NULL; 
@@ -119,7 +119,7 @@ dplist_t* dpl_remove_at_index(dplist_t* list, int index) {
     	dplist_node_t* list_node;
 	if(list == NULL) return NULL; // If 'list' is is NULL, NULL is returned.
 	if(list->head != NULL){
-		list_node = dpt_get_reference_at_index(list,index);  // target node
+		list_node = dpl_get_reference_at_index(list,index);  // target node
 		assert(list_node != NULL);
 		if(index <= 0){
 			assert(list_node->prev == NULL);
@@ -134,7 +134,6 @@ dplist_t* dpl_remove_at_index(dplist_t* list, int index) {
 			list_node->prev->next = list_node->next;
 			list_node->next->prev = list_node->prev;
 		}
-		list_node->element = NULL; // set data to NULL
 		free(list_node);
 	} 
 	list_node = NULL;
