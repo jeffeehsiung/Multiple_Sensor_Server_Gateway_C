@@ -125,7 +125,8 @@ dplist_t* dpl_insert_at_index(dplist_t* list, element_t element, int index) {
 
 dplist_t *dpl_remove_at_index(dplist_t *list, int index) {
 
-    //TODO: add your code here
+    	dplist_node_t* list_node;
+	return  list;
 
 }
 
