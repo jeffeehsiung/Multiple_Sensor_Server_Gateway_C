@@ -39,39 +39,30 @@
  * The real definition of struct list / struct node
  */
 struct dplist_node {
-    dplist_node_t *prev, *next; //pointer to dplist_node_t
+    dplist_node_t *prev, *next; //pointer to node
     element_t element;
 };
 
 struct dplist {
-    dplist_node_t* head;// head points to dplist_node_t 
+    dplist_node_t* head;// head points to node 
     // more fields will be added later
 };
 
-/** Create and allocate memory for a new list
- * \return a pointer to a newly-allocated and initialized list.
- */
 dplist_t* dpl_create() {
-	dplist_t* list; //list points to dplist_t
-	list = malloc(sizeof(struct dplist)); // dplist_t on heap
+	dplist_t* list; //list points to dplist
+	list = malloc(sizeof(struct dplist)); // dplist block on heap
     	DPLIST_ERR_HANDLER(list == NULL, DPLIST_MEMORY_ERROR); 
     	list->head = NULL; //initialize the data to null
     	return list; 
 }
 
-/** Deletes all elements in the list
- * - Every list node of the list needs to be deleted. (free memory)
- * - The list itself also needs to be deleted. (free all memory)
- * - '*list' must be set to NULL.
- * \param list a double pointer to the list
- */
-void dpl_free(dplist_t** list) { // dplist_t** is dplist
-	if (list != NULL){
+void dpl_free(dplist_t** list) { // pointer of pointers to  dplist
+	if (list != NULL){ 
 		if((*list)->head != NULL){// dplist.head != null
 			(*list)->head = NULL; // set dplist.head to null
 		};
-		free(*list);
-		list = NULL;
+		free(*list); //free the dplist block on heap
+		list = NULL; 
 	}
 }
 
@@ -123,39 +114,55 @@ dplist_t* dpl_insert_at_index(dplist_t* list, element_t element, int index) {
     return list;
 }
 
-dplist_t *dpl_remove_at_index(dplist_t *list, int index) {
-
+dplist_t* dpl_remove_at_index(dplist_t* list, int index) {
     	dplist_node_t* list_node;
+	DPLIST_ERR_HANDLER(list == NULL,DPLIST_INVALID_ERROR);
+	DPLIST_ERR_HANDLER(index >= dpl_size(list), DPLIST_INVALID_ERROR);
+	if(list->head != NULL){
+		list_node = dpt_get_reference_at_index(list,index);  //target node
+		assert(list_node != NULL);
+		list_node->prev->next = list_node->next;
+		list_node->next->prev = list_node->prev;
+		if(index <= 0){
+			assert(list_node->prev == NULL);
+			list_node->next->prev = NULL;
+			list->head = list_node->next;
+		}
+		list_node->element = NULL;//set data to NULL
+		free(list_node);
+	} 
+	list_node = NULL;
 	return  list;
 
 }
 
 int dpl_size(dplist_t*list) {
-	dplist_node_t* list_node;
-	list_node = list->head; // list_node = head points to dplist_node
-	int counter = 1;
-	while(list_node->next != NULL)
+	dplist_node_t* list_node; //ptr to node
+	if(list->head == NULL) return 0;
+	list_node = list->head; 
+	int counter = 1; 
+	while(list_node->next != NULL) //node.next is not null
 	{
-	list_node = list_node->next; //list_node now points to the originally next node
+	list_node = list_node->next;
 	counter++;
 	}
 	return counter;
 }
 
 dplist_node_t* dpl_get_reference_at_index(dplist_t* list, int index) {
-    int count;
-    dplist_node_t* dummy;
-    DPLIST_ERR_HANDLER(list == NULL, DPLIST_INVALID_ERROR);
-    if (list->head == NULL) return NULL;
-    for (dummy = list->head, count = 0; dummy->next != NULL; dummy = dummy->next, count++) {
-        if (count >= index) return dummy;
-    }
-    return dummy; //dummy = head pointing to element at the index
+    	int count;
+    	dplist_node_t* dummy;
+    	DPLIST_ERR_HANDLER(list == NULL, DPLIST_INVALID_ERROR);
+    	if (list->head == NULL) return NULL;
+	if(index <= 0){dummy = list->head;}
+    	for (dummy = list->head, count = 0; dummy->next != NULL; dummy = dummy->next, count++) {
+        	if (count >= index) return dummy;
+    	}
+    	return dummy; //dummy = head pointing to node at the index
 }
 
 element_t dpl_get_element_at_index(dplist_t *list, int index) {
 
-    //TODO: add your code here
 
 }
 
