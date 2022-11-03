@@ -96,7 +96,7 @@ dplist_t* dpl_insert_at_index(dplist_t* list, element_t element, int index) {
         list_node->next = NULL;
         list->head = list_node;
         // pointer drawing breakpoint
-    } else if (index <= 0) { // covers case 2
+    } else if (index <= 0) { // covers case 2, insert into beginning
         list_node->prev = NULL;
         list_node->next = list->head;
         list->head->prev = list_node;
@@ -104,10 +104,10 @@ dplist_t* dpl_insert_at_index(dplist_t* list, element_t element, int index) {
         // pointer drawing breakpoint
     } else {
         ref_at_index = dpl_get_reference_at_index(list, index);
-        assert(ref_at_index != NULL);
+        assert(ref_at_index != NULL); // ref_at_index shall not be null
         // pointer drawing breakpoint
-        if (index < dpl_size(list)) { // covers case 4
-            list_node->prev = ref_at_index->prev;
+        if (index < dpl_size(list)) { // covers case 4, within the list
+            list_node->prev = ref_at_index->prev; //insert new node at index
             list_node->next = ref_at_index;
             ref_at_index->prev->next = list_node;
             ref_at_index->prev = list_node;
@@ -129,21 +129,27 @@ dplist_t *dpl_remove_at_index(dplist_t *list, int index) {
 
 }
 
-int dpl_size(dplist_t *list) {
-
-    //TODO: add your code here
-    return -1;
+int dpl_size(dplist_t*list) {
+	dplist_node_t* list_node;
+	list_node = list->head; // list_node = head points to dplist_node
+	int counter = 1;
+	while(list_node->next != NULL)
+	{
+	list_node = list_node->next; //list_node now points to the originally next node
+	counter++;
+	}
+	return counter;
 }
 
-dplist_node_t *dpl_get_reference_at_index(dplist_t *list, int index) {
+dplist_node_t* dpl_get_reference_at_index(dplist_t* list, int index) {
     int count;
-    dplist_node_t *dummy;
+    dplist_node_t* dummy;
     DPLIST_ERR_HANDLER(list == NULL, DPLIST_INVALID_ERROR);
     if (list->head == NULL) return NULL;
     for (dummy = list->head, count = 0; dummy->next != NULL; dummy = dummy->next, count++) {
         if (count >= index) return dummy;
     }
-    return dummy;
+    return dummy; //dummy = head pointing to element at the index
 }
 
 element_t dpl_get_element_at_index(dplist_t *list, int index) {
@@ -157,6 +163,3 @@ int dpl_get_index_of_element(dplist_t *list, element_t element) {
     //TODO: add your code here
 
 }
-
-
-
