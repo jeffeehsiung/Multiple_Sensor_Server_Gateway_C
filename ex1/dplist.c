@@ -39,28 +39,40 @@
  * The real definition of struct list / struct node
  */
 struct dplist_node {
-    dplist_node_t *prev, *next;
+    dplist_node_t *prev, *next; //pointer to dplist_node_t
     element_t element;
 };
 
 struct dplist {
-    dplist_node_t *head;
+    dplist_node_t* head;// head points to dplist_node_t 
     // more fields will be added later
 };
 
-dplist_t *dpl_create() {
-    dplist_t *list;
-    list = malloc(sizeof(struct dplist));
-    DPLIST_ERR_HANDLER(list == NULL, DPLIST_MEMORY_ERROR);
-    list->head = NULL;
-    // pointer drawing breakpoint
-    return list;
+/** Create and allocate memory for a new list
+ * \return a pointer to a newly-allocated and initialized list.
+ */
+dplist_t* dpl_create() {
+	dplist_t* list; //list points to dplist_t
+	list = malloc(sizeof(struct dplist)); // dplist_t on heap
+    	DPLIST_ERR_HANDLER(list == NULL, DPLIST_MEMORY_ERROR); 
+    	list->head = NULL; //initialize the data to null
+    	return list; 
 }
 
-void dpl_free(dplist_t **list) {
-
-    //TODO: add your code here
-
+/** Deletes all elements in the list
+ * - Every list node of the list needs to be deleted. (free memory)
+ * - The list itself also needs to be deleted. (free all memory)
+ * - '*list' must be set to NULL.
+ * \param list a double pointer to the list
+ */
+void dpl_free(dplist_t** list) { // dplist_t** is dplist
+	if (list != NULL){
+		if((*list)->head != NULL){// dplist.head != null
+			(*list)->head = NULL; // set dplist.head to null
+		};
+		free(*list);
+		list = NULL;
+	}
 }
 
 /* Important note: to implement any list manipulation operator (insert, append, delete, sort, ...), always be aware of the following cases:
@@ -71,13 +83,13 @@ void dpl_free(dplist_t **list) {
  * ALWAYS check that you implementation works correctly in all these cases (check this on paper with list representation drawings!)
  **/
 
-dplist_t *dpl_insert_at_index(dplist_t *list, element_t element, int index) {
+dplist_t* dpl_insert_at_index(dplist_t* list, element_t element, int index) {
     dplist_node_t *ref_at_index, *list_node;
     if (list == NULL) return NULL;
 
     list_node = malloc(sizeof(dplist_node_t));
     DPLIST_ERR_HANDLER(list_node == NULL, DPLIST_MEMORY_ERROR);
-    list_node->element = element;
+    list_node->element = element; // store the new element onto heap pointed by list_node
     // pointer drawing breakpoint
     if (list->head == NULL) { // covers case 1
         list_node->prev = NULL;
