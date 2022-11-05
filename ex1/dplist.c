@@ -127,12 +127,13 @@ dplist_t* dpl_remove_at_index(dplist_t* list, int index) {
 		assert(list_node != NULL);
 		if(index <= 0){
 			assert(list_node->prev == NULL);
-			list_node->next->prev = NULL;
-			list->head = list_node->next;
+			if(list_node->next != NULL){
+				list_node->next->prev = NULL;
+				list->head = list_node->next;}
 		}
 		else if (index >= dpl_size(list)){
 			assert(list_node->next == NULL);
-			list_node->prev->next = NULL;
+			if(list_node->prev != NULL){list_node->prev->next = NULL;}
 		}
 		else{
 			list_node->prev->next = list_node->next;
