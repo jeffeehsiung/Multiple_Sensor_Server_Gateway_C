@@ -69,8 +69,7 @@ START_TEST(test_ListInsertAtIndexListEmpty)
     // Test inserting at index -1
     dplist_t *list = dpl_create();
     dplist_t *result = dpl_insert_at_index(list, 'A', -1);
-    ck_assert_msg(dpl_size(result) == 1, "Failure: expected list to have size of 1, got a size of %d",
-                                         dpl_size(result));
+    ck_assert_msg(dpl_size(result) == 1, "Failure: expected list to have size of 1, got a size of %d",dpl_size(result));
     dpl_free(&list);
     // Test inserting at index 0, already tested in previous insert at index 0;
 

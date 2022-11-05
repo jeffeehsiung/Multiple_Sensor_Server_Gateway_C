@@ -9,11 +9,11 @@ test : dplist.c dplist_test.c
 	@echo -e '*** Compiling for UNIT TEST ***'
 	@echo -e '*******************************'
 	mkdir -p build
-	gcc dplist.c dplist_test.c -o build/dplist_test $(FLAGS)
+	gcc -ggdb dplist.c dplist_test.c -o build/dplist_test $(FLAGS)
 	@echo -e '\n*************************'
 	@echo -e '*** Running UNIT TEST ***'
 	@echo -e '*************************'
-	./build/dplist_test
+	valgrind -q --leak-check=full ./build/dplist_test
 
 .PHONY : clean check
 
