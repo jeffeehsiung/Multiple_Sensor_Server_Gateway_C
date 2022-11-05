@@ -61,16 +61,12 @@ void dpl_free(dplist_t** dbptr) { // pointer of pointers to  dplist)
                 if(*dbptr != NULL){ // *&dplist* != null
                         if((*dbptr)->head != NULL){// head = &node != null
 				for(int i = 0; i < dpl_size(*dbptr); i++){
-					printf("size of list: %d \n", dpl_size(*dbptr));
-					printf("current index: %d \n", i);
 					(*dbptr) = dpl_remove_at_index(*dbptr,i);
 				} //set every node to null
                                 (*dbptr)->head = NULL; //  set node = null
-				printf("after removal, list->head = null? %d \n", (*dbptr)->head == NULL);
                         }
-                        *dbptr = NULL; // set dplist* = null
-			printf("list = null? %d \n", *dbptr == NULL);
                 }
+		*dbptr = NULL; // set dplist* = null
                 free(*dbptr); //free the dplist* on heap
                 dbptr = NULL; 
         }
