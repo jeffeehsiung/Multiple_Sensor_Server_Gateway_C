@@ -56,14 +56,17 @@ dplist_t* dpl_create() {
     	return list; 
 }
 
-void dpl_free(dplist_t** list) { // pointer of pointers to  dplist)
-	if (list != NULL){ 
-		if((*list)->head != NULL){// dplist.head != null
-			(*list)->head = NULL; // set dplist.head to null
-			*list = NULL;
-		};
-		free(*list); //free the dplist block on heap
-		list = NULL; 
+void dpl_free(dplist_t** dbptr) { // pointer of pointers to  dplist)
+	if (dbptr != NULL){ 
+		if(*dbptr != NULL){ // *&dplist* != null
+			if((*dbptr)->head != NULL){// head = &node != null
+				(*dbptr)->head = NULL; //  set node = null
+			}
+			*dbptr = NULL; // set dplist* = null
+			free(*dbptr); //free the dplist* on heap
+		}
+		free(*dbptr); //free the dplist* on heap
+		dbptr = NULL; 
 	}
 }
 
@@ -79,7 +82,7 @@ dplist_t* dpl_insert_at_index(dplist_t* list, element_t element, int index) {
     dplist_node_t *ref_at_index, *list_node;
     if (list == NULL) return NULL;
 
-    list_node = malloc(sizeof(dplist_node_t));
+    list_node = malloc(sizeof(dplist_node_t)); //list_node needs to be freed
     DPLIST_ERR_HANDLER(list_node == NULL, DPLIST_MEMORY_ERROR);
     list_node->element = element; // store the new element onto heap pointed by list_node
     // pointer drawing breakpoint
@@ -111,6 +114,7 @@ dplist_t* dpl_insert_at_index(dplist_t* list, element_t element, int index) {
             ref_at_index->next = list_node;
             // pointer drawing breakpoint
         }
+	free(list_node);
     }
     return list;
 }
@@ -134,9 +138,9 @@ dplist_t* dpl_remove_at_index(dplist_t* list, int index) {
 			list_node->prev->next = list_node->next;
 			list_node->next->prev = list_node->prev;
 		}
-		free(list_node);
+		list_node = NULL;
+		//free(list_node);
 	} 
-	list_node = NULL;
 	return list;
 
 }

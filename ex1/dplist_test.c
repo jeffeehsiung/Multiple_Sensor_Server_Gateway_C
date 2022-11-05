@@ -20,12 +20,12 @@ START_TEST(test_ListFree)
         // Test free NULL
         dplist_t* list = NULL;
         dpl_free(&list);
-        ck_assert_msg(list == NULL, "Failure: expected result to be NULL");
+        ck_assert_msg(list == NULL, "Failure: expected free NULL result to be NULL");
 
         // Test free empty list
         list = dpl_create();
         dpl_free(&list);
-        ck_assert_msg(list == NULL, "Failure: expected result to be NULL");
+        ck_assert_msg(list == NULL, "Failure: expected free emptyList result to be NULL");
         // Test free with one element
 	//dplist_node_t node;
 	//element_t = '1';
