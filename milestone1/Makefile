@@ -15,14 +15,14 @@ test : dplist.c dplist_test.c
 	@echo -e '*************************'
 	valgrind -q --leak-check=full ./build/dplist_test
 
-.PHONY : clean check
+.PHONY : clean check zip
 
 check : $(SOURCE) $(HEADERS)
 	@echo "Running cppcheck :"
 	cppcheck --enable=all --suppress=missingIncludeSystem --error-exitcode=1 $(SOURCE) $(HEADERS)
+zip:
+	zip milestone1.zip *.c *.h
 
 clean:
 	rm -f *.o $(EXE) $(EXE)_test *~
 
-zip:
-	zip milestone1.zip *.c *.h
