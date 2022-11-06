@@ -63,7 +63,7 @@ void dpl_free(dplist_t** dbptr) { // pointer of pointers to  dplist)
 				(*dbptr)->head = NULL; //  set node = null
 			}
 			*dbptr = NULL; // set dplist* = null
-			free(*dbptr); //free the dplist* on heap
+			//free(*dbptr); //free the dplist* on heap
 		}
 		free(*dbptr); //free the dplist* on heap
 		dbptr = NULL; 
