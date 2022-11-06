@@ -11,27 +11,31 @@ typedef struct {
     char* name;
 } my_element_t;
 
-void* element_copy(void * element);
-void element_free(void ** element);
-int element_compare(void * x, void * y);
+void* element_copy(void* element); //function declaration
+void element_free(void** element);
+int element_compare(void* x, void* y);
 
-void * element_copy(void * element) {
-    my_element_t* copy = malloc(sizeof (my_element_t));
-    char* new_name;
-    asprintf(&new_name,"%s",((my_element_t*)element)->name); //asprintf requires _GNU_SOURCE
-    assert(copy != NULL);
-    copy->id = ((my_element_t*)element)->id;
-    copy->name = new_name;
-    return (void *) copy;
+void* element_copy(void* element) {
+	if(element == NULL){ return NULL; } // if element is null, no my_element_t will be on heap
+    	my_element_t* copy = malloc(sizeof (my_element_t)); // needs to be freed
+    	char* new_name;
+    	asprintf(&new_name,"%s",((my_element_t*)element)->name); //asprintf requires _GNU_SOURCE
+	//allocate a string large enough & return a pointer to it via the first argument & should be freed.
+	//char* new_name should be freed
+    	assert(copy != NULL);
+    	copy->id = ((my_element_t*)element)->id; // deep copy
+    	copy->name = new_name;
+	free(new_name); // added, should adda breakpoint here at line27
+    	return (void*) copy;
 }
 
-void element_free(void ** element) {
-    free((((my_element_t*)*element))->name);
-    free(*element);
+void element_free(void** element) {
+    free((((my_element_t*)*element))->name); //type casted, name on heap freed
+    free(*element); // free my_element on heap
     *element = NULL;
 }
 
-int element_compare(void * x, void * y) {
+int element_compare(void* x, void* y) {
     return ((((my_element_t*)x)->id < ((my_element_t*)y)->id) ? -1 : (((my_element_t*)x)->id == ((my_element_t*)y)->id) ? 0 : 1);
 }
 
@@ -64,8 +68,12 @@ START_TEST(test_ListFree)
         dpl_free(&list, true);
         ck_assert_msg(list == NULL, "Failure: expected result to be NULL");
 
-        // TODO : Test free with one element, also test if inserted elements are set to NULL
-
+        // Test free with one element, also test if inserted elements are set to NULL
+	list = dpl_create(element_copy,element_free, element_compare);
+	void* element = NULL;
+	list = dpl_insert_at_index(list,element,0,true);
+	ck_assert_msg(dpl_get_element_at_index(list,0) == NULL, "Failure: expected element to be NULL");
+	dpl_free(&list,true);
         // TODO : Test free with multiple element, also test if inserted elements are set to NULL
 
     }

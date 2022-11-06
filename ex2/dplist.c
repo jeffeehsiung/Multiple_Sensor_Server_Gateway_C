@@ -66,8 +66,8 @@ void dpl_free(dplist_t** dbptr) { // pointer of pointers to  dplist)
                                 (*dbptr)->head = NULL; //  set node = null
                         }
                 }
-		*dbptr = NULL; // set dplist* = null
                 free(*dbptr); //free the dplist* on heap
+		*dbptr = NULL; //set dplist* = null
                 dbptr = NULL; 
         }
 }
@@ -81,44 +81,46 @@ void dpl_free(dplist_t** dbptr) { // pointer of pointers to  dplist)
  **/
 
 dplist_t* dpl_insert_at_index(dplist_t* list, element_t element, int index) {
-    dplist_node_t *ref_at_index, *list_node;
-    if (list == NULL) return NULL;
+    	dplist_node_t *ref_at_index, *list_node;
+    	if (list == NULL) return NULL;
 
-    list_node = malloc(sizeof(dplist_node_t)); //list_node needs to be freed
-    DPLIST_ERR_HANDLER(list_node == NULL, DPLIST_MEMORY_ERROR);
-    list_node->element = element; // store the new element onto heap pointed by list_node
-    // pointer drawing breakpoint
-    if (list->head == NULL) { // covers case 1
-        list_node->prev = NULL;
-        list_node->next = NULL;
-        list->head = list_node;
+    	list_node = malloc(sizeof(dplist_node_t)); //list_node needs to be freed
+    	DPLIST_ERR_HANDLER(list_node == NULL, DPLIST_MEMORY_ERROR);
+    	list_node->element = element; // store the new element onto heap pointed by list_node
+    	// pointer drawing breakpoint
+    	if (list->head == NULL) { // covers case 1
+        	list_node->prev = NULL;
+        	list_node->next = NULL;
+        	list->head = list_node;
         // pointer drawing breakpoint
-    } else if (index <= 0) { // covers case 2, insert into beginning
-        list_node->prev = NULL;
-        list_node->next = list->head;
-        list->head->prev = list_node;
-        list->head = list_node;
+    	} else if (index <= 0) { // covers case 2, insert into beginning
+        	list_node->prev = NULL;
+        	list_node->next = list->head;
+        	list->head->prev = list_node;
+        	list->head = list_node;
         // pointer drawing breakpoint
-    } else {
-        ref_at_index = dpl_get_reference_at_index(list, index);
-        assert(ref_at_index != NULL); // ref_at_index shall not be null
+    	} else {
+        	ref_at_index = dpl_get_reference_at_index(list, index);
+        	assert(ref_at_index != NULL); // ref_at_index shall not be null
         // pointer drawing breakpoint
-        if (index < dpl_size(list)) { // covers case 4, within the list
-            list_node->prev = ref_at_index->prev; //insert new node at index
-            list_node->next = ref_at_index;
-            ref_at_index->prev->next = list_node;
-            ref_at_index->prev = list_node;
-            // pointer drawing breakpoint
-        } else { // covers case 3
-            assert(ref_at_index->next == NULL);
-            list_node->next = NULL;
-            list_node->prev = ref_at_index;
-            ref_at_index->next = list_node;
-            // pointer drawing breakpoint
-        }
-        free(list_node);
-    }
-    return list;
+        	if (index < dpl_size(list)) { // covers case 4, within the list
+            		list_node->prev = ref_at_index->prev; //insert new node at index
+            		list_node->next = ref_at_index;
+            		ref_at_index->prev->next = list_node;
+            		ref_at_index->prev = list_node;
+        // pointer drawing breakpoint
+        	} else { // covers case 3
+            		assert(ref_at_index->next == NULL);
+            		list_node->next = NULL;
+           	 	list_node->prev = ref_at_index;
+            	ref_at_index->next = list_node;
+        // pointer drawing breakpoint
+        	}
+    	}
+	list_node = NULL;
+	free(list_node);
+
+    	return list;
 }
 
 dplist_t* dpl_remove_at_index(dplist_t* list, int index) {

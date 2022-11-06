@@ -27,7 +27,7 @@ typedef struct dplist_node dplist_node_t;
  * \param element_compare callback function to compare two element elements; returns -1 if x<y, 0 if x==y, or 1 if x>y
  * \return a pointer to a newly-allocated and initialized list.
  */
-dplist_t *dpl_create(
+dplist_t* dpl_create(
         void* (*element_copy)(void *element),
         void (*element_free)(void **element),
         int (*element_compare)(void *x, void *y)
@@ -40,14 +40,14 @@ dplist_t *dpl_create(
  * \param list a double pointer to the list
  * \param free_element if true call element_free() on the element of the list node to remove
  */
-void dpl_free(dplist_t **list, bool free_element);
+void dpl_free(dplist_t** list, bool free_element);
 
 /** Returns the number of elements in the list.
  * - If 'list' is is NULL, -1 is returned.
  * \param list a pointer to the list
  * \return the size of the list
  */
-int dpl_size(dplist_t *list);
+int dpl_size(dplist_t* list);
 
 /** Inserts a new list node containing an 'element' in the list at position 'index'
  * - the first list node has index 0.
@@ -60,7 +60,7 @@ int dpl_size(dplist_t *list);
  * \param insert_copy if true use element_copy() to make a copy of 'element' and use the copy in the new list node, otherwise the given element pointer is added to the list
  * \return a pointer to the list or NULL
  */
-dplist_t *dpl_insert_at_index(dplist_t *list, void *element, int index, bool insert_copy);
+dplist_t* dpl_insert_at_index(dplist_t* list, void* element, int index, bool insert_copy);
 
 /** Removes the list node at index 'index' from the list.
  * - The list node itself should always be freed.
@@ -73,7 +73,7 @@ dplist_t *dpl_insert_at_index(dplist_t *list, void *element, int index, bool ins
  * \param free_element if true, call element_free() on the element of the list node to remove
  * \return a pointer to the list or NULL
  */
-dplist_t *dpl_remove_at_index(dplist_t *list, int index, bool free_element);
+dplist_t* dpl_remove_at_index(dplist_t* list, int index, bool free_element);
 
 /** Returns a reference to the list node with index 'index' in the list.
  * - If 'index' is 0 or negative, a reference to the first list node is returned.
@@ -84,7 +84,7 @@ dplist_t *dpl_remove_at_index(dplist_t *list, int index, bool free_element);
  * \param index the position of the node for which the reference is returned
  * \return a pointer to the list node at the given index or NULL
  */
-dplist_node_t *dpl_get_reference_at_index(dplist_t *list, int index);
+dplist_node_t* dpl_get_reference_at_index(dplist_t* list, int index);
 
 /** Returns the list element contained in the list node with index 'index' in the list.
  * - return is not returning a copy of the element with index 'index', i.e. 'element_copy()' is not used.
@@ -96,7 +96,7 @@ dplist_node_t *dpl_get_reference_at_index(dplist_t *list, int index);
  * \param index the position of the node for which the element is returned
  * \return a pointer to the element at the given index or NULL
  */
-void *dpl_get_element_at_index(dplist_t *list, int index);
+void* dpl_get_element_at_index(dplist_t* list, int index);
 
 /** Returns an index to the first list node in the list containing 'element'.
  * - the first list node has index 0.
@@ -107,7 +107,7 @@ void *dpl_get_element_at_index(dplist_t *list, int index);
  * \param element the element to look for
  * \return the index of the element that matches 'element'
  */
-int dpl_get_index_of_element(dplist_t *list, void *element);
+int dpl_get_index_of_element(dplist_t* list, void* element);
 
 /** Returns the element contained in the list node with reference 'reference' in the list.
  * - If the list is empty, NULL is returned.
@@ -118,7 +118,7 @@ int dpl_get_index_of_element(dplist_t *list, void *element);
  * \param reference a pointer to a certain node in the list
  * \return the element contained in the list node or NULL
  */
-void *dpl_get_element_at_reference(dplist_t *list, dplist_node_t *reference);
+void* dpl_get_element_at_reference(dplist_t* list, dplist_node_t* reference);
 
 #endif  // _DPLIST_H_
 
