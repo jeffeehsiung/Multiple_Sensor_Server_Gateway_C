@@ -74,8 +74,15 @@ START_TEST(test_ListFree)
 	list = dpl_insert_at_index(list,element,0,true);
 	ck_assert_msg(dpl_get_element_at_index(list,0) == NULL, "Failure: expected element to be NULL");
 	dpl_free(&list,true);
-        // TODO : Test free with multiple element, also test if inserted elements are set to NULL
-
+        // Test free with multiple element, also test if inserted elements are set to NULL
+	list = dpl_create(element_copy,element_free, element_compare);
+	void* element1 = NULL;
+	void* element2 = NULL;
+	list = dpl_insert_at_index(list,element1,0,true);
+	list = dpl_insert_at_index(list,element2,1,false);
+	ck_assert_msg(dpl_get_element_at_index(list,0) == NULL, "Failure: expected element[0] to be NULL");
+	ck_assert_msg(dpl_get_element_at_index(list,1) == NULL, "Failure: expected element[1] to be NULL");
+	dpl_free(&list,true);
     }
 END_TEST
 

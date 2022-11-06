@@ -77,6 +77,7 @@ void dpl_free(dplist_t** dbptr, bool free_element) {
                         }
 		}
 		free(*dbptr);
+		printf("list = dplist* is free as a bird now. \n");
 		*dbptr = NULL;
 		dbptr = NULL; 
         }
