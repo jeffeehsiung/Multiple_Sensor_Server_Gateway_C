@@ -22,4 +22,10 @@ typedef struct {
 } sensor_data_t;
 
 
+typedef struct __attribute__((__packed__)){
+	sensor_id_t id;		/** < sensor id*/
+	sensor_value_t value;	/** < sensor value */
+	sensor_ts_t ts;		/** < sensor timestamp*/
+}sensor_data_t;
+
 #endif /* _CONFIG_H_ */
