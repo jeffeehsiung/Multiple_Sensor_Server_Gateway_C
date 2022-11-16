@@ -87,7 +87,9 @@ void datamgr_parse_sensor_files(FILE *fp_sensor_map, FILE *fp_sensor_data){
  * This method should be called to clean up the datamgr, and to free all used memory. 
  * After this, any call to datamgr_get_room_id, datamgr_get_avg, datamgr_get_last_modified or datamgr_get_total_sensors will not return a valid result
  */
-void datamgr_free();
+void datamgr_free(){
+	dpl_free(&list,true);
+};
 
 /**
  * Gets the room ID for a certain sensor ID
@@ -109,7 +111,9 @@ sensor_value_t datamgr_get_avg(sensor_id_t sensor_id);
 
 time_t datamgr_get_last_modified(sensor_id_t sensor_id);
 
-int datamgr_get_total_sensors();
+int datamgr_get_total_sensors(){
+        return dpl_size(list);
+};
 
 
 
