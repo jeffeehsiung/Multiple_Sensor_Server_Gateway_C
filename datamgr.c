@@ -6,16 +6,16 @@
 #include <time.h>
 
 
-#define NO_ERROR "a"
-#define MEMORY_ERROR "b" // error  mem alloc failure
-#define INVALID_ERROR "c" //error sensor not found
+#define NO_ERROR 0
+#define MEMORY_ERROR 1 // error  mem alloc failure
+#define INVALID_ERROR 2 //error list or sensor null
 
 dplist_t* list;
 void* element_copy(void*);
 void element_free(void**);
 int element_compare(void*,void*);
 
-/* sensor node */
+/* sensor element */
 typedef struct sensor {
         uint16_t sensor_id;
         uint16_t room_id;
@@ -24,92 +24,121 @@ typedef struct sensor {
         double temperatures[RUN_AVG_LENGTH];
 }sensor_t;
 
-
-/**
- *  This method holds the core functionality of your datamgr. It takes in 2 file pointers to the sensor files and parses them. 
- *  When the method finishes all data should be in the internal pointer list and all log messages should be printed to stderr.
- *  \param fp_sensor_map file pointer to the map file
- *  \param fp_sensor_data file pointer to the binary data file
- */
-
-void datamgr_parse_sensor_files(FILE *fp_sensor_map, FILE *fp_sensor_data){
+/* fscanf to read in full lines, fread to read binary data, fwrtie to write binary data
+open, system call. (filename, flags) to read,write,create,append,trucate. returns and int as fileid
+close is needed if we've open
+fopen is faster than open since it uses buffer
+fscan returns 0 if scan is unsuccessful 
+fread returns the size num per defined size bytes*/
+void datamgr_parse_sensor_files(FILE* fp_sensor_map, FILE* fp_sensor_data){
 	printf("length: %d min :%lf max: %lf\n",RUN_AVG_LENGTH,SET_MIN_TEMP,SET_MAX_TEMP);
-        list = dpl_create(element_copy,element_free,element_compare);
-        uint16_t roombuffer;
-        uint16_t sensorbuffer;
-        while(fscanf(fp_sensor_map, "%hd %hd", &roombuffer, &sensorbuffer)>0) { //hd means short integer of 2 bytes
-                sensor_t * sensor;
-                sensor = malloc(sizeof(sensor_t));
-                ERROR_HANDLER(sensor==NULL,MEMORY_ERROR);
-                sensor->room_id=roombuffer;
-                sensor->sensor_id=sensorbuffer;
-                for(int i=0; i<RUN_AVG_LENGTH; i++) {
-                        sensor->temperatures[i]=0;
-                }                          //init values at 0
-                dpl_insert_at_index(list,sensor,100,false); //achteraan invoegen
-        }
-        double temperaturebuffer;
-        time_t timebuffer;
-        int index;
-        while(fread(&sensorbuffer,sizeof(sensorbuffer),1,fp_sensor_data)>0)        //returns number of read files
-        {
-                sensor_t * sensor;
-                index = dpl_get_index_of_element( list, (void *)&sensorbuffer);
-                sensor = (sensor_t *)dpl_get_element_at_index(list,index);
-                fread(&temperaturebuffer,sizeof(temperaturebuffer),1,fp_sensor_data);
-                double running_avgdummy=0;
-                for(int i=RUN_AVG_LENGTH-1; i>0; i--)
-                {
-                        sensor->temperatures[i]=sensor->temperatures[i-1];
-                        running_avgdummy += sensor->temperatures[i];
+        list = dpl_create(element_copy,element_free,element_compare); //to hold all sensor nodes
+        // read  from file
+	fp_sensor_map = fopen("read_sensor.map","r");
+	if(!fp_sensor_map){ printf("could not open file \a\n"); exit(101);}
+	/* read map, text file*/
+	uint16_t roomidBuff;
+        uint16_t sensoridBuff;
+	// while loop with fscanf to iterate. fileptr, value expected, place to store. 
+	// when we get 0 from fscanf, we are done reading information of the file
+	int count = 0;
+        while(fscanf(fp_sensor_map, "%hd %hd", &roomidBuff, &sensoridBuff)>0) {
+                sensor_t* sensor = malloc(sizeof(sensor_t)); //heap, to be freed
+		ERROR_HANDLER(sensor == NULL, MEMORY_ERROR)
+		sensor->room_id = roomidBuff; 
+                sensor->sensor_id = sensoridBuff;
+		count++;
+		// each sensor constains an array of temp
+                for(int i=0; i<RUN_AVG_LENGTH; i++) { 
+                        sensor->temperatures[i] = 0;
                 }
-                sensor->temperatures[0]=temperaturebuffer;
-                running_avgdummy +=temperaturebuffer;
-                sensor->running_avg=running_avgdummy/RUN_AVG_LENGTH;
-                fread(&timebuffer,sizeof(timebuffer),1,fp_sensor_data);
-                sensor->last_modified = timebuffer;
-                if(sensor->temperatures[RUN_AVG_LENGTH-1] != 0) //checken of temperaturen array volledig vol is
+		// for each sensor node we insert into the newly created list and no deep copy to keep on pointing to the heap addr
+                dpl_insert_at_index(list, sensor, count, false); 
+        }
+	/* read sensor data from binary file and configure it with the sensor node in list*/
+        double temperatureBuff;
+        time_t timeBuff;
+        int index;
+	// while loop with fread with reading size 1*sensoridBuff and store it in sensoridBuff 
+        while(fread(&sensoridBuff, sizeof(sensoridBuffer), 1, fp_sensor_data)>0){
+		sensor_t* sensor;
+		// get index per sesnor id
+                index = dpl_get_index_of_element(list, (void*) &sensoridBuff);
+		// get the sensor element
+                sensor = (sensor_t*) dpl_get_element_at_index(list,index);
+		// load the temp array val from sensor & cal avg
+                fread(&temperaturebuffer, sizeof(temperaturebuffer), 1, fp_sensor_data);
+                double sum = 0;
+		// push out the earilerst temp, sum the history temp, load new temp, compute avg
+                for(int i = RUN_AVG_LENGTH-1; i>0; i--)
                 {
-                        if(sensor->running_avg<SET_MIN_TEMP)
-                        {
-                                fprintf( stderr,"It's too cold in room %hu for sensor %hu with a running average of %lf on %ld\n",(sensor->room_id),sensorbuffer,sensor->running_avg,timebuffer );
+                        sensor->temperatures[i] = sensor->temperatures[i-1];
+                        sum += sensor->temperatures[i];
+                }
+                sensor->temperatures[0] = temperatureBuff;
+                sum += temperaturebuffer;
+                sensor->running_avg = sum/RUN_AVG_LENGTH;
+		// load timestamp
+                fread(&timebuffer, sizeof(timebuffer), 1, fp_sensor_data);
+                sensor->last_modified = timebuffer;
+		// avg temp abnormal checking
+                if(sensor->running_avg != 0 && sensor->running_avg != NULL){
+                        if(sensor->running_avg < SET_MIN_TEMP){
+				fprintf( stderr,"avg temp < min. room %hu sensor %hu avg %lf on %ld\n",(sensor->room_id),(sensor->sensor_id), sensor->running_avg, sesnor->last_modified);
                         }
-                        else if(sensor->running_avg > SET_MAX_TEMP)
-                        {
-                                fprintf( stderr, "It's too warm in room %hu for sensor %hu with a running average of %lf on %ld\n",(sensor->room_id),sensorbuffer,sensor->running_avg,timebuffer);
+                        else if(sensor->running_avg > SET_MAX_TEMP){
+                                fprintf( stderr, "avg temp > max. room %hu sensor %hu avg %lf on %ld\n",(sensor->room_id),(sensor->sensor_id),(sensor->running_av)g,(sensor->last_modified));
                         }
-                }list = dpl_create(element_copy,element_free,element_compare);
-        uint16_t roombuffer;
-        uint16_t sensorbuffer;
+                }
+		printf("list containing: %d sensors", dpl_size(list));
 };
 
-/**
- * This method should be called to clean up the datamgr, and to free all used memory. 
- * After this, any call to datamgr_get_room_id, datamgr_get_avg, datamgr_get_last_modified or datamgr_get_total_sensors will not return a valid result
- */
 void datamgr_free(){
 	dpl_free(&list,true);
 };
 
-/**
- * Gets the room ID for a certain sensor ID
- * Use ERROR_HANDLER() if sensor_id is invalid
- * \param sensor_id the sensor id to look for
- * \return the corresponding room id
- */
-uint16_t datamgr_get_room_id(sensor_id_t sensor_id);
+sensor_t* datamgr_get_sensor_per_sensorid(sensor_id_t sensor_id){
+        if(list != NULL){ // list has sensor data
+		sensor_t* sensor = NULL;
+                for (int i = 0; i < dpl_size(list); i++){
+                        if(dpl_get_reference_at_index(list,i)->sensor_id == sensor_id){
+                                sensor = dpl_get_reference_at_index(list,i);
+                                return sensor
+                        }
+                }
+                ERROR_HANDLER(sensor == NULL,INVALID_ERROR);
+        }
+        ERROR_HANDLER(list == NULL, INVALID_ERROR);
+}
 
+uint16_t datamgr_get_room_id(sensor_id_t sensor_id){
+	sensor_t* sensor = datamgr_get_sensor_per_sensorid(sensor_id);
+	if(sensor != NULL){
+		sensor->room_id = room_id;
+		return room_id;
+	}
+}
 
-/**
- * Gets the running AVG of a certain senor ID (if less then RUN_AVG_LENGTH measurements are recorded the avg is 0)
- * Use ERROR_HANDLER() if sensor_id is invalid
- * \param sensor_id the sensor id to look for
- * \return the running AVG of the given sensor
- */
 sensor_value_t datamgr_get_avg(sensor_id_t sensor_id);
+	sensor_t* sensor = datamgr_get_sensor_per_sensorid(sensor_id);
+	sensor_value_t avg = 0;
+	if(sensor != NULL){
+		if(sensor->temperatures[RUN_AVG_LENGTH-1] != NULL || sensor->temperatures[RUN_AVG_LENGTH-1] != 0){
+		avg = sensor->running_avg;
+	}
+	return avg;
+}
 
-
-time_t datamgr_get_last_modified(sensor_id_t sensor_id);
+time_t datamgr_get_last_modified(sensor_id_t sensor_id){
+	sensor_t* sensor = datamgr_get_sensor_per_sensorid(sensor_id);
+	time_t time = NULL;
+	if(sensor != NULL){
+		time = sensor->last_modified;
+		return time_t; 
+	}
+	if(time == NULL){printf("last time modification is 0");}
+	return time_t;
+}
 
 int datamgr_get_total_sensors(){
         return dpl_size(list);
