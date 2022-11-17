@@ -1,10 +1,14 @@
-all: 
-	mkdir -p build
-	gcc -g -Wall -Werror -D SET_MIN_TEMP=15 -D SET_MAX_TEMP=25 main.c datamgr.c datamgr.h lib/dplist.c lib/dplist.h -o build/datamgr $(FLAGS)
+all: main file_creator
 
-file_creator: 
-	gcc -g -Wall -Werror -DDEBUG file_creator.c -o file_creator
+main: main.c datamgr.c lib/dplist.c
+	mkdir -p build
+	gcc -Wall -Werror -DSET_MAX_TEMP=25 -DSET_MIN_TEMP=5 -o build/datamgr main.c datamgr.c lib/dplist.c
+	./build/datamgr
+
+file_creator: file_creator.c
+	mkdir -p build
+	gcc -Wall -Werror -DDEBUG -o build/file_creator file_creator.c
+	./build/file_creator
 
 clean:
-	rm build/*
-
+	rm -r build
