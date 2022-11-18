@@ -10,7 +10,5 @@ file_creator: file_creator.c
 	./build/file_creator
 
 clean:
-	rm -r build/*
-
-zip:
-	zip milestone2.zip *.c *.h
+	rm -f *.o
+	rm -fr build/
