@@ -73,7 +73,7 @@ void dpl_free(dplist_t** dbptr, bool free_element) {
                                 for(int i = 0; i < dpl_size(*dbptr); i++){
                                         (*dbptr) = dpl_remove_at_index(*dbptr,i,free_element);
                                 } //set every node to null
-                                (*dbptr)->head = NULL; //  break arrow between head to node
+				(*dbptr)->head = NULL; //  break arrow between head to node
                         }
 		}
 		free(*dbptr);
@@ -84,7 +84,8 @@ void dpl_free(dplist_t** dbptr, bool free_element) {
 }
 
 dplist_t* dpl_insert_at_index(dplist_t* list, void* element, int index, bool insert_copy) {
-	dplist_node_t *ref_at_index, *list_node;
+	dplist_node_t* ref_at_index;
+	dplist_node_t* list_node;
     	if(list == NULL) return NULL;
     	list_node = malloc(sizeof(dplist_node_t)); //list_node needs to be freed
     	DPLIST_ERR_HANDLER(list_node == NULL, DPLIST_MEMORY_ERROR);
@@ -123,9 +124,9 @@ dplist_t* dpl_insert_at_index(dplist_t* list, void* element, int index, bool ins
         // pointer drawing breakpoint
         	}
     	}
-	free(list_node->element);
-	list_node = NULL;
-	free(list_node);
+	// free(list_node->element);
+	// free(list_node);
+	// list_node = NULL;
     return list;
 }
 
@@ -156,9 +157,9 @@ dplist_t* dpl_remove_at_index(dplist_t* list, int index, bool free_element) {
 				if(list_node->element == NULL){ free(list_node->element); }else{
 				list->element_free(&(list_node->element));} //list_node->element = void*, &(void*) = void**
 			}
-                	list_node = NULL;
 		}
-                //free(list_node), list_node is not on heap;
+                //free(list_node);
+		list_node = NULL;
         } 
         return list;
 }

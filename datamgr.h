@@ -21,6 +21,15 @@
 #error SET_MIN_TEMP not set
 #endif
 
+/* sensor element */
+typedef struct sensor {
+        uint16_t sensor_id;
+        uint16_t room_id;
+        double running_avg; // computed by datamgr
+        time_t last_modified;
+        double temperatures[RUN_AVG_LENGTH];
+}sensor_t;
+
 /*
  * Use ERROR_HANDLER() for handling memory allocation problems, invalid sensor IDs, non-existing files, etc.
  */
@@ -44,6 +53,9 @@ void datamgr_parse_sensor_files(FILE *fp_sensor_map, FILE *fp_sensor_data);
  * After this, any call to datamgr_get_room_id, datamgr_get_avg, datamgr_get_last_modified or datamgr_get_total_sensors will not return a valid result
  */
 void datamgr_free();
+
+/** Gets the sensor element per sensor_id*/
+sensor_t* datamgr_get_sensor_per_sensorid(sensor_id_t sensor_id);
 
 /**
  * Gets the room ID for a certain sensor ID
@@ -75,4 +87,8 @@ time_t datamgr_get_last_modified(sensor_id_t sensor_id);
  */
 int datamgr_get_total_sensors();
 
+/**element wise operations*/
+void* element_copy(void* element);
+void element_free(void** element);
+int element_compare(void* x, void* y);
 #endif  //DATAMGR_H_
