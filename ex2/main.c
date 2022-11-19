@@ -29,7 +29,7 @@ int main(){
 	int fd[2]; // two ends of a file description for read and write
 
 	/* create the pipe */
-	
+
 	/* pipe() creates a pipe, a unidirectional data channel that can be
 	 * used for interprocess communication. The array pipefd is used to
 	 * return two file descriptors, fd, referring to the ends of the pipe.
