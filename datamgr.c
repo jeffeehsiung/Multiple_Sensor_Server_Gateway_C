@@ -19,7 +19,7 @@ int element_compare(void*,void*);
 open, system call. (filename, flags) to read,write,create,append,trucate. returns and int as fileid
 close is needed if we've open
 fopen is faster than open since it uses buffer
-fscan returns 0 if scan is unsuccessful 
+fscan returns 0 if scan is unsuccessful
 fread returns the size num per defined size bytes*/
 void datamgr_parse_sensor_files(FILE* fp_sensor_map, FILE* fp_sensor_data){
 	printf("length: %d min :%d max: %d\n",RUN_AVG_LENGTH,SET_MIN_TEMP,SET_MAX_TEMP);
@@ -27,27 +27,28 @@ void datamgr_parse_sensor_files(FILE* fp_sensor_map, FILE* fp_sensor_data){
 	/* read map, text file*/
 	uint16_t roomidBuff;
         uint16_t sensoridBuff;
-	// while loop with fscanf to iterate. fileptr, value expected, place to store. 
+	// while loop with fscanf to iterate. fileptr, value expected, place to store.
 	// when we get 0 from fscanf, we are done reading information of the file
 	int count = 0;
         while(fscanf(fp_sensor_map, "%hd %hd", &roomidBuff, &sensoridBuff)>0){
                 sensor_t* sensor = malloc(sizeof(sensor_t)); //heap, to be freed
 		ERROR_HANDLER(sensor == NULL, MEMORY_ERROR);
-		sensor->room_id = roomidBuff; 
+		sensor->room_id = roomidBuff;
                 sensor->sensor_id = sensoridBuff;
 		count++;
 		// each sensor constains an array of temp
-                for(int i=0; i<RUN_AVG_LENGTH; i++){ 
+                for(int i=0; i<RUN_AVG_LENGTH; i++){
                         sensor->temperatures[i] = 0;
                 }
 		// for each sensor node we insert into the newly created list and no deep copy to keep on pointing to the heap addr
-                dpl_insert_at_index(list, sensor, count, false); 
+                dpl_insert_at_index(list, sensor, count, false);
         }
 	/* read sensor data from binary file and configure it with the sensor node in list*/
         double temperatureBuff;
         time_t timeBuff;
         int index;
-	// while loop with fread with reading size 1*sensoridBuff and store it in sensoridBuff 
+
+	// while loop with fread with reading size 1*sensoridBuff and store it in sensoridBuff
         while(fread(&sensoridBuff, sizeof(sensoridBuff), 1, fp_sensor_data)>0){
 		sensor_t* sensor;
 		// get index per sesnor id
@@ -124,7 +125,7 @@ time_t datamgr_get_last_modified(sensor_id_t sensor_id){
 	time_t time = 0;
 	if(sensor != NULL){
 		time = sensor->last_modified;
-		return time; 
+		return time;
 	}
 	if(time == 0){printf("last time modification is 0");}
 	return time;
@@ -150,7 +151,8 @@ void* element_copy(void* element) {
 }
 
 void element_free(void** element) {
-	free((((sensor_t*)*element))); //type casted, free the sensor_t* on heap
+	sensor_t* sensor = (sensor_t*)*element;
+	free(sensor); //type casted, free the sensor_t* on heap
 	*element = NULL;
 }
 
