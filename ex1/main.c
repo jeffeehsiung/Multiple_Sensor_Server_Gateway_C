@@ -1,27 +1,12 @@
 #include <stdio.h>
-#include <aio.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <sys/wait.h>
+#include <stdio.h>
+#include <assert.h>
+#include <time.h>
+#include "config.h"
+#include "sensor_db.h"
 
 int main()
 {
-    	printf("Hello World!\n\n");
-    	pid_t pid;
-    	int pcfd[2];
-
-    	pid = fork();
-    	if (pid < 0){
-        	printf("I am the walrus. Fork failed.");
-        	return -1;
-    	}
-    	if (pid > 0){
-        	printf("I am the parent!\n\n");
-        	wait(NULL);
-    	}
-    	else{
-        	printf("\tI am the child!\n\n");
-    	}
 	printf("Hello World\n");
 
 	FILE* map = fopen("room_sensor.map", "r");
@@ -30,9 +15,11 @@ int main()
     	if(map == NULL) return -1;
     	if(data == NULL) return -1;
 
-    	datamgr_parse_sensor_files(map, data);
-
-    	datamgr_free();
+    	FILE* csv = open_db("sensordata.csv", true);
+    	insert_sensor(csv, 1, 20, 10);
+	int insertedrows = storemgr_parse_sensordata_in_csv(data,csv);
+	printf("total rows inserted: %d \n", insertedrows);
+	close_db(csv);
 
     	fclose(map);
     	fclose(data);

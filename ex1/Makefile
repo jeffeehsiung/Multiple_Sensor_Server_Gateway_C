@@ -1,8 +1,8 @@
 FLAGS = -std=c11 -lm $(shell pkg-config --cflags --libs check)
-all: main.c datamgr.c lib/dplist.c
+all: sensor_db.c sensor_db.h config.h main.c
 	mkdir -p build
-	gcc -g -Wall -Werror -DSET_MAX_TEMP=25 -DSET_MIN_TEMP=5 main.c datamgr.c lib/dplist.c -o build/datamgr $(FLAGS)
-	./build/datamgr
+	gcc -g -Wall -Werror main.c sensor_db.c  -o build/sensor_db $(FLAGS)
+	./build/sensor_db
 
 file_creator: file_creator.c
 	mkdir -p build
