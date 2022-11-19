@@ -12,7 +12,7 @@
  * */
 #define DPLIST_NO_ERROR 0
 #define DPLIST_MEMORY_ERROR 1 // error due to mem alloc failure
-#define DPLIST_INVALID_ERROR 2 //error due to a list operation applied on a NULL list 
+#define DPLIST_INVALID_ERROR 2 //error due to a list operation applied on a NULL list
 
 #ifdef DEBUG
 #define DEBUG_PRINTF(...) 									                                        \
@@ -60,7 +60,7 @@ dplist_t* dpl_create(// callback functions
     	list = malloc(sizeof(struct dplist)); //on heap, shall be freed later by ptrofptr
     	DPLIST_ERR_HANDLER(list == NULL, DPLIST_MEMORY_ERROR);
     	list->head = NULL;
-    	list->element_copy = element_copy; 
+    	list->element_copy = element_copy;
     	list->element_free = element_free;
     	list->element_compare = element_compare;
     	return list;
@@ -70,7 +70,9 @@ void dpl_free(dplist_t** dbptr, bool free_element) {
 	if(dbptr != NULL){
 		if(*dbptr != NULL){ // *dptr = *&list = &dplist(on heap) != null
 			if((*dbptr)->head != NULL){// head = &node != null
-                                for(int i = 0; i < dpl_size(*dbptr); i++){
+				int size = dpl_size(*dbptr);
+                                for(int i = 0; i < size; i++){
+					printf("sizeof list before remove: %d \n", dpl_size(*dbptr));
                                         (*dbptr) = dpl_remove_at_index(*dbptr,i,free_element);
                                 } //set every node to null
 				(*dbptr)->head = NULL; //  break arrow between head to node
@@ -79,7 +81,7 @@ void dpl_free(dplist_t** dbptr, bool free_element) {
 		free(*dbptr);
 		printf("list = dplist* is free as a bird now. \n");
 		*dbptr = NULL;
-		dbptr = NULL; 
+		dbptr = NULL;
         }
 }
 
@@ -88,11 +90,13 @@ dplist_t* dpl_insert_at_index(dplist_t* list, void* element, int index, bool ins
 	dplist_node_t* list_node;
     	if(list == NULL) return NULL;
     	list_node = malloc(sizeof(dplist_node_t)); //list_node needs to be freed
-    	DPLIST_ERR_HANDLER(list_node == NULL, DPLIST_MEMORY_ERROR);
+    	printf("addr of heap list_node: %p \n", &(*list_node));
+	DPLIST_ERR_HANDLER(list_node == NULL, DPLIST_MEMORY_ERROR);
     	if(insert_copy){
 		list_node->element = list->element_copy(element);
+		free(element);
 	}else{
-		list_node->element = element; 
+		list_node->element = element;
 	} // on heap: list_node, my_element_t* copy = list_node->element
     	// pointer drawing breakpoint
     	if (list->head == NULL) { // covers case 1, empty, free bird
@@ -124,9 +128,8 @@ dplist_t* dpl_insert_at_index(dplist_t* list, void* element, int index, bool ins
         // pointer drawing breakpoint
         	}
     	}
-	// free(list_node->element);
-	// free(list_node);
-	// list_node = NULL;
+	//free(list_node->element);
+	//free(list_node);
     return list;
 }
 
@@ -153,14 +156,15 @@ dplist_t* dpl_remove_at_index(dplist_t* list, int index, bool free_element) {
                         	list_node->prev->next = list_node->next;
                         	list_node->next->prev = list_node->prev;
                 	}
-                	if(free_element){ 
-				if(list_node->element == NULL){ free(list_node->element); }else{
-				list->element_free(&(list_node->element));} //list_node->element = void*, &(void*) = void**
+                	if(free_element){
+				if(list_node->element == NULL){ free(list_node->element); }
+				else{list->element_free(&(list_node->element));}
+				//list_node->element = void*, &(void*) = void**
 			}
 		}
-                //free(list_node);
-		list_node = NULL;
-        } 
+		printf("addr of freed heap list_node: %p \n", &(*list_node));
+                free(list_node);
+        }
         return list;
 }
 
@@ -168,8 +172,8 @@ int dpl_size(dplist_t* list) {
         dplist_node_t* list_node; // ptr to node
         if(list == NULL) return -1; // If 'list' is is NULL, -1 is returned.
         if(list->head == NULL) return 0;
-        list_node = list->head; 
-        int counter = 1; 
+        list_node = list->head;
+        int counter = 1;
         while(list_node->next != NULL) // node.next is not null
         {
                 list_node = list_node->next;
@@ -206,6 +210,7 @@ dplist_node_t* dpl_get_reference_at_index(dplist_t* list, int index) {
         dplist_node_t* dummy;
         if(list == NULL || list->head == NULL) return NULL;
         dummy = list->head; //dummy = head = node
+	if(dummy->next == NULL){return dummy;}
         for (count = 0; dummy->next != NULL; count++) {
                 if (count >= index || dummy->next == NULL) {
                         return dummy;
