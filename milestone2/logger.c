@@ -5,7 +5,7 @@
 #include <sys/wait.h>
 #include <string.h>
 #include <ctype.h>
-
+#include "/home/jeffee/chiehfei.hsiung/ex1/sensor_db.h"
 
 #define BUFFER_SIZE     25
 #define READ_END        0
