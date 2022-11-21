@@ -40,7 +40,9 @@ void writer_open_and_write_fifo(char* myfifo, char* message){
                 fdw = open(myfifo,O_WRONLY);
                 // take input from user and put to STDIN
 		char* msg;
-		asprintf(&msg, "%d %lu %s", sequence,(unsigned long)time(NULL),message);
+		time_t t;
+		time(&t);
+		asprintf(&msg, "%d %s %s", sequence,ctime(&t),message);
                 printf("strmgr log message: %s \n",msg);
 		// write input on fifo and close it
                 write(fdw, msg, sizeof(msg));

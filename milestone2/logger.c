@@ -14,7 +14,7 @@
 #define NO_ERROR "no error"
 #define MEMORY_ERROR "mem err" // error  mem alloc failure
 #define INVALID_ERROR "invalid err" //error list or sensor null
-#define MAX_BUFF 1024
+#define MAX_BUFF 2000
 #define NEWCSV 97
 #define APPENDCSV 98
 #define INSERTED 99
@@ -52,6 +52,7 @@ void reader_open_and_write_fifo(char* myfifo, char* message){
 char* reader_open_and_read_fifo(char* myfifo, char* message){
         // open fifo for read only
         fdl = open(myfifo, O_RDONLY);
+	//char* temp = malloc(sizeof(int)*MAX_BUFF);
         if(fdl > 0){
 		printf("logger fd table configured, %d \n", fdl);
                 //read from fifo succeed

@@ -37,11 +37,11 @@ int main(){
 	char buffer2[MAX_BUFF];
 	char* writer_message= buffer1;
 	char* reader_message= buffer2;
-	
+
 	/*for a child*/
 	pid = fork();
 
-	if(pid<0){
+	if(pid < 0){
 		printf("fork failed. \n");
 		return -1;
 	}
@@ -52,7 +52,7 @@ int main(){
 		reader_create_fifo(myfifo);
                 log = open_log(logpath, append);
 
-		while(WIFEXITED(status) == false){
+		while(WIFEXITED(status) == false || read(reader_get_fd(),reader_message, sizeof(reader_message))>0){
 			reader_message = reader_open_and_read_fifo(myfifo, reader_message);
 			log  = log_event(myfifo, log, reader_message);
 		}
