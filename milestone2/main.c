@@ -66,14 +66,12 @@ int main(){
                 writer_create_fifo(myfifo);
                 printf("main.c myfifo after func call: %s \n", myfifo);
                 csv = open_db(myfifo, writer_message, "sensordata.csv", true); //write to myfifo
-                insertedrows = insert_sensor(myfifo, writer_message, csv, 1, 20, 10); //write to myfifo
-                exit(status);
+                //insertedrows = insert_sensor(myfifo, writer_message, csv, 1, 20, 10); //write to myfifo
+                insertedrows = storemgr_parse_sensordata_in_csv(myfifo, writer_message, data,csv);
+        	printf("total rows inserted: %d \n", insertedrows);
+		close_db(myfifo, writer_message, csv);
+		exit(status);
 	}
-	//int insertedrows = storemgr_parse_sensordata_in_csv(data,csv);
-	printf("total rows inserted: %d \n", insertedrows);
-	close_db(myfifo, writer_message, csv);
-	//close_log(log);
-
 
     	fclose(map);
     	fclose(data);
