@@ -16,5 +16,5 @@ clean:
 	rm -r build/*
 
 zip:
-	zip milestone2.zip *.c *.h *.log *.csv
+	zip milestone2.zip *.c *.h *.log *.csv 
 

@@ -14,9 +14,6 @@
 
 #define MAX_BUFF 1024
 
-void *writer_piping(FILE* csv);
-void *logger_pipping(FILE* log);
-
 int main(){
 
 	FILE* map = fopen("room_sensor.map", "r");
