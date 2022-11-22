@@ -28,49 +28,60 @@
  */
 
 int fdl;
-
+/* reader create fifo */
+int reader_create_fifo(char* myfifo){
+	fdl = mkfifo(myfifo, 0666);
+	if(fdl < 0){
+		perror("reader create fifo failed: \t");
+		exit(EXIT_FAILURE);
+	}
+	return fdl;
+}
 /* read and parse into buffer string*/
-int reader_read_and_parse_fifo(FILE* rd_stream, FILE* log){
+int reader_read_and_parse_fifo(FILE* rd_stream){
+	char* filename = "gateway.log";
+	bool append = true;
+	FILE* log = reader_open_log(filename, append);
 	/* assign buffer with size seeked on heap*/
 	/* read iteration: number of bytes read is returned (zero indicates end of file) */
-	char* buf = malloc(MAX_BUFF);
+	char buf[MAX_BUFF];
 	char* msg;
-	log_t* logger = malloc(sizeof(log_t));
+	char* buf2;
+	//log_t* logger = malloc(sizeof(log_t));
 	int strlength = 0;
-	while(fread(&(logger->sequence),sizeof(logger->sequence),1,rd_stream)>0){
-		fread(&(logger->t),sizeof(logger->t),1,rd_stream);
-		fread(&(logger->code),sizeof(logger->code),1,rd_stream);
+	buf2 = fgets(buf,MAX_BUFF,rd_stream);
+	while(strlen(buf)>0){
 		/* generating msg */
-		switch(logger->code){
+		switch(buf2[0]){
 			case NEWCSV:
 				msg = "log-event: csv overwritten";
-				asprintf(&buf, "%d %s %s \n", logger->sequence,ctime(&(logger->t)),msg);
+				asprintf(&buf2, "%s\n", strcat(buf,msg));
 				break;
 			case APPENDCSV:
                                 msg = "log-event: append to csv";
-                                asprintf(&buf, "%d %s %s \n", logger->sequence,ctime(&(logger->t)),msg);
+                                asprintf(&buf2,"%s\n", strcat(buf,msg));
 				break;
 			case INSERTED:
                                 msg = "log-event: sensor data insertion succeed";
-                                asprintf(&buf, "%d %s %s \n", logger->sequence,ctime(&(logger->t)),msg);
+                                asprintf(&buf2,"%s\n", strcat(buf,msg));
 				break;
 			case INSERTFAIL:
 				msg = "log-event: sensor data insertion failed";
-                                asprintf(&buf, "%d %s %s \n", logger->sequence,ctime(&(logger->t)),msg);
+                                asprintf(&buf2,"%s\n", strcat(buf,msg));
 				break;
 			case CSVCLOSED:
                                 msg = "log-event: csv closed";
-                                asprintf(&buf, "%d %s %s \n", logger->sequence,ctime(&(logger->t)),msg);
+                                asprintf(&buf2,"%s\n", strcat(buf,msg));
 				break;
 		}
 		strlength = strlen(buf);
 		/* logger parse str to log */
 		reader_parse_log(log,buf);
-		free(logger);
+		//free(logger);
+		close_log(log);
 	}
 	/* alternative read by fgets, read from file and put to str, param needs FILE* */
-	//buf = fgets(buf,MAX_BUFF,rd_stream);
-	free(buf);
+	free(buf2);
 	fclose(rd_stream);
         return strlength;
 }
@@ -110,4 +121,5 @@ int close_log(FILE* log){
 	return 1; // 1 means true
 }
 
-int reader_get_fd(){ return fdl;}
+int reader_get_fd(){ return
+ fdl;}

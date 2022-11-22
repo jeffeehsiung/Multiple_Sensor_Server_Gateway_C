@@ -14,6 +14,8 @@
 #include <time.h>
 
 #define MAX_BUFF 1024
+#define WRITE_END 1
+#define READ_END 0
 
 int main(){
 
@@ -24,12 +26,12 @@ int main(){
     	if(data == NULL) return -1;
 
 	FILE* csv = NULL;
-	FILE* log = NULL;
 
 	pid_t pid;
 
 	int status= 0;
 	int insertedrows = 0;
+
 
 	char* myfifo = "myfifo";
 	int strlength1;
@@ -38,7 +40,7 @@ int main(){
 	FILE *rd_stream,*wr_stream;
 
 
-	/* create fifo*/
+	/*create fifo*/
 	int err = mkfifo(myfifo,0666);
         if(err == -1){
 		perror("fail to create fifo");
@@ -46,7 +48,9 @@ int main(){
         }
 
 	/*for a child*/
+
 	pid = fork();
+
 
 	if(pid < 0){
 		printf("fork failed. \n");
@@ -55,28 +59,24 @@ int main(){
 
 	/*parent process*/
 	if(pid > 0){
-		/* log file open */
-		char* logpath = "gateway.log";
-                bool append = true;
-                log = reader_open_log(logpath, append);
-
+		//reader_create_fifo(myfifo)
 		/* open read only fifo */
 		rd_stream = fopen(myfifo,"r");
         	if(rd_stream == NULL){
                 	perror("logger open error by perror \t");
                 	exit(EXIT_FAILURE);
         	}
-
 	        /* clear O_NONBLOCK to avoid continuous writing during later scan */
         	/*fcntl(fileno(rd_stream),F_GETFL);
         	int flags = 0;
         	flags |= O_NONBLOCK;
         	fcntl(fileno(rd_stream),F_SETFL,flags);*/
 
-		while(reader_read_and_parse_fifo(rd_stream,log) == 0){
-		strlength1 = reader_read_and_parse_fifo(rd_stream,log);}
+		while(WIFEXITED(status) !=0){
+			strlength1 = reader_read_and_parse_fifo(rd_stream);
+		}
 		wait(NULL);
-
+		//close(fd[READ_END]);
 		printf("reader read string length: %d \n", strlength1);
 
 		/* remove the FIFO */
@@ -88,6 +88,7 @@ int main(){
 		}
 	}
 	else{
+		//writer_create_fifo(myfifo);
 		/* open write only fifo*/
 		wr_stream = fopen(myfifo,"w");
                 if(wr_stream == NULL){
@@ -102,6 +103,9 @@ int main(){
         	printf("total rows inserted: %d \n", insertedrows);
                 /* close csv & write to wr_stream */
 		close_db(wr_stream,csv);
+
+		//close(fd[WRITE_END]);
+
 		exit(status);
 	}
 

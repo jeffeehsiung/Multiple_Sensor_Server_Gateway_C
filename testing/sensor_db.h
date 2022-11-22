@@ -37,6 +37,9 @@
  */
 
 
+/* writer create fifo */
+int writer_create_fifo(char* myfifo);
+
 /* open fifo and write to fifo*/
 int writer_open_and_write_fifo(FILE* wr_stream, char code);
 

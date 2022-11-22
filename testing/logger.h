@@ -20,8 +20,11 @@ typedef struct {
 	int code;	/* logging error code */
 } log_t;
 
+/* reader create fifo*/
+int reader_create_fifo(char* myfifo);
+
 /* read from fifo and parse to log */
-int  reader_read_and_parse_fifo(FILE* rd_stream, FILE* log);
+int  reader_read_and_parse_fifo(FILE* rd_stream);
 
 /*create the log file*/
 FILE* reader_open_log(char* filename, bool append);

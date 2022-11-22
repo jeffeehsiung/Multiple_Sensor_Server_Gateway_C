@@ -23,6 +23,15 @@
 int fdw;
 int sequence = 0;
 
+int writer_create_fifo(char* myfifo){
+        fdw = mkfifo(myfifo, 0666);
+        if(fdw < 0){
+                perror("writer create fifo failed: \t");
+                exit(EXIT_FAILURE);
+        }
+	return fdw;
+}
+
 int writer_open_and_write_fifo(FILE* wr_stream, char code){
 	int strlength = 0;
         // open fifo for write only
@@ -30,7 +39,8 @@ int writer_open_and_write_fifo(FILE* wr_stream, char code){
                 // take input from user and put to STDIN
 		time_t t;
 		char* msg;
-		asprintf(&msg, "%d%ld%d", sequence, time(&t), code);
+		time(&t);
+		asprintf(&msg, "%d%d%s\n", code, sequence, ctime(&t));
                 printf("strmgr log message: %s \n",msg);
 		// write input on fifo and close it
                 write(fdw, msg, strlen(msg)+1);
