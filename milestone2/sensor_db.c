@@ -45,9 +45,10 @@ void writer_open_and_write_fifo(char* myfifo, char* message){
 		asprintf(&msg, "%d %s %s", sequence,ctime(&t),message);
                 printf("strmgr log message: %s \n",msg);
 		// write input on fifo and close it
-                write(fdw, msg, sizeof(msg));
+                write(fdw, msg, strlen(msg)+1);
                 close(fdw);
 		sequence++;
+		free(msg);
         }else{
                 printf("strmgr create fifo failed. exit \n");
                 exit(0);

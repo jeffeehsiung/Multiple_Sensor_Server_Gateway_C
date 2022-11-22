@@ -14,7 +14,7 @@
 #define NO_ERROR "no error"
 #define MEMORY_ERROR "mem err" // error  mem alloc failure
 #define INVALID_ERROR "invalid err" //error list or sensor null
-#define MAX_BUFF 2000
+#define MAX_BUFF 1024
 #define NEWCSV 97
 #define APPENDCSV 98
 #define INSERTED 99
@@ -40,6 +40,11 @@ void reader_open_and_write_fifo(char* myfifo, char* message){
 		printf("logger fifo is not null \n");
                 // fifo create succeed
                 fdl = open(myfifo,O_WRONLY);
+	        /* clear O_NONBLOCK to avoid continuous writing during later scan */
+        	/*fcntl(fdl,F_GETFL);
+        	int flags = 0;
+        	flags |= O_NONBLOCK;
+        	fcntl(fdl,F_SETFL,flags);*/
 		printf("logger fd table configured, %d \n", fdl);
                 // write input on fifo and close it
                 write(fdl, message, strlen(message)+1);
@@ -52,19 +57,20 @@ void reader_open_and_write_fifo(char* myfifo, char* message){
 char* reader_open_and_read_fifo(char* myfifo, char* message){
         // open fifo for read only
         fdl = open(myfifo, O_RDONLY);
-	//char* temp = malloc(sizeof(int)*MAX_BUFF);
+	//char* temp = malloc(MAX_BUFF);
+	//temp = message;
         if(fdl > 0){
 		printf("logger fd table configured, %d \n", fdl);
                 //read from fifo succeed
-                read(fdl,message,sizeof(message));
+                read(fdl,message,MAX_BUFF);
                 // print to stdout the read message
                 printf("logger recieved: %s\n", message);
                 close(fdl);
-		return message;
         }else{
-        	printf("logger read fifo failed. exit \n");
+        	perror("logger read fifo failed. exit \n");
         	exit(0);
 	}
+	return message;
 }
 
 FILE* open_log(char* filename, bool append){
@@ -76,16 +82,18 @@ FILE* open_log(char* filename, bool append){
 
 FILE* log_event(char* myfifo, FILE* log, char* message){
 	time_t t = time(&t);
-	char* msg[MAX_BUFF];
-	int ascii[strlen(message)+1];
-	for(int i = 0; i < strlen(message)+1; i++){
-		ascii[i] = message[i];
-		printf("logger converting into %d \n", message[i]);
-		asprintf(&(msg[i]),"%ls",ascii);
+	char msg[MAX_BUFF];
+	char* msgptr = msg;
+	//int ascii[sizeof(message)];
+	for(int i = 0; i < sizeof(message); i++){
+		//ascii[i] = message[i];
+		//printf("logger converting into %d \n", message[i]);
+		//asprintf(&msgptr+i,"%d",ascii[i]);
+		asprintf(&msgptr+i,"%d",message[i]);
 	}
-	printf("logger converted msg: %s \n", *msg);
-	printf("logger logging into gateway \n");
-	fprintf(log, "%s \n", *msg);
+	//printf("logger converted msg: %s \n", *msg);
+	//printf("logger logging into gateway \n");
+	fputs(msg,log);
 	printf("logger logging into gateway succeed\n");
 	return log;
 }
@@ -96,5 +104,6 @@ int close_log(FILE* log){
 	return 1; // 1 means true
 }
 int reader_get_fd(){return fdl;}
+
 
 
