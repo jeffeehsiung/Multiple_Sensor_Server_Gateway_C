@@ -22,6 +22,8 @@
 
 int fdw;
 int sequence = 0;
+char* filename = "sensordata.csv";
+bool append = true;
 
 char* writer_create_fifo(char* myfifo){
 	// FIFO file path
@@ -71,40 +73,42 @@ void writer_open_and_read_fifo(char* myfifo){
 	exit(0);
 }
 
-FILE* open_db(char* myfifo, char* message, char* filename, bool append){
+FILE* open_db(char* myfifo,char* filename, bool append){
 	/* filename of the csv file
 	bool: csv file exist, overwritten = false; exist: append = true; */
 	FILE* fileptr = fopen(filename, ((append == true)? "a+": "w+"));
 	if(append){
 		printf("opening to write fifo \n");
-		message = "log-event: append to csv";
+		char* message = "log-event: append to csv";
 		writer_open_and_write_fifo(myfifo,message);
-	}else{message = "log-event: csv overwritten";  writer_open_and_write_fifo(myfifo,message);}
+	}else{char* message = "log-event: csv overwritten";  writer_open_and_write_fifo(myfifo,message);}
 	return fileptr;
 }
 
 /* append single sensor reading to the csv file */
-int insert_sensor(char* myfifo, char* message, FILE* f, sensor_id_t id, sensor_value_t value, sensor_ts_t ts){
-	int total_rows = get_total_rows_csv(f,sizeof(sensor_data_t));
-	fprintf(f,"%hu,%lf,%ld\n", id, value, ts); // %hu, short unsigned int; time_t, %li
-	if (ferror(f)){
+int insert_sensor(char* myfifo, sensor_id_t id, sensor_value_t value, sensor_ts_t ts){
+	FILE* csv = open_db(myfifo, filename, append);
+	fprintf(csv,"%hu,%lf,%ld\n", id, value, ts); // %hu, short unsigned int; time_t, %li
+	int total_rows = get_total_rows_csv(csv,sizeof(sensor_data_t));
+	if (ferror(csv)){
 		printf("error writing to file, return 0 \n");
-		message = "log-event: sensor data insertion failed";
+		char* message = "log-event: sensor data insertion failed";
 		writer_open_and_write_fifo(myfifo,message);
 		return 0;// return 0 means false
 	}
-	message = "log-event: sensor data insertion successful";
+	char* message = "log-event: sensor data insertion successful";
         writer_open_and_write_fifo(myfifo,message);
-	// assume the returned int shall be the newly added row index
+	int err = close_db(myfifo,csv);
+	if(err != 0){printf("strmgr closing db failed. \n"); exit(0);}
 	return total_rows;
 }
 
 /* close the csv file */
-int close_db(char* myfifo,char* message, FILE* f){
+int close_db(char* myfifo,FILE* f){
 	fclose(f);
-	message = "log-event: csv closed";
+	char* message = "log-event: csv closed";
 	writer_open_and_write_fifo(myfifo,message);
-	return 1; // 1 means true
+	return 0;
 }
 
 /* calculating the total rows in the csv */
@@ -118,14 +122,14 @@ int get_total_rows_csv(FILE* f, int sizeofstruct){
 }
 
 /* read sensor data from binary file fprint into a csv file */
-int storemgr_parse_sensordata_in_csv(char* myfifo, char* message, FILE* openedbinaryfile, FILE* csv){
+int storemgr_parse_sensordata_in_csv(char* myfifo, FILE* openedbinaryfile){
 	int insertrows = 0;
 	sensor_data_t* sensordata = malloc(sizeof(sensor_data_t)); // heap, be freed
         ERROR_HANDLER(sensordata == NULL, MEMORY_ERROR);
         while(fread(&(sensordata->id), sizeof(sensordata->id), 1, openedbinaryfile)>0){ 
                 fread(&(sensordata->value), sizeof(sensordata->value), 1, openedbinaryfile);
                 fread(&(sensordata->ts), sizeof(sensordata->ts), 1, openedbinaryfile);
-		insertrows = insert_sensor(myfifo, message, csv, sensordata->id, sensordata->value, sensordata->ts);
+		insertrows = insert_sensor(myfifo,sensordata->id, sensordata->value, sensordata->ts);
 		if(insertrows == 0){ printf("store manager parsing data failed \n"); return -1; }
         }
 	free(sensordata); //heap, freed

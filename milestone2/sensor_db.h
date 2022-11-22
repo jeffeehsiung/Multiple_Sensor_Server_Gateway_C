@@ -51,19 +51,19 @@ void writer_open_and_read_fifo(char* myfifo);
  * if the file should be overwritten if the file already exists,
  * if the data should be appended to the existing file,
  * if no file exist then we create a file */
-FILE* open_db(char* myfifo, char* message, char* filename, bool append);
+FILE* open_db(char* myfifo, char* filename, bool append);
 
 /* append  single sensor reading to the csv file */
-int insert_sensor(char* myfifo, char* message, FILE* f, sensor_id_t id, sensor_value_t value, sensor_ts_t ts);
+int insert_sensor(char* myfifo,sensor_id_t id, sensor_value_t value, sensor_ts_t ts);
 
 /* close the csv file */
-int close_db(char* myfifo, char* message, FILE* f);
+int close_db(char* myfifo, FILE* f);
 
 /* calculating the total rows in the csv */
 int get_total_rows_csv(FILE* f, int sizeofstruct);
 
 /* read sensor data from binary file fprint into a csv file */
-int storemgr_parse_sensordata_in_csv(char* myfifo, char* message, FILE* openedbinaryfile, FILE* csv);
+int storemgr_parse_sensordata_in_csv(char* myfifo, FILE* openedbinaryfile);
 
 int writer_get_fd();
 

@@ -24,12 +24,15 @@
 //char* myfifo; // used in create fifo
 int fdl;
 int id = 0;
+char* logname = "gateway.log";
+bool insert = true;
 
 /* fifo section */
 char* reader_create_fifo(char* myfifo){
 	printf("logger creating fifo \n");
 	// creating the named file(FIFO), mkfifo(<pathname>,<permission>)
         mkfifo(myfifo,0666);
+	printf("logger fifo created");
         return myfifo;
 }
 
@@ -54,12 +57,13 @@ void reader_open_and_write_fifo(char* myfifo, char* message){
         exit(0);}
 }
 
-char* reader_open_and_read_fifo(char* myfifo, char* message){
+void reader_open_and_read_fifo(char* myfifo){
+	// open log file
+	FILE* log = open_log(logname, insert);
         // open fifo for read only
         fdl = open(myfifo, O_RDONLY);
-	//char* temp = malloc(MAX_BUFF);
-	//temp = message;
-        if(fdl > 0){
+	char message[MAX_BUFF];
+	if(fdl > 0){
 		printf("logger fd table configured, %d \n", fdl);
                 //read from fifo succeed
                 read(fdl,message,MAX_BUFF);
@@ -70,7 +74,9 @@ char* reader_open_and_read_fifo(char* myfifo, char* message){
         	perror("logger read fifo failed. exit \n");
         	exit(0);
 	}
-	return message;
+	log_event(log, message);
+	int err = close_log(log);
+	if(err != 0){printf("logger closing log file failed. err = %d \n", err); exit(0);}
 }
 
 FILE* open_log(char* filename, bool append){
@@ -80,28 +86,21 @@ FILE* open_log(char* filename, bool append){
         return fileptr;
 }
 
-FILE* log_event(char* myfifo, FILE* log, char* message){
+void log_event(FILE* log, char* message){
 	time_t t = time(&t);
 	char msg[MAX_BUFF];
 	char* msgptr = msg;
-	//int ascii[sizeof(message)];
 	for(int i = 0; i < sizeof(message); i++){
-		//ascii[i] = message[i];
-		//printf("logger converting into %d \n", message[i]);
-		//asprintf(&msgptr+i,"%d",ascii[i]);
-		asprintf(&msgptr+i,"%d",message[i]);
+		asprintf(&msgptr,"%d",toascii(message[i]));
 	}
-	//printf("logger converted msg: %s \n", *msg);
-	//printf("logger logging into gateway \n");
 	fputs(msg,log);
+	free(msgptr);
 	printf("logger logging into gateway succeed\n");
-	return log;
 }
 
 int close_log(FILE* log){
 	fclose(log);
-	free(log);
-	return 1; // 1 means true
+	return 0;
 }
 int reader_get_fd(){return fdl;}
 

@@ -23,13 +23,13 @@ char* reader_create_fifo(char* myfifo);
 void reader_open_and_write_fifo(char* myfifo, char* message);
 
 /*open fifo and read from fifo*/
-char* reader_open_and_read_fifo(char* myfifo, char* messgae);
+void reader_open_and_read_fifo(char* myfifo);
 
 /*create the log file*/
 FILE* open_log(char* filename, bool append);
 
 /* log event process */
-FILE* log_event(char* myfifo, FILE* log, char* message);
+void log_event(FILE* log, char* message);
 
 /* close the log file and free the heap log memory */
 int close_log(FILE* log);
