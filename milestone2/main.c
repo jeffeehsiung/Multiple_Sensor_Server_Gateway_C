@@ -37,13 +37,13 @@ int main(){
 	/*parent process*/
 	if(pid > 0){
 		reader_create_fifo(myfifo);
-		while(WIFEXITED(status)==false || WEXITSTATUS(status)== false){
+		while((WIFEXITED(status)!=true ||  WEXITSTATUS(status)!=status)){
 			reader_open_and_read_fifo(myfifo);
 		}
-		waitpid(pid, NULL, 0);
+		waitpid(pid,&status, 0);
 		/* remove the FIFO */
     		unlink(myfifo);
-}
+	}
 	else{
                 writer_create_fifo(myfifo);
                 insertedrows = storemgr_parse_sensordata_in_csv(myfifo,data);

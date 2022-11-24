@@ -17,13 +17,13 @@
 //#include "sensor_db.h"
 
 /* fifo create */
-char* reader_create_fifo(char* myfifo);
+int reader_create_fifo(char* myfifo);
 
 /* open fifo and write to fifo*/
 void reader_open_and_write_fifo(char* myfifo, char* message);
 
 /*open fifo and read from fifo*/
-void reader_open_and_read_fifo(char* myfifo);
+int reader_open_and_read_fifo(char* myfifo);
 
 /*create the log file*/
 FILE* open_log(char* filename, bool append);

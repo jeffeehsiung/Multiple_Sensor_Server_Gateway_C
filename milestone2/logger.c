@@ -28,12 +28,12 @@ char* logname = "gateway.log";
 bool insert = true;
 
 /* fifo section */
-char* reader_create_fifo(char* myfifo){
+int reader_create_fifo(char* myfifo){
 	printf("logger creating fifo \n");
 	// creating the named file(FIFO), mkfifo(<pathname>,<permission>)
-        mkfifo(myfifo,0666);
+        fdl =mkfifo(myfifo,0666);
 	printf("logger fifo created");
-        return myfifo;
+        return fdl;
 }
 
 // not used
@@ -57,16 +57,17 @@ void reader_open_and_write_fifo(char* myfifo, char* message){
         exit(0);}
 }
 
-void reader_open_and_read_fifo(char* myfifo){
+int reader_open_and_read_fifo(char* myfifo){
 	// open log file
 	FILE* log = open_log(logname, insert);
         // open fifo for read only
         fdl = open(myfifo, O_RDONLY);
 	char message[MAX_BUFF];
+	int nbytes;
 	if(fdl > 0){
 		printf("logger fd table configured, %d \n", fdl);
                 //read from fifo succeed
-                read(fdl,message,MAX_BUFF);
+                nbytes = read(fdl,message,MAX_BUFF);
                 // print to stdout the read message
                 printf("logger recieved: %s\n", message);
                 close(fdl);
@@ -77,6 +78,7 @@ void reader_open_and_read_fifo(char* myfifo){
 	log_event(log, message);
 	int err = close_log(log);
 	if(err != 0){printf("logger closing log file failed. err = %d \n", err); exit(0);}
+	return nbytes;
 }
 
 FILE* open_log(char* filename, bool append){
