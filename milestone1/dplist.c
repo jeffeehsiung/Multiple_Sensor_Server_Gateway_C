@@ -70,16 +70,18 @@ void dpl_free(dplist_t** dbptr, bool free_element) {
 	if(dbptr != NULL){
 		if(*dbptr != NULL){ // *dptr = *&list = &dplist(on heap) != null
 			if((*dbptr)->head != NULL){// head = &node != null
-                                for(int i = 0; i < dpl_size(*dbptr); i++){
+				int size = dpl_size(*dbptr);
+                                for(int i = 0; i < size; i++){
                                         (*dbptr) = dpl_remove_at_index(*dbptr,i,free_element);
                                 } //set every node to null
-                                (*dbptr)->head = NULL; //  break arrow between head to node
                         }
+			free((*dbptr)->head);
+                        (*dbptr)->head = NULL;
 		}
 		free(*dbptr);
 		printf("list = dplist* is free as a bird now. \n");
 		*dbptr = NULL;
-		dbptr = NULL; 
+		dbptr = NULL;
         }
 }
 
@@ -124,8 +126,6 @@ dplist_t* dpl_insert_at_index(dplist_t* list, void* element, int index, bool ins
         	}
     	}
 	free(list_node->element);
-	list_node = NULL;
-	free(list_node);
     return list;
 }
 
@@ -152,13 +152,13 @@ dplist_t* dpl_remove_at_index(dplist_t* list, int index, bool free_element) {
                         	list_node->prev->next = list_node->next;
                         	list_node->next->prev = list_node->prev;
                 	}
-                	if(free_element){ 
+                	if(free_element){
 				if(list_node->element == NULL){ free(list_node->element); }else{
 				list->element_free(&(list_node->element));} //list_node->element = void*, &(void*) = void**
 			}
                 	list_node = NULL;
 		}
-                //free(list_node), list_node is not on heap;
+                //free(list_node);
         } 
         return list;
 }
