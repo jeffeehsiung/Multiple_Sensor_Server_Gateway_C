@@ -1,5 +1,5 @@
 /**
- * \author Jeffee Hsiung
+ * \author {AUTHOR}
  */
 
 #include <stdio.h>

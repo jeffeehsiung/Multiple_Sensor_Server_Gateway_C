@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
         exit(EXIT_SUCCESS);
     } else {
         // to do: user input validation!
-        data.id = atoi(argv[1]);
+        data.id = atoi(argv[1]); ////int atoi(const char *str) converts the string argument str to an integer (type int).
         sleep_time = atoi(argv[2]);
         strncpy(server_ip, argv[3], strlen(server_ip));
         server_port = atoi(argv[4]);

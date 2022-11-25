@@ -1,33 +1,27 @@
-FLAGS = -std=c11 -lpthread -lm $(shell pkg-config --cflags --libs check)
-CPATH = g++ -I /home/jeffee/chiehfei.hsiung/ex1/sensor_db.h
+all: sensor_node connmgr
+	@echo "done"
 
-test_server: test_server.c lib/tcpsock.c
-	gcc test_server.c lib/tcpsock.c -o test_server
+sensor_node: sensor_node.c 
+	mkdir -p build
+	gcc sensor_node.c ./lib/tcpsock.c -Wall -Werror -o ./build/sensor_node -DLOOPS=10
 
-sensor_node: sensor_node.c lib/tcpsock.c
-	gcc sensor_node.c lib/tcpsock.c -o sensor_node
+sensor_node_usingsharedlib: 
+	gcc sensor_node.c -Wall -Werror -c -o ./build/sensor_node.o -DLOOPS=10
+	gcc ./build/sensor_node.o -ltcpsock -L./build/lib/ -Wl,-rpath=./lib/ -o ./build/sensor_node
 
-runserver: test_server
-	./test_server
 
-runclient1: sensor_node
-	./sensor_node 1 2 127.0.0.1 5678
+connmgr: connmgr.c tcpsock
+	gcc connmgr.c -Wall -Werror -c -o ./build/connmgr.o
+	gcc ./build/connmgr.o -ltcpsock -L./build/lib/ -Wl,-rpath=./lib/ -o ./build/connmgr
 
-runclient2: sensor_node
-	./sensor_node 2 5 127.0.0.1 5678
+tcpsock: lib/tcpsock.c
+	mkdir -p ./build/lib
+	gcc -c -fPIC ./lib/tcpsock.c -o ./build/lib/tcpsock.o
+	gcc -shared -o ./build/lib/libtcpsock.so ./build/lib/tcpsock.o
 
-all: main.c sensor_node.c test_server.c lib/tcpsock.c
-	gcc -g -Wall -Werror _GNU_SOURCE main.c sensor_node.c test_server.c lib/tcpsock.c -o connmgr $(FLAGS)
-	./connmgr
-
-file_creator: file_creator.c
-	gcc -Wall -Werror file_creator.c -o build/file_creator
-	./build/file_creator
-
-clean:
-	rm -f *.o
-	rm -r build/*
-
-zip:
-	zip milestone2.zip *.c *.h *.log *.csv 
-
+run: connmgr sensor_node
+	cd build; ./connmgr 1234 &
+	sleep 2
+	cd build; ./sensor_node 101 1 127.0.0.1 1234 &
+	cd build; ./sensor_node 102 3 127.0.0.1 1234 &
+	cd build; ./sensor_node 103 2 127.0.0.1 1234 &
