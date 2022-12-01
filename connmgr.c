@@ -18,7 +18,6 @@
 
 // initialize global variables
 tcpsock_t *server,*client;
-int conn_counter = 0;
 
 // Semaphore variables since each thread wishes to write to a sensor_data_t
 sem_t x;
@@ -34,6 +33,7 @@ void* client_handler (void* param) {
     tcpsock_t* client = (tcpsock_t*) param;
     sensor_data_t data;
     int bytes, result;
+    //conn_counter++;
 
     // lock the semaphore of data access
     if (sem_wait(&x) == -1){
@@ -41,7 +41,7 @@ void* client_handler (void* param) {
     }
     int sval = 0;
     sem_getvalue(&x,&sval);
-    printf("data access locked, current semaphore num: %d, num connected: %d\n", sval, conn_counter);
+    printf("data access locked, current semaphore num: %d\n", sval);
 
     do {
         // read sensor ID
@@ -65,7 +65,7 @@ void* client_handler (void* param) {
         perror("sem_post failed\n"); exit(EXIT_FAILURE);
     }
     sem_getvalue(&x,&sval);
-    printf("data access unlocked, unlocked semaphore num: %d, num connected: %d\n", sval, conn_counter);
+    printf("data access unlocked, unlocked semaphore num: %d\n", sval);
 
     if (result == TCP_CONNECTION_CLOSED){printf("Peer has closed connection\n");}
     else{printf("Error occured on connection to peer\n");}
@@ -80,6 +80,8 @@ void* client_handler (void* param) {
  */
 int main(void) {
 
+    int conn_counter = 0;
+
     pthread_t clientthreads[MAX_CONN];
 
     /* initialize the semaphore with resource value 1 and pshared being 0, 
@@ -92,8 +94,8 @@ int main(void) {
     printf("Test server started\n");
     if (tcp_passive_open(&server, PORT) != TCP_NO_ERROR){exit(EXIT_FAILURE);}
 
-    int i = 0;
-    
+    //int i = 0;
+
     /* wait for each client and create thread for each client */
     do {
         // accept one client connection. on success, new client socket created
@@ -101,26 +103,26 @@ int main(void) {
             exit(EXIT_FAILURE);
         }
         printf("Incoming client connection\n");
+
         conn_counter++;
+
         // create client thread with socket number & start the runner + increment the conn_counter
         pthread_attr_t attr;
         pthread_attr_init(&attr);
-        printf("creating %d -th thread\n", i);
-        if (pthread_create(&clientthreads[i++],&attr,client_handler,client) != 0){
+        printf("creating %d -th thread\n", conn_counter);
+        if (pthread_create(&clientthreads[conn_counter++],&attr,client_handler,client) != 0){
             printf("failed to create thread \n");
         }
-
     } while (conn_counter < MAX_CONN);
 
     /* wait for target threads to terminate */
-    if (i >=  MAX_CONN) {
-        while (i != 0){
+    while (conn_counter >  0) {
+        while (conn_counter != 0){
             // join all threads
-            pthread_join(clientthreads[i--],NULL);
-            printf("current tid index: %d, num connected: %d\n", i, conn_counter);
+            pthread_join(clientthreads[conn_counter],NULL);
+            printf("current tid index & num connected: %d\n", conn_counter);
+            conn_counter--;
         }
-        i = 0;
-        conn_counter = 0;
     }
 
     /* tcp close connection fail safe */
