@@ -33,7 +33,6 @@ void* client_handler (void* param) {
     tcpsock_t* client = (tcpsock_t*) param;
     sensor_data_t data;
     int bytes, result;
-    //conn_counter++;
 
     // lock the semaphore of data access
     if (sem_wait(&x) == -1){
@@ -104,17 +103,16 @@ int main(void) {
         }
         printf("Incoming client connection\n");
 
-        conn_counter++;
-
         // create client thread with socket number & start the runner + increment the conn_counter
         pthread_attr_t attr;
         pthread_attr_init(&attr);
         printf("creating %d -th thread\n", conn_counter);
-        if (pthread_create(&clientthreads[conn_counter++],&attr,client_handler,client) != 0){
+        if (pthread_create(&clientthreads[conn_counter],&attr,client_handler,client) != 0){
             printf("failed to create thread \n");
         }
+        conn_counter++;
     } while (conn_counter < MAX_CONN);
-
+    
     /* wait for target threads to terminate */
     while (conn_counter >  0) {
         while (conn_counter != 0){

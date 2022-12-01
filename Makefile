@@ -27,3 +27,4 @@ run: connmgr sensor_node
 	cd build; ./sensor_node 101 1 127.0.0.1 1234 &
 	cd build; ./sensor_node 102 3 127.0.0.1 1234 &
 	cd build; ./sensor_node 103 2 127.0.0.1 1234 &
+	cd build; ./sensor_node 104 4 127.0.0.1 1234 &
