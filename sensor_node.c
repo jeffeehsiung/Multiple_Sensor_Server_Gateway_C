@@ -48,7 +48,7 @@
 #endif
 
 #define INITIAL_TEMPERATURE    20
-#define TEMP_DEV        5    // max afwijking vorige temperatuur in 0.1 celsius
+#define TEMP_DEV        5    // max temperatuur in 0.1 celsius
 
 
 void print_help(void);
@@ -63,11 +63,13 @@ void print_help(void);
  * argv[4] = server port
  */
 
+/* sensor node is a client */
+
 int main(int argc, char *argv[]) {
     sensor_data_t data;
     int server_port;
     char server_ip[] = "000.000.000.000";
-    tcpsock_t *client;
+    tcpsock_t *client; //client is a pointer to tcpsocket
     int i, bytes, sleep_time;
 
     LOG_OPEN();

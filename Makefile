@@ -1,3 +1,5 @@
+FLAGS = -std=c11 -lpthread -lm $(shell pkg-config --cflags --libs check)
+
 all: sensor_node connmgr
 	@echo "done"
 
@@ -11,7 +13,7 @@ sensor_node_usingsharedlib:
 
 
 connmgr: connmgr.c tcpsock
-	gcc connmgr.c -Wall -Werror -c -o ./build/connmgr.o
+	gcc connmgr.c -Wall -Werror -c -o ./build/connmgr.o $(FLAGS)
 	gcc ./build/connmgr.o -ltcpsock -L./build/lib/ -Wl,-rpath=./lib/ -o ./build/connmgr
 
 tcpsock: lib/tcpsock.c

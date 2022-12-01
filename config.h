@@ -18,5 +18,7 @@ typedef struct {
     sensor_ts_t ts;
 } sensor_data_t;
 
+/* client handler as runner funcion to be kicked off by pthread */
+void* client_handler (void *param);
 
 #endif /* _CONFIG_H_ */

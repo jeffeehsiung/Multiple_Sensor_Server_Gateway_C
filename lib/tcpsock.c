@@ -74,7 +74,8 @@ int tcp_passive_open(tcpsock_t **sock, int port) {
     addr.sin_family = PROTOCOLFAMILY;
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
     addr.sin_port = htons(port);
-    result = bind(s->sd, (struct sockaddr *) &addr, sizeof(addr));
+    // bind assigns the address specified by addr to the socket referred to by the file descriptor sockfd
+    result = bind(s->sd, (struct sockaddr *) &addr, sizeof(addr)); 
     TCP_DEBUG_PRINTF(result == -1, "Bind() failed with errno = %d [%s]", errno, strerror(errno));
     TCP_ERR_HANDLER(result != 0, free(s);return TCP_SOCKOP_ERROR);
     result = listen(s->sd, MAX_PENDING);
