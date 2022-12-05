@@ -1,27 +1,16 @@
-HEADERS=sbuffer.h valgrind/*.h
-SOURCE=sbuffer.c
-
 FLAGS = -std=c11 -lpthread -lm $(shell pkg-config --cflags --libs check)
-
 all: main.c sbuffer.c
-	gcc -g -Wall -Werror -D _GNU_DOURCE main.c sbuffer.c -o sbuffer $(FLAGS)
-	./sbuffer 
+	gcc -g -Wall -Werror main.c sbuffer.c -o build/sbuffer $(FLAGS)
+	./build/sbuffer
 
-sbuffer: sbuffer.c 
+file_creator: file_creator.c
 	mkdir -p build
-	gcc -g -Wall -Werror -D _GNU_DOURCE sbuffer.c -o sbuffer $(FLAGS)
+	gcc -Wall -Werror -DDEBUG file_creator.c -o build/file_creator
+	./build/file_creator
 
-main: main.c 
-	gcc -g -Wall -Werror -D _GNU_DOURCE main.c -o ./build/main $(FLAGS)
-	./main
-
-run: main sbuffer
-	./main
-	./sbuffer
-
-check : $(SOURCE) $(HEADERS)
-	@echo "Running cppcheck :"
-	cppcheck --enable=all --suppress=missingIncludeSystem --error-exitcode=1 $(SOURCE) $(HEADERS)
+clean:
+	rm -f *.o
+	rm -r build/*
 
 zip:
 	zip milestone3.zip *.c *.h

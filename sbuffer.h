@@ -5,11 +5,23 @@
 #ifndef _SBUFFER_H_
 #define _SBUFFER_H_
 
+
+#include <semaphore.h>
+#include <errno.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
+#include <ctype.h>
+#include <stdbool.h>
 #include "config.h"
 
 #define SBUFFER_FAILURE -1
 #define SBUFFER_SUCCESS 0
 #define SBUFFER_NO_DATA 1
+#define SBUFFER_END 2
 
 typedef struct sbuffer sbuffer_t;
 
@@ -34,7 +46,7 @@ int sbuffer_free(sbuffer_t **buffer);
  * \param data a pointer to pre-allocated sensor_data_t space, the data will be copied into this structure. No new memory is allocated for 'data' in this function.
  * \return SBUFFER_SUCCESS on success and SBUFFER_FAILURE if an error occurred
  */
-int sbuffer_remove(sbuffer_t *buffer, sensor_data_t *data);
+int sbuffer_remove(sbuffer_t *buffer, sensor_data_t data);
 
 /**
  * Inserts the sensor data in 'data' at the end of 'buffer' (at the 'tail')
@@ -43,5 +55,11 @@ int sbuffer_remove(sbuffer_t *buffer, sensor_data_t *data);
  * \return SBUFFER_SUCCESS on success and SBUFFER_FAILURE if an error occured
 */
 int sbuffer_insert(sbuffer_t *buffer, sensor_data_t *data);
+
+/**
+ * set and get flags to check EOF
+*/
+void sbuffer_setflag(sbuffer_t* buffer, bool flag);
+bool sbuffer_getflag(sbuffer_t* buffer);
 
 #endif  //_SBUFFER_H_
