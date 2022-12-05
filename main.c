@@ -69,7 +69,7 @@ void* reader(void* param)
 void* writer(void* param)
 {
     printf("\nWriter is trying to enter");
-    (sbuffer_t*) dummy = (sbuffer_t*) param[1];
+    (sbuffer_t*) buffer = (sbuffer_t*) param[1];
 
     // lock to exclude any other writer or reader
     sem_wait(&wrt);
