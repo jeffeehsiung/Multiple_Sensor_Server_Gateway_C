@@ -27,6 +27,7 @@ void* reader(void* param){
     sbuffer_t* buffer;
     buffer = (sbuffer_t*) (param);
     //printf("reader sbuffer addr: %p\n", buffer);
+
     sensor_data_t data;
     int count = 0;
 
@@ -51,16 +52,20 @@ void* reader(void* param){
 
 // Writer Function
 void* writer(void* param){
+    
     //printf("Writer is trying to enter\n");
     FILE* sensor_data = fopen("sensor_data", "rb");
     if(ferror(sensor_data)){
         perror("error opening sensor_data\n"); exit(EXIT_FAILURE);
     }
+
     sbuffer_t* buffer;
     buffer = (sbuffer_t*) (param);
     //printf("writer sbuffer addr: %p\n", buffer);
+
     sensor_data_t data;
     int count = 0;
+
     // mark end_of_stream of sbuffer as false
     sbuffer_setflag(buffer,false);
     // while loop: fread return number of item read
@@ -74,7 +79,7 @@ void* writer(void* param){
     sbuffer_setflag(buffer,true);
 
     fclose(sensor_data);
-    //printf("Writer has left & binary file closed & items appended: %d\n",count);
+    printf("Writer has left & binary file closed & items appended: %d\n",count);
     pthread_exit(NULL);
 }
 
@@ -82,10 +87,6 @@ void* writer(void* param){
 int main(void){
     
     sbuffer_t* sbuffer;
- /*    void* (*readerptr)(void* sbuffer);
-    readerptr = reader;
-    void* (*writerptr)(void* sbuffer);
-    writerptr = writer; */
 
     int totalthread = 0;
 
@@ -97,7 +98,7 @@ int main(void){
 
     /* create writer thread */
     do {
-        //printf("creating %d -th thread\n", totalthread);
+        printf("creating %d -th thread\n", totalthread);
         pthread_attr_t attr;
         pthread_attr_init(&attr);
         if (pthread_create(&threads[totalthread],&attr,writer,sbuffer) != 0){
@@ -108,7 +109,7 @@ int main(void){
 
     /* create reader thread */
     do {
-        //printf("creating %d -th thread\n", totalthread);
+        printf("creating %d -th thread\n", totalthread);
         pthread_attr_t attr;
         pthread_attr_init(&attr);
         if (pthread_create(&threads[totalthread],&attr,reader,sbuffer) != 0){
@@ -121,7 +122,7 @@ int main(void){
     while (totalthread >  0) {
         pthread_join(threads[totalthread],NULL);
         totalthread--;
-        printf("number of threads left active: %d", totalthread);
+        printf("number of threads left active: %d\n", totalthread);
     }
 
     /* free the malloc */

@@ -63,3 +63,4 @@ void sbuffer_setflag(sbuffer_t* buffer, bool flag);
 bool sbuffer_getflag(sbuffer_t* buffer);
 
 #endif  //_SBUFFER_H_
+

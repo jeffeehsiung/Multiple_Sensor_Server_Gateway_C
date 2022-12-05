@@ -85,13 +85,13 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t data) {
     
     int sval = 0;
 
-/*     // lock to update readcount
+    // lock to update readcount
     sem_wait(&mutex);
     sem_getvalue(&mutex,&sval);
     //printf("reader access locked, current semaphore num: %d\n", sval);
-    readercount++; */
+    readercount++;
 
-/*     if (readercount != 0){
+    /* if (readercount != 0){
         sem_wait(&wrt);     // no writer can enter
     } */
 
@@ -105,7 +105,7 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t data) {
             //printf("readers = 0, signal writer\n");
         }
         //printf("head empty, %d readers inside\n", readercount);
-        //sem_post(&mutex);
+        sem_post(&mutex);
         //sem_getvalue(&mutex,&sval);
         //printf("reader access unlocked, current semaphore num: %d\n", sval);
         return SBUFFER_NO_DATA;
@@ -113,16 +113,11 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t data) {
     else if ((buffer->head == NULL) && (sbuffer_getflag(buffer) == true)){
         readercount--;
         //printf("end of reading stream\n");
-        //sem_post(&mutex);
+        sem_post(&mutex);
         return SBUFFER_END;
     }
 
     /* critical section */
-    // lock to update readcount
-    sem_wait(&mutex);
-    sem_getvalue(&mutex,&sval);
-    //printf("reader access locked, current semaphore num: %d\n", sval);
-    readercount++;
     sem_wait(&wrt);
     //printf("reader enters critical section\n");
     data = buffer->head->data;
@@ -179,3 +174,7 @@ void sbuffer_setflag(sbuffer_t* buffer, bool flag){
 bool sbuffer_getflag(sbuffer_t* buffer){
     return buffer->end_of_stream;
 }
+
+
+
+
