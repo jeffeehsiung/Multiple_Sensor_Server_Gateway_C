@@ -28,14 +28,14 @@ void* reader(void* param){
     buffer = (sbuffer_t*) (param);
     //printf("reader sbuffer addr: %p\n", buffer);
 
-    sensor_data_t data;
     int count = 0;
+    sensor_data_t data;
 
     /* current reader performs reading here */
     int code = 5;
     while ((code != SBUFFER_END) && (code != SBUFFER_FAILURE)){
         //printf("reading sbuffer\n");
-        code = sbuffer_remove(buffer,data);
+        code = sbuffer_remove(buffer, data);
         //printf("sbuffer_remove returned code: %d\n", code);
         if (code == SBUFFER_SUCCESS){
             count++;
@@ -47,6 +47,7 @@ void* reader(void* param){
     else if (code == SBUFFER_FAILURE){
         perror("buffer is NULL\n");
     }
+    pthread_detach(pthread_self());
     pthread_exit(NULL);
 }
 
@@ -80,6 +81,7 @@ void* writer(void* param){
 
     fclose(sensor_data);
     printf("Writer has left & binary file closed & items appended: %d\n",count);
+    pthread_detach(pthread_self());
     pthread_exit(NULL);
 }
 
@@ -89,6 +91,8 @@ int main(void){
     sbuffer_t* sbuffer;
 
     int totalthread = 0;
+    pthread_attr_t attr;
+    pthread_attr_init(&attr);
 
     /* initialize malloced sbuffer */
     if (sbuffer_init(&sbuffer) < 0){
@@ -99,8 +103,6 @@ int main(void){
     /* create writer thread */
     do {
         printf("creating %d -th thread\n", totalthread);
-        pthread_attr_t attr;
-        pthread_attr_init(&attr);
         if (pthread_create(&threads[totalthread],&attr,writer,sbuffer) != 0){
             perror("failed to create thread \n"); exit(EXIT_FAILURE);
         }
@@ -110,8 +112,6 @@ int main(void){
     /* create reader thread */
     do {
         printf("creating %d -th thread\n", totalthread);
-        pthread_attr_t attr;
-        pthread_attr_init(&attr);
         if (pthread_create(&threads[totalthread],&attr,reader,sbuffer) != 0){
             perror("failed to create thread \n"); exit(EXIT_FAILURE);
         }
@@ -129,6 +129,8 @@ int main(void){
     if (sbuffer_free(&sbuffer) < 0){ // shared buffer freed
         perror("sbuffer_free failed\n"); exit(EXIT_FAILURE);
     }
+    pthread_exit(NULL);
+    printf("all freed\n");
 
     return 0;
 }

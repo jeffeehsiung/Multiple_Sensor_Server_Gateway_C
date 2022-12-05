@@ -8,9 +8,5 @@ file_creator: file_creator.c
 	gcc -Wall -Werror -DDEBUG file_creator.c -o build/file_creator
 	./build/file_creator
 
-clean:
-	rm -f *.o
-	rm -r build/*
-
 zip:
 	zip milestone3.zip *.c *.h

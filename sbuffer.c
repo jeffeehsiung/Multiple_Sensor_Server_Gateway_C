@@ -41,6 +41,7 @@ struct sbuffer {
 
 int sbuffer_init(sbuffer_t** buffer) {
     *buffer = malloc(sizeof(sbuffer_t));
+    memset(*buffer,'\0',sizeof(sbuffer_t));
     //printf("sbuffer malloced addr: %p\n", (*buffer));
 
     if (*buffer == NULL) return SBUFFER_FAILURE;
@@ -82,23 +83,19 @@ int sbuffer_free(sbuffer_t** buffer) {
 int sbuffer_remove(sbuffer_t* buffer, sensor_data_t data) {
     sbuffer_node_t* dummy;
     if (buffer == NULL) return SBUFFER_FAILURE;
-    
-    int sval = 0;
 
     // lock to update readcount
+    int sval = 0;
     sem_wait(&mutex);
     sem_getvalue(&mutex,&sval);
     //printf("reader access locked, current semaphore num: %d\n", sval);
     readercount++;
 
-    /* if (readercount != 0){
-        sem_wait(&wrt);     // no writer can enter
-    } */
-
     //printf("\n%d reader is inside\n", readercount);
 
     // head empty, reader leaves
-    if ((buffer->head == NULL) && (sbuffer_getflag(buffer) == false)){
+    bool flag = sbuffer_getflag(buffer);
+    if ((buffer->head == NULL) && (flag == false)){
         readercount--;
         if (readercount == 0) {
             sem_post(&wrt);
