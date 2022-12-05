@@ -8,9 +8,9 @@
 
 /**
  * basic node for the buffer, these nodes are linked together to create the buffer
- */
+*/
 typedef struct sbuffer_node {
-    struct sbuffer_node *next;  /**< a pointer to the next node*/
+    struct sbuffer_node* next;  /**< a pointer to the next node*/
     sensor_data_t data;         /**< a structure containing the data */
 } sbuffer_node_t;
 
@@ -18,11 +18,11 @@ typedef struct sbuffer_node {
  * a structure to keep track of the buffer
  */
 struct sbuffer {
-    sbuffer_node_t *head;       /**< a pointer to the first node in the buffer */
-    sbuffer_node_t *tail;       /**< a pointer to the last node in the buffer */
+    sbuffer_node_t* head;       /**< a pointer to the first node in the buffer */
+    sbuffer_node_t* tail;       /**< a pointer to the last node in the buffer */
 };
 
-int sbuffer_init(sbuffer_t **buffer) {
+int sbuffer_init(sbuffer_t** buffer) {
     *buffer = malloc(sizeof(sbuffer_t));
     if (*buffer == NULL) return SBUFFER_FAILURE;
     (*buffer)->head = NULL;
@@ -30,8 +30,8 @@ int sbuffer_init(sbuffer_t **buffer) {
     return SBUFFER_SUCCESS;
 }
 
-int sbuffer_free(sbuffer_t **buffer) {
-    sbuffer_node_t *dummy;
+int sbuffer_free(sbuffer_t** buffer) {
+    sbuffer_node_t* dummy;
     if ((buffer == NULL) || (*buffer == NULL)) {
         return SBUFFER_FAILURE;
     }
@@ -45,10 +45,10 @@ int sbuffer_free(sbuffer_t **buffer) {
     return SBUFFER_SUCCESS;
 }
 
-int sbuffer_remove(sbuffer_t *buffer, sensor_data_t *data) {
-    sbuffer_node_t *dummy;
+int sbuffer_remove(sbuffer_t* buffer, sensor_data_t* data) {
+    sbuffer_node_t* dummy;
     if (buffer == NULL) return SBUFFER_FAILURE;
-    if (buffer->head == NULL) return SBUFFER_NO_DATA;
+    if (buffer->head == NULL) return SBUFFER_NO_DATA; 
     *data = buffer->head->data;
     dummy = buffer->head;
     if (buffer->head == buffer->tail) // buffer has only one node
@@ -62,8 +62,8 @@ int sbuffer_remove(sbuffer_t *buffer, sensor_data_t *data) {
     return SBUFFER_SUCCESS;
 }
 
-int sbuffer_insert(sbuffer_t *buffer, sensor_data_t *data) {
-    sbuffer_node_t *dummy;
+int sbuffer_insert(sbuffer_t* buffer, sensor_data_t* data) {
+    sbuffer_node_t* dummy;
     if (buffer == NULL) return SBUFFER_FAILURE;
     dummy = malloc(sizeof(sbuffer_node_t));
     if (dummy == NULL) return SBUFFER_FAILURE;
