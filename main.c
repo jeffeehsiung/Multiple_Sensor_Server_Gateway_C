@@ -71,9 +71,8 @@ void* writer(void* param){
     sbuffer_setflag(buffer,false);
     // while loop: fread return number of item read
     while(fread(&(data.id), sizeof(data.id), 1, sensor_data) > 0){
-	fread(&(data.value), sizeof(data.value), 1, sensor_data);
-	fread(&(data.ts), sizeof(data.ts), 1, sensor_data);
-	printf("%d,%f, %ld\n",(data).id, (data).value, (data).ts);
+	    fread(&(data.value), sizeof(data.value), 1, sensor_data);
+	    fread(&(data.ts), sizeof(data.ts), 1, sensor_data);
         if(sbuffer_insert(buffer,&data) < 0){
             perror("sbuffer_insert failed\n"); exit(EXIT_FAILURE);
         }
