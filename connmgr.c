@@ -6,7 +6,7 @@
 #include "connmgr.h"
 #include "config.h"
 
-#define MAX_CONN 3  // state the max. number of connections the server will handle before exiting
+#define MAX_CONN 4  // state the max. number of connections the server will handle before exiting
 
 // initialize global variables
 tcpsock_t *server,*client;
@@ -66,14 +66,18 @@ void* client_handler (void* param) {
  */
 void* connmgr_start(void* server_port) {
     
-    // typcast the void* to int*
+    /* typcast the void* to int* */
     int* port = (int*) server_port;
     
     /* initialize variables */
     int conn_counter = 0;
 
+    /* initialize thread array */
     pthread_t clientthreads[MAX_CONN];
-
+    /* set pthread_attr_t to default */
+    pthread_attr_t attr;
+    pthread_attr_init(&attr);
+    //pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_JOINABLE);
 
     /* open tcp connection */
     printf("Test server started\n");
@@ -89,9 +93,12 @@ void* connmgr_start(void* server_port) {
         printf("Incoming client connection\n");
 
         // create client thread with socket number & start the runner + increment the conn_counter
-        if (pthread_create(&clientthreads[conn_counter],NULL,client_handler,client) != 0){
-            printf("failed to create thread \n");
+        if (pthread_create(&clientthreads[conn_counter],&attr,client_handler,client) != 0){
+            perror("failed to create thread \n"); exit(EXIT_FAILURE);
         }
+        // print the counter
+        printf("conn_counter = %d",conn_counter);
+
         conn_counter++;
     } while (conn_counter < MAX_CONN);
     

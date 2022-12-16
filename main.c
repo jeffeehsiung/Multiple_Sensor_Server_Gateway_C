@@ -3,9 +3,13 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
+#include <sys/time.h>
 #include <pthread.h>
 #include <inttypes.h>
 #include <string.h>
@@ -15,8 +19,9 @@
 #include <aio.h>
 #include "config.h"
 #include "sbuffer.h"
-#include "logger.h"
 #include "connmgr.h"
+
+
 
 void print_help(void);
 
@@ -32,6 +37,10 @@ int main(int argc, char *argv[]){
 	/* instantiate */
 	pid_t pid;
     int server_port;
+    // set pthread attributes
+    pthread_attr_t attr;
+    pthread_attr_init(&attr);
+    //pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
     if (argc != 2) {
         print_help();
@@ -61,7 +70,10 @@ int main(int argc, char *argv[]){
         close(fd[READ_END]);
 
         // create a thread that will start connmgr_start()
-        pthread_create(&threads[totalthread], NULL, &connmgr_start, arg);
+        if (pthread_create(&threads[totalthread],&attr,connmgr_start,arg) != 0){
+            perror("failed to create thread \n"); exit(EXIT_FAILURE);
+        }
+        totalthread++;
 
         /* wait for target threads to terminate */
         while (totalthread >  0) {
@@ -81,15 +93,26 @@ int main(int argc, char *argv[]){
         /* close the writing end of the pipe */
         close(fd[WRITE_END]);
         /* open logfile and read until there is nothing then close it */
+        char* logname = "gateway.log";
         bool append = true;
-        FILE* log = open_log(append);
+        FILE* log = fopen(logname, ((append == true)? "a+": "w+"));
+        if (log == NULL){
+            perror("logger opening file falied\n"); exit(EXIT_FAILURE);
+        }
+
+        /** strlen vs sizeof: 
+         * https://www.sanfoundry.com/c-tutorials-size-array-using-sizeof-operator-strlen-function/
+         * */
+
         /* read from the pipe into the buf*/
         char read_msg[100];
         while(read(fd[READ_END], read_msg, sizeof(read_msg)) > 0){
-            //TODO should get the bytes that's gonna be read for read function
-            log_event(log,read_msg);
+            fwrite(read_msg,strlen(read_msg)+1,1,log); //fwrite write in ascii format
         }
-        close_log(log);
+
+        if (fclose(log) != 0){
+            perror("logger closing file falied\n"); exit(EXIT_FAILURE);
+        }
 
         /* close the child reading end of the pipe*/
         close(fd[READ_END]);
