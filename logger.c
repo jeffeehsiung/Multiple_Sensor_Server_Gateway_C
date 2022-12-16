@@ -29,7 +29,6 @@ FILE* open_log(bool append){
  * */
 void log_event(FILE* log, char* message){
 	fwrite(message,strlen(message)+1,1,log); //fwrite write in ascii format
-	fprintf("logger logged: %s\n",message);
 }
 
 void close_log(FILE* log){

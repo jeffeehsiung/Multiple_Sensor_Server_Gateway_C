@@ -10,7 +10,7 @@
 
 // initialize global variables
 tcpsock_t *server,*client;
-extern fd;
+extern int fd[2];
 
 /**
  * The thread will begin control in this runner function for one client
@@ -64,7 +64,10 @@ void* client_handler (void* param) {
 /**
  * Implements a sequential test server (only one connection at the same time)
  */
-void connmgr_start(int server_port) {
+void* connmgr_start(void* server_port) {
+    
+    // typcast the void* to int*
+    int* port = (int*) server_port;
     
     /* initialize variables */
     int conn_counter = 0;
@@ -74,7 +77,7 @@ void connmgr_start(int server_port) {
 
     /* open tcp connection */
     printf("Test server started\n");
-    if (tcp_passive_open(&server, server_port) != TCP_NO_ERROR){exit(EXIT_FAILURE);}
+    if (tcp_passive_open(&server, *port) != TCP_NO_ERROR){exit(EXIT_FAILURE);}
 
 
     /* wait for each client and create thread for each client */

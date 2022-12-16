@@ -28,9 +28,6 @@ pthread_t threads[MAX_RD + MAX_WRT];
 
 
 int main(int argc, char *argv[]){
-    /* buf */
-	char write_msg[MAX_BUFF];
-	char read_msg[MAX_BUFF];
 
 	/* instantiate */
 	pid_t pid;
@@ -58,18 +55,13 @@ int main(int argc, char *argv[]){
 
         /** instantiate variables */
         int totalthread = 0;
+        void* arg = (void*) &server_port;
 
         /* close the read end of the pipe */
         close(fd[READ_END]);
 
-        /* create connmgr thread */
-        do {
-            printf("creating %d -th thread\n", totalthread);
-            if (pthread_create(&threads[totalthread],NULL,connmgr_start,server_port) != 0){
-                perror("failed to create thread \n"); exit(EXIT_FAILURE);
-            }
-            totalthread++;
-        } while (totalthread < MAX_WRT);
+        // create a thread that will start connmgr_start()
+        pthread_create(&threads[totalthread], NULL, &connmgr_start, arg);
 
         /* wait for target threads to terminate */
         while (totalthread >  0) {
@@ -92,6 +84,7 @@ int main(int argc, char *argv[]){
         bool append = true;
         FILE* log = open_log(append);
         /* read from the pipe into the buf*/
+        char read_msg[100];
         while(read(fd[READ_END], read_msg, sizeof(read_msg)) > 0){
             //TODO should get the bytes that's gonna be read for read function
             log_event(log,read_msg);
@@ -115,3 +108,6 @@ void print_help(void) {
     printf("Use this program with 2 command line options: \n");
     printf("\t%-15s : TCP server port number\n", "\'server port\'");
 }
+
+
+

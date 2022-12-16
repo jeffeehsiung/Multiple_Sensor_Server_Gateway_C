@@ -18,6 +18,6 @@
 #include "lib/tcpsock.h"
 
 void* client_handler (void* param);
-void connmgr_start(int server_port);
+void* connmgr_start(void* server_port);
 
 #endif /* _CONNMGR_H_ */
