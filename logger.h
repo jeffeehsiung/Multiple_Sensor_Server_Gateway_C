@@ -9,10 +9,14 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <time.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/time.h>
+#include <ctype.h>
 
 /*create the log file*/
 FILE* open_log(bool append);
