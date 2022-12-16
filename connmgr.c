@@ -57,7 +57,7 @@ void* client_handler (void* param) {
     else{printf("Error occured on connection to peer\n");}
 
     tcp_close(&client);
-    pthread_detach(pthread_self());
+    //pthread_detach(pthread_self());
     pthread_exit(NULL);
 }
 
@@ -77,7 +77,6 @@ void* connmgr_start(void* server_port) {
     /* set pthread_attr_t to default */
     pthread_attr_t attr;
     pthread_attr_init(&attr);
-    //pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_JOINABLE);
 
     /* open tcp connection */
     printf("Test server started\n");
@@ -97,18 +96,15 @@ void* connmgr_start(void* server_port) {
             perror("failed to create thread \n"); exit(EXIT_FAILURE);
         }
         // print the counter
-        printf("conn_counter = %d",conn_counter);
+        printf("conn_counter = %d \n",conn_counter);
 
         conn_counter++;
     } while (conn_counter < MAX_CONN);
     
     /* wait for target threads to terminate */
     while (conn_counter >  0) {
-        while (conn_counter != 0){
-            // join all threads
-            pthread_join(clientthreads[conn_counter],NULL);
-            conn_counter--;
-        }
+        pthread_join(clientthreads[conn_counter],NULL);
+        conn_counter--;
     }
 
     /* tcp close connection fail safe */
@@ -116,7 +112,7 @@ void* connmgr_start(void* server_port) {
     printf("Test server is shutting down\n");
 
     pthread_detach(pthread_self());
-    pthread_exit(NULL);
+    //pthread_exit(NULL);
 }
 
 

@@ -40,7 +40,7 @@ int main(int argc, char *argv[]){
     // set pthread attributes
     pthread_attr_t attr;
     pthread_attr_init(&attr);
-    //pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
     if (argc != 2) {
         print_help();
