@@ -20,7 +20,6 @@
 #include "config.h"
 #include "sbuffer.h"
 #include "connmgr.h"
-#include "logger.h"
 
 
 
@@ -84,6 +83,10 @@ int main(int argc, char *argv[]){
         /* wait for child process to terminate */
         wait(NULL);
 
+        /* exit parent process */
+        exit(EXIT_SUCCESS);
+
+
     }
 	/* child process: log process */
     else{
@@ -92,20 +95,37 @@ int main(int argc, char *argv[]){
         
         /* open logfile and read until there is nothing then close it */
         bool append = true;
-        FILE* log = open_log(append);
+        char* logname = "gateway.log";
+        char* testname = "gateway.txt";
+        /* bool: csv file exist, overwritten = false; exist: append = true; */
+        FILE* log = fopen(logname, ((append == true)? "a+": "w+"));
+        if (log == NULL){
+            perror("logger opening file failed\n"); exit(EXIT_FAILURE);
+        }
+        FILE* test = fopen(testname, ((append == true)? "a+": "w+"));
+        if (test == NULL){
+            perror("logger opening file failed\n"); exit(EXIT_FAILURE);
+        }
         /* read from the pipe into the buf*/
         char read_msg[100];
         while(read(fd[READ_END], read_msg, sizeof(read_msg)) > 0){
-            //TODO should get the bytes that's gonna be read for read function
-            log_event(log,read_msg);
+            	int byte = fwrite(read_msg,strlen(read_msg)+1,1,log); //fwrite write in ascii format
+                if (byte == 0){
+                        perror("logger writing file failed\n"); exit(EXIT_FAILURE);
+                }
+                fprintf(test,"logger logged: %s",read_msg);
+                //printf("logger logged: %s",message);
+            }
+        
+        if(fclose(log) != 0){
+                perror("logger closing file falied\n"); exit(EXIT_FAILURE);
         }
-        close_log(log);
 
         /* close the child reading end of the pipe*/
         close(fd[READ_END]);
 
         /* exit child process */
-        exit(0);
+        exit(EXIT_SUCCESS);
 	}
     
     return 0;

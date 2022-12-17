@@ -42,7 +42,7 @@ void* client_handler (void* param) {
                 char buf[100];
                 sprintf(buf,"Sensor node %d has opened a new connection\n",data.id);
                 write(fd[WRITE_END],buf,sizeof(buf));
-                printf("Sensor node %d has opened a new connection\n",data.id);
+                printf("client handler wrote to pipe: %s\n", buf);
             }
         }
     } while (result == TCP_NO_ERROR);
@@ -54,7 +54,7 @@ void* client_handler (void* param) {
         char buf[100];
         sprintf(buf,"Sensor node %d has closed the connection\n",data.id);
         write(fd[WRITE_END],buf,sizeof(buf));
-        printf("Sensor node %d has closed the connection\n",data.id);
+        printf("client handler wrote close conn to pipe\n");
     }
     else{printf("Error occured on connection to peer\n");}
 
@@ -63,7 +63,11 @@ void* client_handler (void* param) {
 
     printf("Client thread is shutting down\n");
     // join connmgr thread
+    pthread_detach(pthread_self());
     pthread_exit(NULL);
+
+
+    return NULL;
 }
 
 /**
@@ -79,9 +83,6 @@ void* connmgr_start(void* server_port) {
 
     /* initialize thread array */
     pthread_t clientthreads[MAX_CONN];
-    /* set pthread_attr_t to default */
-    pthread_attr_t attr;
-    pthread_attr_init(&attr);
 
     /* open tcp connection */
     printf("Test server started\n");
@@ -94,22 +95,22 @@ void* connmgr_start(void* server_port) {
         if (tcp_wait_for_connection(server, &client) != TCP_NO_ERROR){
             exit(EXIT_FAILURE);
         }
-        printf("Incoming client connection\n");
+        printf("connmgr Incoming client connection\n");
         
         // create client thread with socket number & start the runner + increment the conn_counter
-        if (pthread_create(&clientthreads[conn_counter],&attr,client_handler,client) != 0){
+        if (pthread_create(&clientthreads[conn_counter],NULL,client_handler,client) != 0){
             perror("failed to create thread \n"); exit(EXIT_FAILURE);
         }
         conn_counter++;
         // print the counter
-        printf("conn_counter = %d \n",conn_counter);
+        printf("connmgr conn_counter = %d \n",conn_counter);
 
     } while (conn_counter < MAX_CONN);
     
     /* wait for target threads to terminate */
     while (conn_counter >  0) {
         pthread_join(clientthreads[conn_counter-1],NULL);
-        printf("joined thread number = %d \n",conn_counter);
+        printf("connmgr joined thread number = %d \n",conn_counter);
         conn_counter--;
     }
 
@@ -118,8 +119,8 @@ void* connmgr_start(void* server_port) {
     printf("Test server is shutting down\n");
 
     // join main thread
+    pthread_detach(pthread_self());
     pthread_exit(NULL);
-
     return NULL;
     
 }
