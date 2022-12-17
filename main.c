@@ -25,22 +25,21 @@
 
 void print_help(void);
 
-/* global varaibles */
+/* pipe varaibles */
 int fd[2]; // two ends of a file description for read and write
 
 /* threads variables */
 pthread_t threads[MAX_RD + MAX_WRT];
-
 
 int main(int argc, char *argv[]){
 
 	/* instantiate */
 	pid_t pid;
     int server_port;
+
     // set pthread attributes
     pthread_attr_t attr;
     pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
     if (argc != 2) {
         print_help();
@@ -77,16 +76,18 @@ int main(int argc, char *argv[]){
 
         /* wait for target threads to terminate */
         while (totalthread >  0) {
-            pthread_join(threads[totalthread],NULL);
+            if(pthread_detach(threads[totalthread-1]) != 0){
+                perror("failed to detach thread \n"); exit(EXIT_FAILURE);
+            }
             totalthread--;
-            printf("number of threads left active: %d\n", totalthread);
         }
 
         /* wait for child process to terminate */
         wait(NULL);
 
-        /* exit parent process */
-        exit(EXIT_SUCCESS);
+        /* close the parent writing end of the pipe */
+        close(fd[WRITE_END]);
+
     }
 	/* child process: log process */
     else{
@@ -107,6 +108,7 @@ int main(int argc, char *argv[]){
         /* read from the pipe into the buf*/
         char read_msg[100];
         while(read(fd[READ_END], read_msg, sizeof(read_msg)) > 0){
+            printf("logger logged: %s\n",read_msg);
             fwrite(read_msg,strlen(read_msg)+1,1,log); //fwrite write in ascii format
         }
 
