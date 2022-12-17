@@ -20,13 +20,14 @@
 #include "config.h"
 #include "sbuffer.h"
 #include "connmgr.h"
+#include "logger.h"
 
 
 
 void print_help(void);
 
 /* pipe varaibles */
-int fd[2]; // two ends of a file description for read and write
+int fd[2]; // two ends of a file description for read and write. shared between processes
 
 /* threads variables */
 pthread_t threads[MAX_RD + MAX_WRT];
@@ -36,10 +37,6 @@ int main(int argc, char *argv[]){
 	/* instantiate */
 	pid_t pid;
     int server_port;
-
-    // set pthread attributes
-    pthread_attr_t attr;
-    pthread_attr_init(&attr);
 
     if (argc != 2) {
         print_help();
@@ -68,18 +65,20 @@ int main(int argc, char *argv[]){
         /* close the read end of the pipe */
         close(fd[READ_END]);
 
-        // create a thread that will start connmgr_start()
-        if (pthread_create(&threads[totalthread],&attr,connmgr_start,arg) != 0){
+        /* create a thread that is joinable */
+        if (pthread_create(&threads[totalthread],NULL,connmgr_start,arg) != 0){
             perror("failed to create thread \n"); exit(EXIT_FAILURE);
         }
-        totalthread++;
-
+        totalthread++; 
+        
         /* wait for target threads to terminate */
         while (totalthread >  0) {
-            if(pthread_detach(threads[totalthread-1]) != 0){
+            if(pthread_join(threads[totalthread-1],NULL) != 0){
                 perror("failed to detach thread \n"); exit(EXIT_FAILURE);
+            }else{
+                totalthread--;
+                printf(" threads in main left active: %d:",totalthread);
             }
-            totalthread--;
         }
 
         /* wait for child process to terminate */
@@ -93,28 +92,17 @@ int main(int argc, char *argv[]){
     else{
         /* close the writing end of the pipe */
         close(fd[WRITE_END]);
+        
         /* open logfile and read until there is nothing then close it */
-        char* logname = "gateway.log";
         bool append = true;
-        FILE* log = fopen(logname, ((append == true)? "a+": "w+"));
-        if (log == NULL){
-            perror("logger opening file falied\n"); exit(EXIT_FAILURE);
-        }
-
-        /** strlen vs sizeof: 
-         * https://www.sanfoundry.com/c-tutorials-size-array-using-sizeof-operator-strlen-function/
-         * */
-
+        FILE* log = open_log(append);
         /* read from the pipe into the buf*/
         char read_msg[100];
         while(read(fd[READ_END], read_msg, sizeof(read_msg)) > 0){
-            printf("logger logged: %s\n",read_msg);
-            fwrite(read_msg,strlen(read_msg)+1,1,log); //fwrite write in ascii format
+            //TODO should get the bytes that's gonna be read for read function
+            log_event(log,read_msg);
         }
-
-        if (fclose(log) != 0){
-            perror("logger closing file falied\n"); exit(EXIT_FAILURE);
-        }
+        close_log(log);
 
         /* close the child reading end of the pipe*/
         close(fd[READ_END]);

@@ -43,6 +43,7 @@ void* client_handler (void* param) {
                 char buf[100];
                 sprintf(buf,"Sensor node %d has opened a new connection\n",data.id);
                 write(fd[WRITE_END],buf,sizeof(buf));
+                printf("Sensor node %d has opened a new connection\n",data.id);
             }
         }
     } while (result == TCP_NO_ERROR);
@@ -53,14 +54,15 @@ void* client_handler (void* param) {
         char buf[100];
         sprintf(buf,"Sensor node %d has closed the connection\n",data.id);
         write(fd[WRITE_END],buf,sizeof(buf));
+        printf("Sensor node %d has closed the connection\n",data.id);
     }
     else{printf("Error occured on connection to peer\n");}
 
     // close the client socket
     tcp_close(&client);
-    // terminate the thread
-    pthread_detach(pthread_self());
-    return NULL;
+
+    // join connmgr thread
+    pthread_exit(NULL);
 }
 
 /**
@@ -111,10 +113,14 @@ void* connmgr_start(void* server_port) {
     }
 
     /* tcp close connection fail safe */
-    if (tcp_close(&server) != TCP_NO_ERROR) exit(EXIT_FAILURE);
+    if (tcp_close(&server) != TCP_NO_ERROR){exit(EXIT_FAILURE);}
     printf("Test server is shutting down\n");
-    
+
+    // join main thread
+    pthread_exit(NULL);
+
     return NULL;
+    
 }
 
 
