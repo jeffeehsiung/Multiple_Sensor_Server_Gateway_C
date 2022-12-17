@@ -13,9 +13,7 @@
 #define INSERTFAIL 100
 #define CSVCLOSED 101
 
-//char* myfifo; // used in create fifo
-int fdl;
-int id = 0;
+
 char* logname = "gateway.log";
 
 FILE* open_log(bool append){
@@ -29,11 +27,13 @@ FILE* open_log(bool append){
  * */
 void log_event(FILE* log, char* message){
 	fwrite(message,strlen(message)+1,1,log); //fwrite write in ascii format
+        printf("log: %s",message);
 }
 
 void close_log(FILE* log){
-	fclose(log);
-	perror("logger closing file falied\n"); exit(EXIT_FAILURE);
+	if(fclose(log)!= 0){
+                perror("logger closing file falied\n"); exit(EXIT_FAILURE);
+        }
 }
 
 

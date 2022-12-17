@@ -36,7 +36,6 @@ void* client_handler (void* param) {
         result = tcp_receive(client, (void *) &data.ts, &bytes);
         
         conncounter++;
-        // prints to stdout (console)
         if ((result == TCP_NO_ERROR) && bytes) {
             // write to pipe
             if(conncounter == 1){
@@ -48,6 +47,7 @@ void* client_handler (void* param) {
         }
     } while (result == TCP_NO_ERROR);
     
+    printf("checking if result is closed \n");
     if (result == TCP_CONNECTION_CLOSED){
         printf("Peer has closed connection\n");
         // write to pipe
@@ -61,6 +61,7 @@ void* client_handler (void* param) {
     // close the client socket
     tcp_close(&client);
 
+    printf("Client thread is shutting down\n");
     // join connmgr thread
     pthread_exit(NULL);
 }

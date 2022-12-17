@@ -84,9 +84,6 @@ int main(int argc, char *argv[]){
         /* wait for child process to terminate */
         wait(NULL);
 
-        /* close the parent writing end of the pipe */
-        close(fd[WRITE_END]);
-
     }
 	/* child process: log process */
     else{
@@ -108,7 +105,7 @@ int main(int argc, char *argv[]){
         close(fd[READ_END]);
 
         /* exit child process */
-        exit(EXIT_SUCCESS);
+        exit(0);
 	}
     
     return 0;
