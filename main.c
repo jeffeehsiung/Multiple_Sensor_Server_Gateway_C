@@ -96,14 +96,9 @@ int main(int argc, char *argv[]){
         /* open logfile and read until there is nothing then close it */
         bool append = true;
         char* logname = "gateway.log";
-        char* testname = "gateway.txt";
         /* bool: csv file exist, overwritten = false; exist: append = true; */
         FILE* log = fopen(logname, ((append == true)? "a+": "w+"));
         if (log == NULL){
-            perror("logger opening file failed\n"); exit(EXIT_FAILURE);
-        }
-        FILE* test = fopen(testname, ((append == true)? "a+": "w+"));
-        if (test == NULL){
             perror("logger opening file failed\n"); exit(EXIT_FAILURE);
         }
         /* read from the pipe into the buf*/
@@ -113,8 +108,7 @@ int main(int argc, char *argv[]){
                 if (byte == 0){
                         perror("logger writing file failed\n"); exit(EXIT_FAILURE);
                 }
-                fprintf(test,"logger logged: %s",read_msg);
-                //printf("logger logged: %s",message);
+                printf("logger logged: %s",read_msg);
             }
         
         if(fclose(log) != 0){
