@@ -32,10 +32,11 @@ int fd[2]; // two ends of a file description for read and write. shared between 
 pthread_t threads[MAX_RD + MAX_WRT];
 
 int main(int argc, char *argv[]){
-
-	/* instantiate */
-	pid_t pid;
+    /* instantiate */
+    pid_t pid;
     int server_port;
+    FILE* log;
+    char* logname = "gateway.log";
 
     if (argc != 2) {
         print_help();
@@ -83,6 +84,8 @@ int main(int argc, char *argv[]){
         /* wait for child process to terminate */
         wait(NULL);
 
+	/* close write end of the pipe */
+	close(fd[WRITE_END]);
         /* exit parent process */
         exit(EXIT_SUCCESS);
 
@@ -95,9 +98,8 @@ int main(int argc, char *argv[]){
         
         /* open logfile and read until there is nothing then close it */
         bool append = true;
-        char* logname = "gateway.log";
         /* bool: csv file exist, overwritten = false; exist: append = true; */
-        FILE* log = fopen(logname, ((append == true)? "a+": "w+"));
+        log = fopen(logname, ((append == true)? "a+": "w+"));
         if (log == NULL){
             perror("logger opening file failed\n"); exit(EXIT_FAILURE);
         }
@@ -105,6 +107,7 @@ int main(int argc, char *argv[]){
         char read_msg[100];
         while(read(fd[READ_END], read_msg, sizeof(read_msg)) > 0){
             	int byte = fwrite(read_msg,strlen(read_msg)+1,1,log); //fwrite write in ascii format
+		fputs(read_msg,log);
                 if (byte == 0){
                         perror("logger writing file failed\n"); exit(EXIT_FAILURE);
                 }
