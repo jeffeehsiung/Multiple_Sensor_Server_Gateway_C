@@ -35,8 +35,7 @@ int main(int argc, char *argv[]){
     /* instantiate */
     pid_t pid;
     int server_port;
-    FILE* log;
-    char* logname = "gateway.log";
+    bool terminate = false;
 
     if (argc != 2) {
         print_help();
@@ -81,11 +80,13 @@ int main(int argc, char *argv[]){
             }
         }
 
+        terminate = true;
+
         /* wait for child process to terminate */
         wait(NULL);
 
-	/* close write end of the pipe */
-	close(fd[WRITE_END]);
+	    /* close write end of the pipe */
+	    close(fd[WRITE_END]);
         /* exit parent process */
         exit(EXIT_SUCCESS);
 
@@ -98,31 +99,29 @@ int main(int argc, char *argv[]){
         
         /* open logfile and read until there is nothing then close it */
         bool append = true;
+        FILE* log;
+        char* logname = "gateway.log";
         /* bool: csv file exist, overwritten = false; exist: append = true; */
         log = fopen(logname, ((append == true)? "a+": "w+"));
         if (log == NULL){
             perror("logger opening file failed\n"); exit(EXIT_FAILURE);
         }
-        /* read from the pipe into the buf*/
-        char read_msg[100];
-        while(read(fd[READ_END], read_msg, sizeof(read_msg)) > 0){
-            /* find the index of the char terminator in the string, and advance by the index to continue to find the next string */      
-            int i = 0;
-            while(i <= sizeof(read_msg)){
-                char dummy[sizeof(read_msg)];
-                /* if char is a terminator, we put the terminated dummy string into file */
-                int j = 0;
-                for(j =0; read_msg[j] != '\0'; j++){
-                    fputs(read_msg[j+1], log);
-                }
-                 fputs(read_msg[j+1], log);
-                
-                i += j+1;
+        while(terminate == false){
+            /* keep reading from the pipe */
+            char read_msg[100];
+            int bytes_read = read(fd[READ_END], read_msg, sizeof(read_msg));
+            if (bytes_read == -1){
+                perror("logger reading from pipe failed\n"); exit(EXIT_FAILURE);
             }
-
+            if (bytes_read == 0){
+                break;
+            }
+            // write to the log file
+            if (fwrite(read_msg, sizeof(char), bytes_read, log) != bytes_read){
+                perror("logger writing to file failed\n"); exit(EXIT_FAILURE);
+            }
             printf("logger logged: %s",read_msg);
         }
-        
         if(fclose(log) != 0){
                 perror("logger closing file falied\n"); exit(EXIT_FAILURE);
         }
@@ -130,8 +129,9 @@ int main(int argc, char *argv[]){
         /* close the child reading end of the pipe*/
         close(fd[READ_END]);
 
+        printf("logger process terminated\n");
         /* exit child process */
-        exit(EXIT_SUCCESS);
+        exit(0);
 	}
     
     return 0;

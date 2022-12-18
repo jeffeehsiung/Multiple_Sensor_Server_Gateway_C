@@ -24,7 +24,7 @@ void* client_handler (void* param) {
     sensor_data_t data;
     int bytes, result;
     int conncounter = 0;
-    do {
+    while (result == TCP_NO_ERROR){
         // read sensor ID
         bytes = sizeof(data.id);
         result = tcp_receive(client, (void *) &data.id, &bytes);
@@ -45,7 +45,7 @@ void* client_handler (void* param) {
                 printf("client handler wrote to pipe: %s\n", buf);
             }
         }
-    } while (result == TCP_NO_ERROR);
+    }
     
     printf("checking if result is closed \n");
     if (result == TCP_CONNECTION_CLOSED){
@@ -60,14 +60,9 @@ void* client_handler (void* param) {
 
     // close the client socket
     tcp_close(&client);
-
-    printf("Client thread is shutting down\n");
+    printf("client handler closed client socket\n");
     // join connmgr thread
-    pthread_detach(pthread_self());
     pthread_exit(NULL);
-
-
-    return NULL;
 }
 
 /**
@@ -119,9 +114,7 @@ void* connmgr_start(void* server_port) {
     printf("Test server is shutting down\n");
 
     // join main thread
-    pthread_detach(pthread_self());
     pthread_exit(NULL);
-    return NULL;
     
 }
 
