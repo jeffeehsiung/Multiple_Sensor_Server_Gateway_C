@@ -97,17 +97,17 @@ int main(int argc, char *argv[]){
         /* close the writing end of the pipe */
         close(fd[WRITE_END]);
         
-        /* open logfile and read until there is nothing then close it */
+        /* open logfile and append */
         bool append = true;
         FILE* log;
         char* logname = "gateway.log";
-        /* bool: csv file exist, overwritten = false; exist: append = true; */
         log = fopen(logname, ((append == true)? "a+": "w+"));
         if (log == NULL){
             perror("logger opening file failed\n"); exit(EXIT_FAILURE);
         }
+        /* keep reading from the pipe until terminated */
         while(terminate == false){
-            /* keep reading from the pipe */
+            // read from the pipe
             char read_msg[100];
             int bytes_read = read(fd[READ_END], read_msg, sizeof(read_msg));
             if (bytes_read == -1){
@@ -122,6 +122,7 @@ int main(int argc, char *argv[]){
             }
             printf("logger logged: %s",read_msg);
         }
+
         if(fclose(log) != 0){
                 perror("logger closing file falied\n"); exit(EXIT_FAILURE);
         }
@@ -131,7 +132,7 @@ int main(int argc, char *argv[]){
 
         printf("logger process terminated\n");
         /* exit child process */
-        exit(0);
+        exit(EXIT_SUCCESS);
 	}
     
     return 0;

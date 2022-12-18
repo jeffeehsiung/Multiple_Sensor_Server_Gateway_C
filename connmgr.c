@@ -11,6 +11,9 @@
 // initialize global variables
 tcpsock_t *server,*client;
 extern int fd[2];
+// Semaphore variables since each thread wishes to write to a pipe
+sem_t x;
+
 
 /**
  * The thread will begin control in this runner function for one client
@@ -24,6 +27,9 @@ void* client_handler (void* param) {
     sensor_data_t data;
     int bytes, result;
     int conncounter = 0;
+    result = TCP_NO_ERROR;
+
+
     while (result == TCP_NO_ERROR){
         // read sensor ID
         bytes = sizeof(data.id);
@@ -39,17 +45,26 @@ void* client_handler (void* param) {
         if ((result == TCP_NO_ERROR) && bytes) {
             // write to pipe
             if(conncounter == 1){
+                // lock the semaphore of data access
+                if (sem_wait(&x) == -1){
+                    perror("sem_wait failed\n"); exit(EXIT_FAILURE);
+                }
                 char buf[100];
                 sprintf(buf,"Sensor node %d has opened a new connection\n",data.id);
                 write(fd[WRITE_END],buf,sizeof(buf));
                 printf("client handler wrote to pipe: %s\n", buf);
+
+                // unlock the semaphore of data access
+                if (sem_post(&x) == -1){
+                    perror("sem_post failed\n"); exit(EXIT_FAILURE);
+                }
+
             }
         }
     }
     
     printf("checking if result is closed \n");
     if (result == TCP_CONNECTION_CLOSED){
-        printf("Peer has closed connection\n");
         // write to pipe
         char buf[100];
         sprintf(buf,"Sensor node %d has closed the connection\n",data.id);
@@ -60,7 +75,6 @@ void* client_handler (void* param) {
 
     // close the client socket
     tcp_close(&client);
-    printf("client handler closed client socket\n");
     // join connmgr thread
     pthread_exit(NULL);
 }
@@ -76,6 +90,13 @@ void* connmgr_start(void* server_port) {
     /* initialize variables */
     int conn_counter = 0;
 
+    /* initialize the semaphore with resource value 1 and pshared being 0, 
+     * meaning shared between threads */
+    if (sem_init(&x, 0, 1) == -1){
+        perror("sem_init failed\n"); exit(EXIT_FAILURE);
+    }
+
+
     /* initialize thread array */
     pthread_t clientthreads[MAX_CONN];
 
@@ -90,7 +111,6 @@ void* connmgr_start(void* server_port) {
         if (tcp_wait_for_connection(server, &client) != TCP_NO_ERROR){
             exit(EXIT_FAILURE);
         }
-        printf("connmgr Incoming client connection\n");
         
         // create client thread with socket number & start the runner + increment the conn_counter
         if (pthread_create(&clientthreads[conn_counter],NULL,client_handler,client) != 0){

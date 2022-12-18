@@ -56,11 +56,11 @@ clean-all: clean
 	rm -rf lib/*.so
 
 run : sensor_gateway sensor_node
-	./sensor_gateway 1234 &
+	./sensor_gateway 1234 
 	sleep 2
-	./sensor_node 101 1 127.0.0.1 1234 &
-	./sensor_node 102 3 127.0.0.1 1234 &
-	./sensor_node 103 2 127.0.0.1 1234 &
+	./sensor_node 101 1 127.0.0.1 1234 
+	./sensor_node 102 3 127.0.0.1 1234 
+	./sensor_node 103 2 127.0.0.1 1234 
 
 zip:
 	zip lab_final.zip main.c connmgr.c connmgr.h datamgr.c datamgr.h sbuffer.c sbuffer.h sensor_db.c sensor_db.h config.h lib/dplist.c lib/dplist.h lib/tcpsock.c lib/tcpsock.h
