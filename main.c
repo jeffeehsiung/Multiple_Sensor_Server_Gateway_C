@@ -106,13 +106,22 @@ int main(int argc, char *argv[]){
         /* read from the pipe into the buf*/
         char read_msg[100];
         while(read(fd[READ_END], read_msg, sizeof(read_msg)) > 0){
-            	int byte = fwrite(read_msg,strlen(read_msg)+1,1,log); //fwrite write in ascii format
-		fputs(read_msg,log);
-                if (byte == 0){
-                        perror("logger writing file failed\n"); exit(EXIT_FAILURE);
+            /* find the index of the char terminator in the string, and advance by the index to continue to find the next string */      
+            int i = 0;
+            while(i <= sizeof(read_msg)){
+                char dummy[sizeof(read_msg)];
+                /* if char is a terminator, we put the terminated dummy string into file */
+                int j = 0;
+                for(j =0; read_msg[j] != '\0'; j++){
+                    fputs(read_msg[j+1], log);
                 }
-                printf("logger logged: %s",read_msg);
+                 fputs(read_msg[j+1], log);
+                
+                i += j+1;
             }
+
+            printf("logger logged: %s",read_msg);
+        }
         
         if(fclose(log) != 0){
                 perror("logger closing file falied\n"); exit(EXIT_FAILURE);
