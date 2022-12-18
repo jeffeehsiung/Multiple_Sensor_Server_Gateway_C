@@ -105,6 +105,9 @@ int main(int argc, char *argv[]){
         if (log == NULL){
             perror("logger opening file failed\n"); exit(EXIT_FAILURE);
         }
+        //char* msg = "logger process started\n";
+        //fwrite(msg, sizeof(char), strlen(msg), log);
+        //printf("%s",msg);
         /* keep reading from the pipe until terminated */
         while(terminate == false){
             // read from the pipe
@@ -117,9 +120,10 @@ int main(int argc, char *argv[]){
                 break;
             }
             // write to the log file
-            if (fwrite(read_msg, sizeof(char), bytes_read, log) != bytes_read){
-                perror("logger writing to file failed\n"); exit(EXIT_FAILURE);
-            }
+            // if (fwrite(read_msg, sizeof(char), bytes_read, log) != bytes_read){
+            //     perror("logger writing to file failed\n"); exit(EXIT_FAILURE);
+            // }
+            fprintf(log, "%s", read_msg);
             printf("logger logged: %s",read_msg);
         }
 
