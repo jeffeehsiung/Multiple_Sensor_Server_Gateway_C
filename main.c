@@ -35,7 +35,6 @@ int main(int argc, char *argv[]){
     /* instantiate */
     pid_t pid;
     int server_port;
-    bool terminate = false;
 
     if (argc != 2) {
         print_help();
@@ -80,8 +79,6 @@ int main(int argc, char *argv[]){
             }
         }
 
-        terminate = true;
-
         /* wait for child process to terminate */
         wait(NULL);
 
@@ -98,35 +95,24 @@ int main(int argc, char *argv[]){
         close(fd[WRITE_END]);
         
         /* open logfile and append */
-        bool append = true;
-        FILE* log;
         char* logname = "gateway.log";
-        log = fopen(logname, ((append == true)? "a+": "w+"));
+        FILE* log = fopen(logname,"a+");
         if (log == NULL){
             perror("logger opening file failed\n"); exit(EXIT_FAILURE);
         }
-        //char* msg = "logger process started\n";
-        //fwrite(msg, sizeof(char), strlen(msg), log);
-        //printf("%s",msg);
-        /* keep reading from the pipe until terminated */
-        while(terminate == false){
-            // read from the pipe
-            char read_msg[100];
-            int bytes_read = read(fd[READ_END], read_msg, sizeof(read_msg));
-            if (bytes_read == -1){
-                perror("logger reading from pipe failed\n"); exit(EXIT_FAILURE);
-            }
-            if (bytes_read == 0){
-                break;
-            }
-            // write to the log file
-            // if (fwrite(read_msg, sizeof(char), bytes_read, log) != bytes_read){
-            //     perror("logger writing to file failed\n"); exit(EXIT_FAILURE);
-            // }
-            fprintf(log, "%s", read_msg);
-            printf("logger logged: %s",read_msg);
-        }
+        char* msg = "logger process started\n";
+        fwrite(msg, sizeof(char), strlen(msg), log);
 
+        // read from the pipe
+        char read_msg[100];
+        int byte;
+        while((byte = read(fd[READ_END], read_msg, sizeof(read_msg))) > 0){
+            // write to the log file
+            fwrite(read_msg, sizeof(char), strlen(read_msg), log);
+            printf("logger logged: %s",read_msg);
+            printf("byte read: %d", byte);
+        }
+        printf("logger process terminated\n");
         if(fclose(log) != 0){
                 perror("logger closing file falied\n"); exit(EXIT_FAILURE);
         }
