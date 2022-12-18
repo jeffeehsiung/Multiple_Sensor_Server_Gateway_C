@@ -26,7 +26,7 @@
 void print_help(void);
 
 /* pipe varaibles */
-int fd[2]; // two ends of a file description for read and write. shared between processes
+int fd[2]; 
 
 /* threads variables */
 pthread_t threads[MAX_RD + MAX_WRT];
@@ -72,10 +72,10 @@ int main(int argc, char *argv[]){
         /* wait for target threads to terminate */
         while (totalthread >  0) {
             if(pthread_join(threads[totalthread-1],NULL) != 0){
-                perror("failed to detach thread \n"); exit(EXIT_FAILURE);
+                perror("main: failed to detach thread \n"); exit(EXIT_FAILURE);
             }else{
                 totalthread--;
-                printf(" threads in main left active: %d:",totalthread);
+                printf(" main: threads in main left active: %d:",totalthread);
             }
         }
 
@@ -86,7 +86,6 @@ int main(int argc, char *argv[]){
 	    close(fd[WRITE_END]);
         /* exit parent process */
         exit(EXIT_SUCCESS);
-
 
     }
 	/* child process: log process */
@@ -107,7 +106,7 @@ int main(int argc, char *argv[]){
             }
 
             // read from the pipe
-            char read_msg[100];
+            char read_msg[BUFF_SIZE];
             int bytes_read = read(fd[READ_END], read_msg, sizeof(read_msg));
             if (bytes_read == -1)
             {
@@ -121,7 +120,6 @@ int main(int argc, char *argv[]){
             }
 
             fprintf(log, "%s", read_msg);
-            printf("logger logged: %s", read_msg);
             fflush(log);
 
             if (fclose(log) != 0)
@@ -130,7 +128,7 @@ int main(int argc, char *argv[]){
                 exit(EXIT_FAILURE);
             }
 
-        } // end of while loop
+        } 
         /* close the child reading end of the pipe*/
         close(fd[READ_END]);
 

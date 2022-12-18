@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <time.h>
 
-#define MAX_BUFF	1024
+#define BUFF_SIZE	100
 #define READ_END	0
 #define WRITE_END	1
 #define MAX_RD      2

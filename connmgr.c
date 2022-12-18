@@ -49,10 +49,10 @@ void* client_handler (void* param) {
                 if (sem_wait(&x) == -1){
                     perror("sem_wait failed\n"); exit(EXIT_FAILURE);
                 }
-                char buf[100];
+
+                char buf[BUFF_SIZE];
                 sprintf(buf,"Sensor node %d has opened a new connection\n",data.id);
                 write(fd[WRITE_END],buf,sizeof(buf));
-                printf("client handler wrote to pipe: %s\n", buf);
 
                 // unlock the semaphore of data access
                 if (sem_post(&x) == -1){
@@ -63,13 +63,11 @@ void* client_handler (void* param) {
         }
     }
     
-    printf("checking if result is closed \n");
     if (result == TCP_CONNECTION_CLOSED){
         // write to pipe
-        char buf[100];
+        char buf[BUFF_SIZE];
         sprintf(buf,"Sensor node %d has closed the connection\n",data.id);
         write(fd[WRITE_END],buf,sizeof(buf));
-        printf("client handler wrote close conn to pipe\n");
     }
     else{printf("Error occured on connection to peer\n");}
 
@@ -90,12 +88,10 @@ void* connmgr_start(void* server_port) {
     /* initialize variables */
     int conn_counter = 0;
 
-    /* initialize the semaphore with resource value 1 and pshared being 0, 
-     * meaning shared between threads */
+    /* initialize the semaphore shared between threads */
     if (sem_init(&x, 0, 1) == -1){
         perror("sem_init failed\n"); exit(EXIT_FAILURE);
     }
-
 
     /* initialize thread array */
     pthread_t clientthreads[MAX_CONN];
