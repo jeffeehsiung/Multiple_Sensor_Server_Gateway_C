@@ -35,6 +35,7 @@ int main(int argc, char *argv[]){
     /* instantiate */
     pid_t pid;
     int server_port;
+    bool terminate = false;
 
     if (argc != 2) {
         print_help();
@@ -68,9 +69,11 @@ int main(int argc, char *argv[]){
             perror("failed to create thread \n"); exit(EXIT_FAILURE);
         }
         totalthread++; 
+        printf("main: total threads: %d\n",totalthread);
         
         /* wait for target threads to terminate */
         while (totalthread >  0) {
+            printf("main: waiting for thread to terminate\n");
             if(pthread_join(threads[totalthread-1],NULL) != 0){
                 perror("main: failed to detach thread \n"); exit(EXIT_FAILURE);
             }else{
@@ -78,6 +81,9 @@ int main(int argc, char *argv[]){
                 printf(" main: threads in main left active: %d:",totalthread);
             }
         }
+
+        printf("main: all threads terminated");
+        terminate = true;
 
         /* wait for child process to terminate */
         wait(NULL);
@@ -95,7 +101,7 @@ int main(int argc, char *argv[]){
         close(fd[WRITE_END]);
 
         // keep reading  until pipe is empty and log the message is the gateway.log file
-        while (1)
+        while (terminate == false)
         {
 
             FILE *log = fopen("gateway.log", "a");

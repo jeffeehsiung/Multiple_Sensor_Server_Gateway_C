@@ -34,12 +34,11 @@ struct sbuffer {
 int sbuffer_init(sbuffer_t** buffer) {
     *buffer = malloc(sizeof(sbuffer_t));
     memset(*buffer,'\0',sizeof(sbuffer_t));
-    //printf("sbuffer malloced addr: %p\n", (*buffer));
 
     if (*buffer == NULL) return SBUFFER_FAILURE;
     (*buffer)->head = NULL;
     (*buffer)->tail = NULL;
-    csv = fopen("sensor_data_out.csv", "a+");
+    csv = fopen("sensor_data_out.csv", "a");
     //printf("sbuffer init csv addr: %p\n",csv);
     if(ferror(csv)){
         perror("error opening csv\n"); exit(EXIT_FAILURE);
@@ -66,9 +65,7 @@ int sbuffer_free(sbuffer_t** buffer) {
     }
     free(*buffer);
     *buffer = NULL;
-    //printf("sbuffer_free malloced freed\n");
     fclose(csv);
-    //printf("csv closed\n");
     return SBUFFER_SUCCESS;
 }
 
@@ -77,13 +74,7 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t data) {
     if (buffer == NULL) return SBUFFER_FAILURE;
 
     // lock to update readcount
-    int sval = 0;
-    sem_wait(&mutex);
-    sem_getvalue(&mutex,&sval);
-    //printf("reader access locked, current semaphore num: %d\n", sval);
     readercount++;
-
-    //printf("\n%d reader is inside\n", readercount);
 
     // head empty, reader leaves
     bool flag = sbuffer_getflag(buffer);
@@ -91,28 +82,22 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t data) {
         readercount--;
         if (readercount == 0) {
             sem_post(&wrt);
-            //printf("readers = 0, signal writer\n");
         }
-        //printf("head empty, %d readers inside\n", readercount);
         sem_post(&mutex);
-        //sem_getvalue(&mutex,&sval);
-        //printf("reader access unlocked, current semaphore num: %d\n", sval);
+
         return SBUFFER_NO_DATA;
     }
     else if ((buffer->head == NULL) && (sbuffer_getflag(buffer) == true)){
         readercount--;
-        //printf("end of reading stream\n");
         sem_post(&mutex);
         return SBUFFER_END;
     }
 
     /* critical section */
     sem_wait(&wrt);
-    //printf("reader enters critical section\n");
     data = buffer->head->data;
     dummy = buffer->head; // node that just been read
     fprintf(csv,"%hu,%lf,%ld\n", (data).id, (data).value, (data).ts);
-    //printf("sbuffer_remove csv addr: %p\n",csv);
 
     // move head to next node for the other reader
     if (buffer->head == buffer->tail){ // buffer has only one node

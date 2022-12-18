@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "connmgr.h"
 #include "config.h"
+#include "sbuffer.h"
 
 #define MAX_CONN 4  // state the max. number of connections the server will handle before exiting
 
@@ -131,6 +132,7 @@ void* connmgr_start(void* server_port) {
 
     // join main thread
     pthread_exit(NULL);
+    return NULL;
     
 }
 
