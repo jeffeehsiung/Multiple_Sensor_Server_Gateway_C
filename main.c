@@ -90,40 +90,54 @@ int main(int argc, char *argv[]){
 
     }
 	/* child process: log process */
-    else{
-        /* close the writing end of the pipe */
+    else
+    {
+        /* close the write end of the pipe */
         close(fd[WRITE_END]);
-        
-        /* open logfile and append */
-        char* logname = "gateway.log";
-        FILE* log = fopen(logname,"a+");
-        if (log == NULL){
-            perror("logger opening file failed\n"); exit(EXIT_FAILURE);
-        }
-        char* msg = "logger process started\n";
-        fwrite(msg, sizeof(char), strlen(msg), log);
 
-        // read from the pipe
-        char read_msg[100];
-        int byte;
-        while((byte = read(fd[READ_END], read_msg, sizeof(read_msg))) > 0){
-            // write to the log file
-            fwrite(read_msg, sizeof(char), strlen(read_msg), log);
-            printf("logger logged: %s",read_msg);
-            printf("byte read: %d", byte);
-        }
-        printf("logger process terminated\n");
-        if(fclose(log) != 0){
-                perror("logger closing file falied\n"); exit(EXIT_FAILURE);
-        }
+        // keep reading  until pipe is empty and log the message is the gateway.log file
+        while (1)
+        {
 
+            FILE *log = fopen("gateway.log", "a");
+            if (log == NULL)
+            {
+                perror("logger opening file failed\n");
+                exit(EXIT_FAILURE);
+            }
+
+            // read from the pipe
+            char read_msg[100];
+            int bytes_read = read(fd[READ_END], read_msg, sizeof(read_msg));
+            if (bytes_read == -1)
+            {
+                perror("logger reading from pipe failed\n");
+                exit(EXIT_FAILURE);
+            }
+            if (bytes_read == 0)
+            {
+                printf("logger read 0 bytes from pipe\n");
+                break;
+            }
+
+            fprintf(log, "%s", read_msg);
+            printf("logger logged: %s", read_msg);
+            fflush(log);
+
+            if (fclose(log) != 0)
+            {
+                perror("logger closing file falied\n");
+                exit(EXIT_FAILURE);
+            }
+
+        } // end of while loop
         /* close the child reading end of the pipe*/
         close(fd[READ_END]);
 
         printf("logger process terminated\n");
         /* exit child process */
         exit(EXIT_SUCCESS);
-	}
+    }
     
     return 0;
 }
