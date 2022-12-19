@@ -7,13 +7,15 @@
 #include <sys/time.h>
 #include <pthread.h>
 #include <aio.h>
-#include "sbuffer.h"
 #include "connmgr.h"
 #include "datamgr.h"
+#include "sbuffer.h"
 
 
 
 void print_help(void);
+// void set_termintate(bool term);
+// bool get_terminate(void);
 
 /* pipe varaibles */
 int fd[2]; 
@@ -85,14 +87,16 @@ int main(int argc, char *argv[]){
         }
 
         printf("main: all threads terminated");
+        //set_termintate(true);
         terminate = true;
+        sbuffer_free(&buffer);
 
         wait(NULL);
 
 	    close(fd[WRITE_END]);
         fclose(map);
 
-        exit(EXIT_SUCCESS);
+        return 0;
 
     }
 	// child process: log process
@@ -152,6 +156,14 @@ void print_help(void) {
     printf("Use this program with 2 command line options: \n");
     printf("\t%-15s : TCP server port number\n", "\'server port\'");
 }
+
+// void set_termintate(bool term){
+//     terminate = term;
+// }
+
+// bool get_terminate(void){
+//     return terminate;
+// }
 
 
 

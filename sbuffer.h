@@ -27,11 +27,29 @@
 
 
 /**
+ * a structure to keep track of the buffer
+ */
+typedef struct sbuffer_node {
+    sensor_data_t data;         /**< the sensor data */
+    struct sbuffer_node* next;  /**< a pointer to the next node in the buffer */
+    bool read_by_a;
+    bool read_by_b;
+}sbuffer_node_t;
+
+typedef struct sbuffer {
+    sbuffer_node_t* head;       /**< a pointer to the first node in the buffer */
+    sbuffer_node_t* tail;       /**< a pointer to the last node in the buffer */
+    bool end_of_stream;
+    pthread_mutex_t mutex;
+    pthread_cond_t cond;
+}sbuffer_t;
+
+/**
  * Allocates and initializes a new shared buffer
  * \param buffer a double pointer to the buffer that needs to be initialized
  * \return SBUFFER_SUCCESS on success and SBUFFER_FAILURE if an error occurred
  */
-sbuffer_t* sbuffer_init(sbuffer_t **buffer);
+int sbuffer_init(sbuffer_t **buffer);
 
 /**
  * All allocated resources are freed and cleaned up

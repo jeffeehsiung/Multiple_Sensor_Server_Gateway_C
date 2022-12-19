@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <assert.h>
+#include <semaphore.h>
 #include "datamgr.h"
 #include "sbuffer.h"
 #include "lib/dplist.h"
@@ -10,6 +10,8 @@
 #define NO_ERROR "no error"
 #define MEMORY_ERROR "mem err" // error  mem alloc failure
 #define INVALID_ERROR "invalid err" //error list or sensor null
+#define SET_MIN_TEMP 10
+#define SET_MAX_TEMP 20
 
 extern int fd[2];
 extern sem_t pipe_lock;
@@ -22,7 +24,7 @@ int element_compare(void*,void*);
 
 
 void* datamgr_parse_sensor_files(void* param){
-	
+	printf("datamgr: parse sensor files\n");
 	FILE* fp_sensor_map = (FILE*) param;
 
     list = dpl_create(element_copy,element_free,element_compare);
@@ -33,6 +35,7 @@ void* datamgr_parse_sensor_files(void* param){
 	// read sensor map from text file and configure it with the sensor node in list
 	int count = 0;
 	while(fscanf(fp_sensor_map, "%hd %hd", &roomidBuff, &sensoridBuff)>0){
+		printf("datamgr: roomid: %d, sensorid: %d, count: %d\n", roomidBuff, sensoridBuff, count);
 		sensor_t* sensor = malloc(sizeof(sensor_t)); //element on heap, to be freed by element free
 		ERROR_HANDLER(sensor == NULL, MEMORY_ERROR);
 		sensor->room_id = roomidBuff;
@@ -43,7 +46,7 @@ void* datamgr_parse_sensor_files(void* param){
 				sensor->temperatures[i] = 0;
 		}
 		// for each sensor node we insert into the newly created list and no deep copy to keep on pointing to the heap addr
-		dpl_insert_at_index(list, sensor, count, false);
+		list = dpl_insert_at_index(list, sensor, count, false);
 	}
 
 	// for each sensor node, read sensor data from shared buffer and update the sensor node
@@ -82,7 +85,7 @@ void* datamgr_parse_sensor_files(void* param){
 			sum += data.value;
 			sensor->running_avg = sum/RUN_AVG_LENGTH;
 			// load timestamp
-			sensor->timestamp = data.ts;
+			sensor->last_modified = data.ts;
 			// avg temp abnormal checking
 			if(sensor->running_avg != 0){
 				// lock the semaphore of pipe access

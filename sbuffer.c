@@ -10,28 +10,18 @@
 /* instantiate variables */
 FILE* csv;
 
-/**
- * basic node for the buffer, these nodes are linked together to create the buffer
-*/
-typedef struct sbuffer_node {
-    struct sbuffer_node* next;  /**< a pointer to the next node*/
-    sensor_data_t data;         /**< a structure containing the data */
-    bool read_by_a;             /**< a flag to indicate whether the data has been read by datamgr */
-    bool read_by_b;             /**< a flag to indicate whether the data has been read by storagemgr */      
-}sbuffer_node_t;
+// /**
+//  * basic node for the buffer, these nodes are linked together to create the buffer
+// */
+// typedef struct sbuffer_node {
+//     sensor_data_t data;
+//     struct sbuffer_node* next;
+//     bool read_by_a;             
+//     bool read_by_b;
+// } sbuffer_node_t;
 
-/**
- * a structure to keep track of the buffer
- */
-typedef struct sbuffer {
-    sbuffer_node_t* head;       /**< a pointer to the first node in the buffer */
-    sbuffer_node_t* tail;       /**< a pointer to the last node in the buffer */
-    bool end_of_stream;
-    pthread_mutex_t mutex;
-    pthread_cond_t cond;
-}suffer_t;
 
-sbuffer_t* sbuffer_init(sbuffer_t** buffer) {
+int sbuffer_init(sbuffer_t** buffer) {
     *buffer = malloc(sizeof(sbuffer_t));
     memset(*buffer,'\0',sizeof(sbuffer_t));
 
@@ -44,26 +34,29 @@ sbuffer_t* sbuffer_init(sbuffer_t** buffer) {
         perror("error opening csv\n"); exit(EXIT_FAILURE);
     }
     /* initialize the binary semaphore to 1 and set shared between threads */
-    if(pthread_mutex_init(&buffer->mutex, NULL) != 0){
+    if(pthread_mutex_init(&((*buffer)->mutex), NULL) != 0){
         perror("mutex init failed\n"); exit(EXIT_FAILURE);
     }
-    if(pthread_cond_init(&buffer->cond, NULL) != 0){
+    if(pthread_cond_init(&((*buffer)->cond), NULL) != 0){
         perror("cond init failed\n"); exit(EXIT_FAILURE);
     }
     // pthread_mutex_destroy & pthread_cond_destroy to free the resources
-    return *buffer;
+    return SBUFFER_SUCCESS;
 }
 
 int sbuffer_free(sbuffer_t** buffer) {
-    sbuffer_node_t* dummy;
     if ((buffer == NULL) || (*buffer == NULL)) {
         return SBUFFER_FAILURE;
     }
     while ((*buffer)->head) {
-        dummy = (*buffer)->head;
+        sbuffer_node_t* dummy = (*buffer)->head;
         (*buffer)->head = (*buffer)->head->next;
         free(dummy);
     }
+    // free the mutex and cond
+    pthread_mutex_destroy(&((*buffer)->mutex));
+    pthread_cond_destroy(&((*buffer)->cond));
+    
     free(*buffer);
     *buffer = NULL;
     fclose(csv);
@@ -90,8 +83,8 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t* data, int consumer_id) {
     }
     
     // buffer is not empty
-    if ((consumer_id == CONSUMER_A && buffer->head->read_by_A) || 
-        (consumer_id == CONSUMER_B && buffer->head->read_by_B)){
+    if ((consumer_id == CONSUMER_A && buffer->head->read_by_a) || 
+        (consumer_id == CONSUMER_B && buffer->head->read_by_b)){
         pthread_mutex_unlock(&buffer->mutex);
         return SBUFFER_NO_DATA;
     }
@@ -152,7 +145,7 @@ int sbuffer_insert(sbuffer_t* buffer, sensor_data_t* data) {
 
 // function to set the end_of_stream flag
 void sbuffer_set_end(sbuffer_t* buffer, bool end){
-    buffer->end_of_stream = flag;
+    buffer->end_of_stream = end;
 }
 
 
