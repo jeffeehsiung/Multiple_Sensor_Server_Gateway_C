@@ -33,7 +33,7 @@ void* datamgr_parse_sensor_files(void* param){
 	// read sensor map from text file and configure it with the sensor node in list
 	int count = 0;
 	while(fscanf(fp_sensor_map, "%hd %hd", &roomidBuff, &sensoridBuff)>0){
-		sensor_t* sensor = malloc(sizeof(sensor_t)); //heap, to be freed
+		sensor_t* sensor = malloc(sizeof(sensor_t)); //element on heap, to be freed by element free
 		ERROR_HANDLER(sensor == NULL, MEMORY_ERROR);
 		sensor->room_id = roomidBuff;
 		sensor->sensor_id = sensoridBuff;
@@ -46,23 +46,30 @@ void* datamgr_parse_sensor_files(void* param){
 		dpl_insert_at_index(list, sensor, count, false);
 	}
 
-	// read sensor data from shared buffer and configure it with the sensor node in list
-	int index;
+	// for each sensor node, read sensor data from shared buffer and update the sensor node
+	sensor_data_t data;
 	int code = SBUFFER_SUCCESS;
-	
-	while((code != SBUFFER_END) && (code != SBUFFER_FAILURE)){
-		sensor_t* sensor;
-		// read sensor data from shared buffer
-		sensor_data_t* sensor_data = (sensor_data_t*) NULL;
-		//sbuffer_set_finish(buffer, false);
-		code = sbuffer_remove(buffer, sensor_data);
-		// if read success
-		if(code == SBUFFER_SUCCESS){
-			sensor->sensor_id = sensor_data->id;
-			// get index per sesnor id
-			index = dpl_get_index_of_element(list, (void*) (sensor));
-			// get the sensor element
-			sensor = (sensor_t*) dpl_get_element_at_index(list,index);
+
+	// loop until the end-of-stream marker is detected
+	while(code != SBUFFER_END){
+		code = sbuffer_remove(buffer,&data, CONSUMER_A);
+		// if the data has been read by consumer A, skip this iteration
+		if(code == SBUFFER_NO_DATA){
+			continue;
+		}else if(code == SBUFFER_FAILURE){
+			perror("datamgr: sbuffer_remove failed\n"); exit(EXIT_FAILURE);
+		}
+		// get index of the dplist sensor_t element per grabbed sensor data id
+		int index = dpl_get_index_of_element(list, (void*) (&data.id));
+		// get the sensor element in the list
+		sensor_t* sensor = (sensor_t*) dpl_get_element_at_index(list,index);
+		if(sensor == NULL){
+			perror("datamgr: sensor not found\n"); exit(EXIT_FAILURE);
+		}
+		// compare the grabbed id with the sensor id in the list
+		if(sensor->sensor_id == data.id){
+			// set the read_by_a flag for the node in sbuffer to true
+        	buffer->head->read_by_a = true;
 			// load the temp array val from sensor & cal avg
 			double sum = 0;
 			// push out the earilerst temp, sum the history temp, load new temp, compute avg
@@ -70,41 +77,37 @@ void* datamgr_parse_sensor_files(void* param){
 				sensor->temperatures[i] = sensor->temperatures[i-1];
 				sum += sensor->temperatures[i];
 			}
-			sensor->temperatures[0] = sensor_data->value;
-			sum += sensor_data->value;
+			// load new temp
+			sensor->temperatures[0] = data.value;
+			sum += data.value;
 			sensor->running_avg = sum/RUN_AVG_LENGTH;
 			// load timestamp
-			sensor->last_modified = sensor_data->ts;
+			sensor->timestamp = data.ts;
 			// avg temp abnormal checking
 			if(sensor->running_avg != 0){
-				
-				// lock the semaphore of data access
+				// lock the semaphore of pipe access
 				if (sem_wait(&pipe_lock) == -1){
-					perror("sem_wait failed\n"); exit(EXIT_FAILURE);
+					perror("datamgr: sem_wait pipe_lock failed\n"); exit(EXIT_FAILURE);
 				}
-
+				// write the sensor data to pipe
 				char buf[BUFF_SIZE];
-
 				if(sensor->running_avg < SET_MIN_TEMP){
-					sprintf(buf,"Sensor node %d reports it's too cold (avg temp = %lf)\n",sensor->sensor_id, sensor->running_avg);
+					sprintf(buf, "Sensor node %hu reports it's too cold (avg temp = %lf)\n",(sensor->sensor_id),(sensor->running_avg));
+				}else if(sensor->running_avg > SET_MAX_TEMP){
+					sprintf(buf, "Sensor node %hu reports it's too hot (avg temp = %lf)\n",(sensor->sensor_id),(sensor->running_avg));
 				}
-				else if(sensor->running_avg > SET_MAX_TEMP){
-					sprintf(buf,"Sensor node %d reports it's too hot (avg temp = %lf)\n",sensor->sensor_id, sensor->running_avg);
+				if (write(fd[WRITE_END], buf, sizeof(buf)) == -1){
+					perror("datamgr: write to pipe failed\n"); exit(EXIT_FAILURE);
 				}
-
-				write(fd[WRITE_END],buf,sizeof(buf));
-
-				// unlock the semaphore of data access
+				// unlock the semaphore of pipe access
 				if (sem_post(&pipe_lock) == -1){
-					perror("sem_post failed\n"); exit(EXIT_FAILURE);
+					perror("datamgr: sem_post pipe_lock failed\n"); exit(EXIT_FAILURE);
 				}
 			}
-			printf("list containing: %d sensors", dpl_size(list));
 		}
 	}
-	pthread_detach(pthread_self());
-    pthread_exit(NULL);
-	return NULL;
+
+	pthread_exit(NULL);
 }
 
 void datamgr_free(){
@@ -113,16 +116,16 @@ void datamgr_free(){
 
 sensor_t* datamgr_get_sensor_per_sensorid(sensor_id_t sensor_id){
 	sensor_t* sensor = NULL;
-        if(list != NULL){ // list has sensor data
-                for (int i = 0; i < dpl_size(list); i++){
-                        if(((sensor_t*)dpl_get_element_at_index(list,i))->sensor_id == sensor_id){
-                                sensor = (sensor_t*) dpl_get_element_at_index(list,i);
-                                return sensor;
-                        }
-                }
-                ERROR_HANDLER(sensor == NULL,INVALID_ERROR);
-        }
-        ERROR_HANDLER(list == NULL, INVALID_ERROR);
+	if(list != NULL){ // list has sensor data
+		for (int i = 0; i < dpl_size(list); i++){
+			if(((sensor_t*)dpl_get_element_at_index(list,i))->sensor_id == sensor_id){
+					sensor = (sensor_t*) dpl_get_element_at_index(list,i);
+					return sensor;
+			}
+		}
+		ERROR_HANDLER(sensor == NULL,INVALID_ERROR);
+	}
+	ERROR_HANDLER(list == NULL, INVALID_ERROR);
 	return NULL;
 }
 
@@ -152,7 +155,7 @@ time_t datamgr_get_last_modified(sensor_id_t sensor_id){
 		time = sensor->last_modified;
 		return time;
 	}
-	if(time == 0){printf("last time modification is 0");}
+	if(time == 0){perror("datamgr: last time modification is 0\n");exit(EXIT_FAILURE);}
 	return time;
 }
 
@@ -162,17 +165,17 @@ int datamgr_get_total_sensors(){
 
 void* element_copy(void* element) {
 	if(element == NULL){ return NULL; } // if element is null, no my_element_t will be on heap
-    	sensor_t* copy = malloc(sizeof (sensor_t*)); // needs to be freed
-    	sensor_t* sensor = (sensor_t*)element;
-    	ERROR_HANDLER(copy != NULL,MEMORY_ERROR);
-    	copy->sensor_id = sensor->sensor_id; // \deep copy
-    	copy->room_id = sensor->room_id;
+	sensor_t* copy = malloc(sizeof (sensor_t*)); // needs to be freed
+	sensor_t* sensor = (sensor_t*)element;
+	ERROR_HANDLER(copy != NULL,MEMORY_ERROR);
+	copy->sensor_id = sensor->sensor_id; // \deep copy
+	copy->room_id = sensor->room_id;
 	copy->running_avg = sensor->running_avg;
 	copy->last_modified = sensor->last_modified;
 	for(int i = 0; i < RUN_AVG_LENGTH; i++){
 		copy->temperatures[i] = sensor->temperatures[i];
 	}
-    	return (void*) copy;
+    return (void*) copy;
 }
 
 void element_free(void** element) {

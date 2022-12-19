@@ -6,7 +6,7 @@
 #define _SBUFFER_H_
 
 
-#include <semaphore.h>
+#include <pthread.h>
 #include <errno.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -22,15 +22,16 @@
 #define SBUFFER_SUCCESS 0
 #define SBUFFER_NO_DATA 1
 #define SBUFFER_END 2
+#define CONSUMER_A 0
+#define CONSUMER_B 1
 
-typedef struct sbuffer sbuffer_t;
 
 /**
  * Allocates and initializes a new shared buffer
  * \param buffer a double pointer to the buffer that needs to be initialized
  * \return SBUFFER_SUCCESS on success and SBUFFER_FAILURE if an error occurred
  */
-int sbuffer_init(sbuffer_t **buffer);
+sbuffer_t* sbuffer_init(sbuffer_t **buffer);
 
 /**
  * All allocated resources are freed and cleaned up
@@ -46,7 +47,7 @@ int sbuffer_free(sbuffer_t **buffer);
  * \param data a pointer to pre-allocated sensor_data_t space, the data will be copied into this structure. No new memory is allocated for 'data' in this function.
  * \return SBUFFER_SUCCESS on success and SBUFFER_FAILURE if an error occurred
  */
-int sbuffer_remove(sbuffer_t *buffer, sensor_data_t* data);
+int sbuffer_remove(sbuffer_t *buffer, sensor_data_t* data, int consumer_id);
 
 /**
  * Inserts the sensor data in 'data' at the end of 'buffer' (at the 'tail')
@@ -57,12 +58,10 @@ int sbuffer_remove(sbuffer_t *buffer, sensor_data_t* data);
 int sbuffer_insert(sbuffer_t *buffer, sensor_data_t *data);
 
 /**
- * set and get flags to check EOF
+ * set flags to check EOF
 */
-void sbuffer_set_end(sbuffer_t* buffer, bool flag);
-bool sbuffer_get_end(sbuffer_t* buffer);
-void sbuffer_set_finish(sbuffer_t* buffer, bool flag);
-bool sbuffer_get_finish(sbuffer_t* buffer);
+void sbuffer_set_end(sbuffer_t* buffer, bool end);
+
 
 #endif  //_SBUFFER_H_
 

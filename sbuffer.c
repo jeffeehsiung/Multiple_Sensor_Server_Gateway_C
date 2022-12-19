@@ -7,11 +7,7 @@
 #include <sys/stat.h>
 #include "sbuffer.h"
 
-/* Semaphore variables */
-sem_t mutex;   // to esnure mutual exclusion when readcoutn is updated
-sem_t wrt;  // common to both raeder and writer processes
-int readercount = 0;
-int writercount = 0;
+/* instantiate variables */
 FILE* csv;
 
 /**
@@ -20,19 +16,22 @@ FILE* csv;
 typedef struct sbuffer_node {
     struct sbuffer_node* next;  /**< a pointer to the next node*/
     sensor_data_t data;         /**< a structure containing the data */
+    bool read_by_a;             /**< a flag to indicate whether the data has been read by datamgr */
+    bool read_by_b;             /**< a flag to indicate whether the data has been read by storagemgr */      
 }sbuffer_node_t;
 
 /**
  * a structure to keep track of the buffer
  */
-struct sbuffer {
+typedef struct sbuffer {
     sbuffer_node_t* head;       /**< a pointer to the first node in the buffer */
     sbuffer_node_t* tail;       /**< a pointer to the last node in the buffer */
     bool end_of_stream;
-    bool finish_reading;
-};
+    pthread_mutex_t mutex;
+    pthread_cond_t cond;
+}suffer_t;
 
-int sbuffer_init(sbuffer_t** buffer) {
+sbuffer_t* sbuffer_init(sbuffer_t** buffer) {
     *buffer = malloc(sizeof(sbuffer_t));
     memset(*buffer,'\0',sizeof(sbuffer_t));
 
@@ -45,13 +44,14 @@ int sbuffer_init(sbuffer_t** buffer) {
         perror("error opening csv\n"); exit(EXIT_FAILURE);
     }
     /* initialize the binary semaphore to 1 and set shared between threads */
-    if (sem_init(&mutex, 0, 1) == -1){
-        perror("sem_init failed\n"); exit(EXIT_FAILURE);
+    if(pthread_mutex_init(&buffer->mutex, NULL) != 0){
+        perror("mutex init failed\n"); exit(EXIT_FAILURE);
     }
-    if (sem_init(&wrt, 0, 1) == -1){
-        perror("sem_init failed\n"); exit(EXIT_FAILURE);
+    if(pthread_cond_init(&buffer->cond, NULL) != 0){
+        perror("cond init failed\n"); exit(EXIT_FAILURE);
     }
-    return SBUFFER_SUCCESS;
+    // pthread_mutex_destroy & pthread_cond_destroy to free the resources
+    return *buffer;
 }
 
 int sbuffer_free(sbuffer_t** buffer) {
@@ -70,68 +70,72 @@ int sbuffer_free(sbuffer_t** buffer) {
     return SBUFFER_SUCCESS;
 }
 
-int sbuffer_remove(sbuffer_t* buffer, sensor_data_t* data) {
-    sbuffer_node_t* dummy;
+int sbuffer_remove(sbuffer_t* buffer, sensor_data_t* data, int consumer_id) {
+
     if (buffer == NULL) return SBUFFER_FAILURE;
 
-    // lock to update readcount
-    sem_wait(&mutex);
-    readercount++;
+    // lock to secure the buffer->head and readercount
+    pthread_mutex_lock(&buffer->mutex);
 
-    // head empty, reader leaves
-    bool flag = sbuffer_get_end(buffer);
-    if ((buffer->head == NULL) && (flag == false)){
-        readercount--;
-        if (readercount == 0) {
-            sem_post(&wrt);
-        }
-        sem_post(&mutex);
-
-        return SBUFFER_NO_DATA;
+    // critical section
+    // buufer empty, blocking wait for the producer to insert data
+    while (buffer->head == NULL && buffer->end_of_stream == false){
+        pthread_cond_wait(&buffer->cond, &buffer->mutex);
     }
-    else if ((buffer->head == NULL) && (sbuffer_get_end(buffer) == true)){
-        readercount--;
-        sem_post(&mutex);
+
+    // buffer is empty and end of stream
+    if (buffer->end_of_stream){
+        pthread_mutex_unlock(&buffer->mutex);
         return SBUFFER_END;
     }
-
-    /* critical section */
-    sem_wait(&wrt);
+    
+    // buffer is not empty
+    if ((consumer_id == CONSUMER_A && buffer->head->read_by_A) || 
+        (consumer_id == CONSUMER_B && buffer->head->read_by_B)){
+        pthread_mutex_unlock(&buffer->mutex);
+        return SBUFFER_NO_DATA;
+    }
+    
     data = &(buffer->head->data);
     fprintf(csv,"%hu,%lf,%ld\n", (data)->id, (data)->value, (data)->ts);
 
-    // if last reader has read, remove the node
-    if(sbuffer_get_finish(buffer) == true){
-        dummy = buffer->head;
-        // move head to next node for the other reader
-        if (buffer->head == buffer->tail){ // buffer has only one node
-            buffer->head = buffer->tail = NULL;
-        }
-        else{
-            buffer->head = buffer->head->next; // regardless of if next node is null, next cycle will detect
-        }
-        free(dummy);
+    if (consumer_id == 0){
+        buffer->head->read_by_a = true;
+    } else if (consumer_id == 1){
+        buffer->head->read_by_b = true;
     }
-    /* end of critical section */
-    readercount--;
-    sem_post(&wrt);
-    sem_post(&mutex);
+
+    // check if both consumer A and consumer B have read the data
+    if (buffer->head->read_by_a && buffer->head->read_by_b){
+        // remove the head node from the buffer, set the node to null, and free the memory
+        sbuffer_node_t* dummy = buffer->head;
+        buffer->head = buffer->head->next;
+        free(dummy);
+    } 
+    // end of critical section
+
+    // release mutex lock
+    pthread_mutex_unlock(&buffer->mutex);
 
     return SBUFFER_SUCCESS;
 }
 
 int sbuffer_insert(sbuffer_t* buffer, sensor_data_t* data) {
-    // lock to exclude any other writer or reader
-    sem_wait(&wrt);
-    writercount++;
-
-    sbuffer_node_t* dummy;
+    // lock to secure the buffer->tail
+    pthread_mutex_lock(&(buffer->mutex));
+    
     if (buffer == NULL) return SBUFFER_FAILURE;
-    dummy = malloc(sizeof(sbuffer_node_t));
+    
+    sbuffer_node_t* dummy = malloc(sizeof(sbuffer_node_t));
     if (dummy == NULL) return SBUFFER_FAILURE;
     dummy->data = *data;
     dummy->next = NULL;
-    if (buffer->tail == NULL) // buffer empty (buffer->head should also be NULL
+    dummy->read_by_a = false;
+    dummy->read_by_b = true; // set read_by_b to true for debugging
+
+    //printf("inserted data: %hu,%lf,%ld\n", dummy->data.id, dummy->data.value, dummy->data.ts);
+    
+    if (buffer->tail == NULL) // buffer empty. buffer->head should also be NULL
     {
         buffer->head = buffer->tail = dummy;
     } else // buffer not empty
@@ -139,28 +143,18 @@ int sbuffer_insert(sbuffer_t* buffer, sensor_data_t* data) {
         buffer->tail->next = dummy; // insert to tail
         buffer->tail = buffer->tail->next; // point tail to the inserted end
     }
-
-    // unlock
-    writercount--;
-    sem_post(&wrt);
+    // signal the consumer threads that new data is available
+    pthread_cond_broadcast(&(buffer->cond));
+    // unlock the mutex
+    pthread_mutex_unlock(&(buffer->mutex));
     return SBUFFER_SUCCESS;
 }
 
-void sbuffer_set_end(sbuffer_t* buffer, bool flag){
+// function to set the end_of_stream flag
+void sbuffer_set_end(sbuffer_t* buffer, bool end){
     buffer->end_of_stream = flag;
 }
 
-bool sbuffer_get_end(sbuffer_t* buffer){
-    return buffer->end_of_stream;
-}
-
-void sbuffer_set_finish(sbuffer_t* buffer, bool flag){
-    buffer->finish_reading = flag;
-}
-
-bool sbuffer_get_finish(sbuffer_t* buffer){
-    return buffer->finish_reading;
-}
 
 
 
