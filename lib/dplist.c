@@ -90,7 +90,6 @@ dplist_t* dpl_insert_at_index(dplist_t* list, void* element, int index, bool ins
 	dplist_node_t* list_node;
     	if(list == NULL) return NULL;
     	list_node = malloc(sizeof(dplist_node_t)); //list_node needs to be freed
-    	printf("addr of heap list_node: %p \n", &(*list_node));
 	DPLIST_ERR_HANDLER(list_node == NULL, DPLIST_MEMORY_ERROR);
     	if(insert_copy){
 		list_node->element = list->element_copy(element);
@@ -128,8 +127,6 @@ dplist_t* dpl_insert_at_index(dplist_t* list, void* element, int index, bool ins
         // pointer drawing breakpoint
         	}
     	}
-	//free(list_node->element);
-	//free(list_node);
     return list;
 }
 

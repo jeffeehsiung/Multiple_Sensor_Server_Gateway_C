@@ -29,6 +29,7 @@ struct sbuffer {
     sbuffer_node_t* head;       /**< a pointer to the first node in the buffer */
     sbuffer_node_t* tail;       /**< a pointer to the last node in the buffer */
     bool end_of_stream;
+    bool finish_reading;
 };
 
 int sbuffer_init(sbuffer_t** buffer) {
@@ -69,15 +70,16 @@ int sbuffer_free(sbuffer_t** buffer) {
     return SBUFFER_SUCCESS;
 }
 
-int sbuffer_remove(sbuffer_t* buffer, sensor_data_t data) {
+int sbuffer_remove(sbuffer_t* buffer, sensor_data_t* data) {
     sbuffer_node_t* dummy;
     if (buffer == NULL) return SBUFFER_FAILURE;
 
     // lock to update readcount
+    sem_wait(&mutex);
     readercount++;
 
     // head empty, reader leaves
-    bool flag = sbuffer_getflag(buffer);
+    bool flag = sbuffer_get_end(buffer);
     if ((buffer->head == NULL) && (flag == false)){
         readercount--;
         if (readercount == 0) {
@@ -87,7 +89,7 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t data) {
 
         return SBUFFER_NO_DATA;
     }
-    else if ((buffer->head == NULL) && (sbuffer_getflag(buffer) == true)){
+    else if ((buffer->head == NULL) && (sbuffer_get_end(buffer) == true)){
         readercount--;
         sem_post(&mutex);
         return SBUFFER_END;
@@ -95,23 +97,26 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t data) {
 
     /* critical section */
     sem_wait(&wrt);
-    data = buffer->head->data;
-    dummy = buffer->head; // node that just been read
-    fprintf(csv,"%hu,%lf,%ld\n", (data).id, (data).value, (data).ts);
+    data = &(buffer->head->data);
+    fprintf(csv,"%hu,%lf,%ld\n", (data)->id, (data)->value, (data)->ts);
 
-    // move head to next node for the other reader
-    if (buffer->head == buffer->tail){ // buffer has only one node
-        buffer->head = buffer->tail = NULL;
-    }
-    else{
-        buffer->head = buffer->head->next; // regardless of if next node is null, next cycle will detect
+    // if last reader has read, remove the node
+    if(sbuffer_get_finish(buffer) == true){
+        dummy = buffer->head;
+        // move head to next node for the other reader
+        if (buffer->head == buffer->tail){ // buffer has only one node
+            buffer->head = buffer->tail = NULL;
+        }
+        else{
+            buffer->head = buffer->head->next; // regardless of if next node is null, next cycle will detect
+        }
+        free(dummy);
     }
     /* end of critical section */
     readercount--;
     sem_post(&wrt);
     sem_post(&mutex);
 
-    free(dummy);
     return SBUFFER_SUCCESS;
 }
 
@@ -141,14 +146,21 @@ int sbuffer_insert(sbuffer_t* buffer, sensor_data_t* data) {
     return SBUFFER_SUCCESS;
 }
 
-void sbuffer_setflag(sbuffer_t* buffer, bool flag){
+void sbuffer_set_end(sbuffer_t* buffer, bool flag){
     buffer->end_of_stream = flag;
 }
 
-bool sbuffer_getflag(sbuffer_t* buffer){
+bool sbuffer_get_end(sbuffer_t* buffer){
     return buffer->end_of_stream;
 }
 
+void sbuffer_set_finish(sbuffer_t* buffer, bool flag){
+    buffer->finish_reading = flag;
+}
+
+bool sbuffer_get_finish(sbuffer_t* buffer){
+    return buffer->finish_reading;
+}
 
 
 

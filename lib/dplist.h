@@ -5,9 +5,7 @@
 #ifndef _DPLIST_H_
 #define _DPLIST_H_
 
-typedef enum {
-    false, true
-} bool; // or use C99 #include <stdbool.h>
+#include <stdbool.h>
 
 /**
  * dplist_t is a struct containing at least a head pointer to the start of the list;

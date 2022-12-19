@@ -12,8 +12,8 @@
 // initialize global variables
 tcpsock_t *server,*client;
 extern int fd[2];
-// Semaphore variables since each thread wishes to write to a pipe
-sem_t pipe_lock;
+extern sem_t pipe_lock;
+extern sbuffer_t* buffer;
 
 
 /**
@@ -27,7 +27,7 @@ void* client_handler (void* param) {
     tcpsock_t* client = (tcpsock_t*) param;
     sensor_data_t data;
     int bytes, result;
-    int conncounter = 0;
+    int counter = 0;
     result = TCP_NO_ERROR;
 
 
@@ -42,10 +42,12 @@ void* client_handler (void* param) {
         bytes = sizeof(data.ts);
         result = tcp_receive(client, (void *) &data.ts, &bytes);
         
-        conncounter++;
+        counter++;
         if ((result == TCP_NO_ERROR) && bytes) {
+            // insert the data into the buffer
+            sbuffer_insert(buffer,&data);
             // write to pipe
-            if(conncounter == 1){
+            if(counter == 1){
                 // lock the semaphore of data access
                 if (sem_wait(&pipe_lock) == -1){
                     perror("sem_wait failed\n"); exit(EXIT_FAILURE);
@@ -84,6 +86,7 @@ void* client_handler (void* param) {
     tcp_close(&client);
     // join connmgr thread
     pthread_exit(NULL);
+    return NULL;
 }
 
 /**
@@ -91,26 +94,23 @@ void* client_handler (void* param) {
  */
 void* connmgr_start(void* server_port) {
     
-    /* typcast the void* to int* */
+    // typcast the void* to int*
     int* port = (int*) server_port;
     
-    /* initialize variables */
+    // initialize variables
     int conn_counter = 0;
-
-    /* initialize the semaphore shared between threads */
-    if (sem_init(&pipe_lock, 0, 1) == -1){
-        perror("sem_init failed\n"); exit(EXIT_FAILURE);
-    }
-
-    /* initialize thread array */
+    
+    // initialize thread array
     pthread_t clientthreads[MAX_CONN];
 
-    /* open tcp connection */
+    // open tcp connection
     printf("Test server started\n");
     if (tcp_passive_open(&server, *port) != TCP_NO_ERROR){exit(EXIT_FAILURE);}
 
+    // mark end_of_stream of sbuffer as false
+    sbuffer_set_end(buffer,false);
 
-    /* wait for each client and create thread for each client */
+    // wait for each client and create thread for each client
     do {
         // accept one client connection. on success, new client socket created
         if (tcp_wait_for_connection(server, &client) != TCP_NO_ERROR){
@@ -122,19 +122,23 @@ void* connmgr_start(void* server_port) {
             perror("failed to create thread \n"); exit(EXIT_FAILURE);
         }
         conn_counter++;
+
         // print the counter
         printf("connmgr conn_counter = %d \n",conn_counter);
 
     } while (conn_counter < MAX_CONN);
     
-    /* wait for target threads to terminate */
+    // wait for target threads to terminate
     while (conn_counter >  0) {
         pthread_join(clientthreads[conn_counter-1],NULL);
         printf("connmgr joined thread number = %d \n",conn_counter);
         conn_counter--;
     }
-
-    /* tcp close connection fail safe */
+    
+    // mark end_of_stream of sbuffer as true
+    sbuffer_set_end(buffer,true);
+    
+    // tcp close connection fail safe
     if (tcp_close(&server) != TCP_NO_ERROR){exit(EXIT_FAILURE);}
     printf("Test server is shutting down\n");
 

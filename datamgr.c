@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
-#include "datamgr.h" //config.h is included in datamgr.h
+#include "datamgr.h"
+#include "sbuffer.h"
 #include "lib/dplist.h"
 #include <time.h>
 
@@ -10,81 +11,105 @@
 #define MEMORY_ERROR "mem err" // error  mem alloc failure
 #define INVALID_ERROR "invalid err" //error list or sensor null
 
+extern int fd[2];
+extern sem_t pipe_lock;
+extern sbuffer_t* buffer;
+
 dplist_t* list;
 void* element_copy(void*);
 void element_free(void**);
 int element_compare(void*,void*);
 
-/* fscanf to read in full lines, fread to read binary data, fwrtie to write binary data
-open, system call. (filename, flags) to read,write,create,append,trucate. returns and int as fileid
-close is needed if we've open
-fopen is faster than open since it uses buffer
-fscan returns 0 if scan is unsuccessful
-fread returns the size num per defined size bytes*/
-void datamgr_parse_sensor_files(FILE* fp_sensor_map, FILE* fp_sensor_data){
-	printf("length: %d min :%d max: %d\n",RUN_AVG_LENGTH,SET_MIN_TEMP,SET_MAX_TEMP);
-        list = dpl_create(element_copy,element_free,element_compare); //to hold all sensor nodes
-	/* read map, text file*/
+
+void* datamgr_parse_sensor_files(void* param){
+	
+	FILE* fp_sensor_map = (FILE*) param;
+
+    list = dpl_create(element_copy,element_free,element_compare);
+
 	uint16_t roomidBuff;
-        uint16_t sensoridBuff;
-	// while loop with fscanf to iterate. fileptr, value expected, place to store.
-	// when we get 0 from fscanf, we are done reading information of the file
+    uint16_t sensoridBuff;
+
+	// read sensor map from text file and configure it with the sensor node in list
 	int count = 0;
-        while(fscanf(fp_sensor_map, "%hd %hd", &roomidBuff, &sensoridBuff)>0){
-                sensor_t* sensor = malloc(sizeof(sensor_t)); //heap, to be freed
+	while(fscanf(fp_sensor_map, "%hd %hd", &roomidBuff, &sensoridBuff)>0){
+		sensor_t* sensor = malloc(sizeof(sensor_t)); //heap, to be freed
 		ERROR_HANDLER(sensor == NULL, MEMORY_ERROR);
 		sensor->room_id = roomidBuff;
-                sensor->sensor_id = sensoridBuff;
+		sensor->sensor_id = sensoridBuff;
 		count++;
 		// each sensor constains an array of temp
-                for(int i=0; i<RUN_AVG_LENGTH; i++){
-                        sensor->temperatures[i] = 0;
-                }
+		for(int i=0; i<RUN_AVG_LENGTH; i++){
+				sensor->temperatures[i] = 0;
+		}
 		// for each sensor node we insert into the newly created list and no deep copy to keep on pointing to the heap addr
-                dpl_insert_at_index(list, sensor, count, false);
-        }
-	/* read sensor data from binary file and configure it with the sensor node in list*/
-        double temperatureBuff;
-        time_t timeBuff;
-        int index;
-
-	// while loop with fread with reading size 1*sensoridBuff and store it in sensoridBuff
-        while(fread(&sensoridBuff, sizeof(sensoridBuff), 1, fp_sensor_data)>0){
-		sensor_t* sensor;
-		// get index per sesnor id
-                index = dpl_get_index_of_element(list, (void*) &sensoridBuff);
-		// get the sensor element
-                sensor = (sensor_t*) dpl_get_element_at_index(list,index);
-		// load the temp array val from sensor & cal avg
-                fread(&temperatureBuff, sizeof(temperatureBuff), 1, fp_sensor_data);
-                double sum = 0;
-		// push out the earilerst temp, sum the history temp, load new temp, compute avg
-                for(int i = RUN_AVG_LENGTH-1; i>0; i--){
-                        sensor->temperatures[i] = sensor->temperatures[i-1];
-                        sum += sensor->temperatures[i];
-                }
-                sensor->temperatures[0] = temperatureBuff;
-                sum += temperatureBuff;
-                sensor->running_avg = sum/RUN_AVG_LENGTH;
-		// load timestamp
-                fread(&timeBuff, sizeof(timeBuff), 1, fp_sensor_data);
-                sensor->last_modified = timeBuff;
-		// avg temp abnormal checking
-                if(sensor->running_avg != 0){
-                        if(sensor->running_avg < SET_MIN_TEMP){
-				fprintf( stderr,"avg temp < min. room %hu sensor %hu avg %lf on %ld\n",(sensor->room_id),(sensor->sensor_id), sensor->running_avg, sensor->last_modified);
-                        }
-                        else if(sensor->running_avg > SET_MAX_TEMP){
-                                fprintf( stderr, "avg temp > max. room %hu sensor %hu avg %lf on %ld\n",(sensor->room_id),(sensor->sensor_id),(sensor->running_avg),(sensor->last_modified));
-                        }
-                }
-		printf("list containing: %d sensors", dpl_size(list));
+		dpl_insert_at_index(list, sensor, count, false);
 	}
-};
+
+	// read sensor data from shared buffer and configure it with the sensor node in list
+	int index;
+	int code = SBUFFER_SUCCESS;
+	
+	while((code != SBUFFER_END) && (code != SBUFFER_FAILURE)){
+		sensor_t* sensor;
+		// read sensor data from shared buffer
+		sensor_data_t* sensor_data = (sensor_data_t*) NULL;
+		//sbuffer_set_finish(buffer, false);
+		code = sbuffer_remove(buffer, sensor_data);
+		// if read success
+		if(code == SBUFFER_SUCCESS){
+			sensor->sensor_id = sensor_data->id;
+			// get index per sesnor id
+			index = dpl_get_index_of_element(list, (void*) (sensor));
+			// get the sensor element
+			sensor = (sensor_t*) dpl_get_element_at_index(list,index);
+			// load the temp array val from sensor & cal avg
+			double sum = 0;
+			// push out the earilerst temp, sum the history temp, load new temp, compute avg
+			for(int i = RUN_AVG_LENGTH-1; i>0; i--){
+				sensor->temperatures[i] = sensor->temperatures[i-1];
+				sum += sensor->temperatures[i];
+			}
+			sensor->temperatures[0] = sensor_data->value;
+			sum += sensor_data->value;
+			sensor->running_avg = sum/RUN_AVG_LENGTH;
+			// load timestamp
+			sensor->last_modified = sensor_data->ts;
+			// avg temp abnormal checking
+			if(sensor->running_avg != 0){
+				
+				// lock the semaphore of data access
+				if (sem_wait(&pipe_lock) == -1){
+					perror("sem_wait failed\n"); exit(EXIT_FAILURE);
+				}
+
+				char buf[BUFF_SIZE];
+
+				if(sensor->running_avg < SET_MIN_TEMP){
+					sprintf(buf,"Sensor node %d reports it's too cold (avg temp = %lf)\n",sensor->sensor_id, sensor->running_avg);
+				}
+				else if(sensor->running_avg > SET_MAX_TEMP){
+					sprintf(buf,"Sensor node %d reports it's too hot (avg temp = %lf)\n",sensor->sensor_id, sensor->running_avg);
+				}
+
+				write(fd[WRITE_END],buf,sizeof(buf));
+
+				// unlock the semaphore of data access
+				if (sem_post(&pipe_lock) == -1){
+					perror("sem_post failed\n"); exit(EXIT_FAILURE);
+				}
+			}
+			printf("list containing: %d sensors", dpl_size(list));
+		}
+	}
+	pthread_detach(pthread_self());
+    pthread_exit(NULL);
+	return NULL;
+}
 
 void datamgr_free(){
 	dpl_free(&list,true);
-};
+}
 
 sensor_t* datamgr_get_sensor_per_sensorid(sensor_id_t sensor_id){
 	sensor_t* sensor = NULL;

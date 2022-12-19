@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <pthread.h>
 #include "config.h"
 
 #ifndef RUN_AVG_LENGTH
@@ -46,7 +47,7 @@ typedef struct sensor {
  *  \param fp_sensor_map file pointer to the map file
  *  \param fp_sensor_data file pointer to the binary data file
  */
-void datamgr_parse_sensor_files(FILE *fp_sensor_map, FILE *fp_sensor_data);
+void* datamgr_parse_sensor_files(void* param);
 
 /**
  * This method should be called to clean up the datamgr, and to free all used memory. 

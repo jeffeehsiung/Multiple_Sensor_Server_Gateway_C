@@ -4,22 +4,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
 #include <sys/time.h>
 #include <pthread.h>
-#include <inttypes.h>
-#include <string.h>
-#include <ctype.h>
-#include <errno.h>
-#include <stdint.h>
 #include <aio.h>
-#include "config.h"
 #include "sbuffer.h"
 #include "connmgr.h"
+#include "datamgr.h"
 
 
 
@@ -27,12 +17,12 @@ void print_help(void);
 
 /* pipe varaibles */
 int fd[2]; 
+sem_t pipe_lock;
+sbuffer_t* buffer;
 
-/* threads variables */
-pthread_t threads[MAX_RD + MAX_WRT];
 
 int main(int argc, char *argv[]){
-    /* instantiate */
+
     pid_t pid;
     int server_port;
     bool terminate = false;
@@ -43,35 +33,47 @@ int main(int argc, char *argv[]){
     } else {
         server_port = atoi(argv[1]);
     }
-	/* create the pipe */
+	// create the pipe
 	if (pipe(fd) == -1) {
 		perror("pipe creation failed\n"); exit(EXIT_FAILURE);
 	}
 
-	/* fork a child process */
+	// fork a child process
     pid = fork();
     if (pid < 0){
         perror("Fork failed.\n"); exit(EXIT_FAILURE);
     }
 
-	/* parent process: main process */
+	// parent process: main process
 	if (pid > 0){
 
-        /** instantiate variables */
         int totalthread = 0;
-        void* arg = (void*) &server_port;
+        void* serverptr = (void*) &server_port;
+        FILE* map = fopen("room_sensor.map", "r");
+        void* mapptr = (void*) map;
+        pthread_t threads[MAX_RD + MAX_WRT];
 
-        /* close the read end of the pipe */
+
+        if (map == NULL){
+            perror("map opening file failed\n"); exit(EXIT_FAILURE);
+        }
+
+        if (sem_init(&pipe_lock, 0, 1) == -1){
+            perror("sem_init failed\n"); exit(EXIT_FAILURE);
+        }
+
+        if (sbuffer_init(&buffer) != SBUFFER_SUCCESS){
+            perror("sbuffer_init failed\n"); exit(EXIT_FAILURE);
+        }
+
         close(fd[READ_END]);
 
-        /* create a thread that is joinable */
-        if (pthread_create(&threads[totalthread],NULL,connmgr_start,arg) != 0){
-            perror("failed to create thread \n"); exit(EXIT_FAILURE);
-        }
-        totalthread++; 
+        pthread_create(&threads[totalthread],NULL,connmgr_start,serverptr); totalthread++; 
+        pthread_create(&threads[totalthread],NULL,datamgr_parse_sensor_files,mapptr); totalthread++;
+
+        
         printf("main: total threads: %d\n",totalthread);
         
-        /* wait for target threads to terminate */
         while (totalthread >  0) {
             printf("main: waiting for thread to terminate\n");
             if(pthread_join(threads[totalthread-1],NULL) != 0){
@@ -85,22 +87,19 @@ int main(int argc, char *argv[]){
         printf("main: all threads terminated");
         terminate = true;
 
-        /* wait for child process to terminate */
         wait(NULL);
 
-	    /* close write end of the pipe */
 	    close(fd[WRITE_END]);
-        /* exit parent process */
+        fclose(map);
+
         exit(EXIT_SUCCESS);
 
     }
-	/* child process: log process */
+	// child process: log process
     else
     {
-        /* close the write end of the pipe */
         close(fd[WRITE_END]);
 
-        // keep reading  until pipe is empty and log the message is the gateway.log file
         while (terminate == false)
         {
 
@@ -135,11 +134,11 @@ int main(int argc, char *argv[]){
             }
 
         } 
-        /* close the child reading end of the pipe*/
+
         close(fd[READ_END]);
 
         printf("logger process terminated\n");
-        /* exit child process */
+
         exit(EXIT_SUCCESS);
     }
     
