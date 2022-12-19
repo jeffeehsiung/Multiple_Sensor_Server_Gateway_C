@@ -15,11 +15,11 @@
 #endif
 
 #ifndef SET_MAX_TEMP
-#error SET_MAX_TEMP not set
+#define SET_MAX_TEMP 20
 #endif
 
 #ifndef SET_MIN_TEMP
-#error SET_MIN_TEMP not set
+#define SET_MIN_TEMP 10
 #endif
 
 /* sensor element */

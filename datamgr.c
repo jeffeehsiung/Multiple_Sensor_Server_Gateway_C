@@ -10,8 +10,6 @@
 #define NO_ERROR "no error"
 #define MEMORY_ERROR "mem err" // error  mem alloc failure
 #define INVALID_ERROR "invalid err" //error list or sensor null
-#define SET_MIN_TEMP 10
-#define SET_MAX_TEMP 20
 
 extern int fd[2];
 extern sem_t pipe_lock;
@@ -40,13 +38,13 @@ void* datamgr_parse_sensor_files(void* param){
 		ERROR_HANDLER(sensor == NULL, MEMORY_ERROR);
 		sensor->room_id = roomidBuff;
 		sensor->sensor_id = sensoridBuff;
-		count++;
 		// each sensor constains an array of temp
 		for(int i=0; i<RUN_AVG_LENGTH; i++){
 				sensor->temperatures[i] = 0;
 		}
 		// for each sensor node we insert into the newly created list and no deep copy to keep on pointing to the heap addr
 		list = dpl_insert_at_index(list, sensor, count, false);
+		count++;
 	}
 
 	// for each sensor node, read sensor data from shared buffer and update the sensor node
