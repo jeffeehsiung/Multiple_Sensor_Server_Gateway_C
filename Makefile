@@ -17,6 +17,7 @@ sensor_gateway : main.c connmgr.c datamgr.c sensor_db.c sbuffer.c lib/libdplist.
 	gcc -g -c sbuffer.c   -Wall -std=c11 -Werror -DSET_MIN_TEMP=10 -DSET_MAX_TEMP=20 -DTIMEOUT=5 -o sbuffer.o   -fdiagnostics-color=auto
 	@echo "$(TITLE_COLOR)\n***** LINKING sensor_gateway *****$(NO_COLOR)"
 	gcc main.o connmgr.o datamgr.o sensor_db.o sbuffer.o -ldplist -ltcpsock -lpthread -o sensor_gateway -Wall -L./lib -Wl,-rpath=./lib -fdiagnostics-color=auto
+	./sensor_gateway 1234
 
 file_creator : file_creator.c
 	@echo "$(TITLE_COLOR)\n***** COMPILE & LINKING file_creator *****$(NO_COLOR)"
@@ -58,10 +59,10 @@ clean-all: clean
 run : sensor_gateway sensor_node
 	./sensor_gateway 1234 
 	sleep 2
-	./sensor_node 101 1 127.0.0.1 1234 
-	./sensor_node 102 3 127.0.0.1 1234 
-	./sensor_node 103 2 127.0.0.1 1234
-	./sensor_node 104 4 127.0.0.1 1234 
+	./sensor_node 15 1 127.0.0.1 1234 
+	./sensor_node 21 3 127.0.0.1 1234 
+	./sensor_node 37 2 127.0.0.1 1234
+	./sensor_node 49 4 127.0.0.1 1234 
 
 zip:
 	zip lab_final.zip main.c connmgr.c connmgr.h datamgr.c datamgr.h sbuffer.c sbuffer.h sensor_db.c sensor_db.h config.h lib/dplist.c lib/dplist.h lib/tcpsock.c lib/tcpsock.h

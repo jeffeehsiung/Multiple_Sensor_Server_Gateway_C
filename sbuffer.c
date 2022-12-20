@@ -73,7 +73,12 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t* data, int consumer_id) {
     // critical section
     // buufer empty, blocking wait for the producer to insert data
     while (buffer->head == NULL && buffer->end_of_stream == false){
+        // pause the consumer thread and wait for the producer to insert data
         pthread_cond_wait(&buffer->cond, &buffer->mutex);
+        // sleep for 10 seconds
+        sleep(10);
+
+        printf("consumer %d is waiting for data\n", consumer_id);
     }
 
     // buffer is empty and end of stream
@@ -91,6 +96,7 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t* data, int consumer_id) {
     
     data = &(buffer->head->data);
     fprintf(csv,"%hu,%lf,%ld\n", (data)->id, (data)->value, (data)->ts);
+    printf("sbuffer_remove: printed data to csv\n");
 
     if (consumer_id == 0){
         buffer->head->read_by_a = true;
@@ -104,6 +110,7 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t* data, int consumer_id) {
         sbuffer_node_t* dummy = buffer->head;
         buffer->head = buffer->head->next;
         free(dummy);
+        printf(" sbuffer_remove: removed data from buffer\n");
     } 
     // end of critical section
 
@@ -115,7 +122,7 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t* data, int consumer_id) {
 
 int sbuffer_insert(sbuffer_t* buffer, sensor_data_t* data) {
     // lock to secure the buffer->tail
-    pthread_mutex_lock(&(buffer->mutex));
+    //pthread_mutex_lock(&(buffer->mutex));
     
     if (buffer == NULL) return SBUFFER_FAILURE;
     
@@ -138,8 +145,9 @@ int sbuffer_insert(sbuffer_t* buffer, sensor_data_t* data) {
     }
     // signal the consumer threads that new data is available
     pthread_cond_broadcast(&(buffer->cond));
+
     // unlock the mutex
-    pthread_mutex_unlock(&(buffer->mutex));
+    //pthread_mutex_unlock(&(buffer->mutex));
     return SBUFFER_SUCCESS;
 }
 

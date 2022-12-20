@@ -52,7 +52,7 @@ int main(int argc, char *argv[]){
         int totalthread = 0;
         void* serverptr = (void*) &server_port;
         FILE* map = fopen("room_sensor.map", "r");
-        //void* mapptr = (void*) map;
+        void* mapptr = (void*) map;
         pthread_t threads[MAX_RD + MAX_WRT];
 
 
@@ -71,7 +71,7 @@ int main(int argc, char *argv[]){
         close(fd[READ_END]);
 
         pthread_create(&threads[totalthread],NULL,connmgr_start,serverptr); totalthread++; 
-        //pthread_create(&threads[totalthread],NULL,datamgr_parse_sensor_files,mapptr); totalthread++;
+        pthread_create(&threads[totalthread],NULL,datamgr_parse_sensor_files,mapptr); totalthread++;
 
         
         printf("main: total threads: %d\n",totalthread);

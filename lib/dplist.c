@@ -95,40 +95,29 @@ dplist_t* dpl_insert_at_index(dplist_t* list, void* element, int index, bool ins
 	}else{
 		list_node->element = element;
 	} // on heap: list_node, my_element_t* copy = list_node->element
-	// pointer drawing breakpoint
 	if (list->head == NULL) { // covers case 1, empty, free bird
 		printf("inserting into empty list\n");
 		list_node->prev = NULL;
 		list_node->next = NULL;
 		list->head = list_node;
-	// pointer drawing breakpoint
 	} else if (index <= 0) { // covers case 2, insert into beginning
 		printf("inserting into beginning of list\n");
 		list_node->prev = NULL;
 		list_node->next = list->head;
 		list->head->prev = list_node;
 		list->head = list_node;
-	// pointer drawing breakpoint
 	} else {
-		ref_at_index = dpl_get_reference_at_index(list, index);
-		//assert(ref_at_index != NULL); // ref_at_index shall not be null
-	// pointer drawing breakpoint
+		ref_at_index = dpl_get_reference_at_index(list, index-1);
+		assert(ref_at_index != NULL);
 		if (index < dpl_size(list)) { // covers case 4, within the list
-			printf("inserting into middle of list\n");
-			// copy reference element's prev and next to new node
-			list_node->prev = ref_at_index->prev;
-			list_node->next = ref_at_index;
-			// change the prev and next of the reference element
-			ref_at_index->prev->next = list_node;
-			ref_at_index->prev = list_node;
-	// pointer drawing breakpoint
-		} else { // covers case 3
-			printf("inserting into end of list\n");
-			assert(ref_at_index->next == NULL);
-			list_node->next = NULL;
+			list_node->next = ref_at_index->next;
+			ref_at_index->next->prev = list_node;
 			list_node->prev = ref_at_index;
 			ref_at_index->next = list_node;
-	// pointer drawing breakpoint
+		} else { // covers case 3
+			list_node->prev = ref_at_index;
+			ref_at_index->next = list_node;
+			list_node->next = NULL;
 		}
 	}
     return list;

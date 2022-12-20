@@ -32,8 +32,8 @@ void* datamgr_parse_sensor_files(void* param){
 
 	// read sensor map from text file and configure it with the sensor node in list
 	int count = 0;
-	while(fscanf(fp_sensor_map, "%hd %hd", &roomidBuff, &sensoridBuff)>0){
-		printf("datamgr: roomid: %d, sensorid: %d, count: %d\n", roomidBuff, sensoridBuff, count);
+	while(fscanf(fp_sensor_map, "%hu %hu", &roomidBuff, &sensoridBuff)>0){
+		printf("datamgr: roomid: %hu, sensorid: %hu, count: %d\n", roomidBuff, sensoridBuff, count);
 		sensor_t* sensor = malloc(sizeof(sensor_t)); //element on heap, to be freed by element free
 		ERROR_HANDLER(sensor == NULL, MEMORY_ERROR);
 		sensor->room_id = roomidBuff;
@@ -45,6 +45,7 @@ void* datamgr_parse_sensor_files(void* param){
 		// for each sensor node we insert into the newly created list and no deep copy to keep on pointing to the heap addr
 		list = dpl_insert_at_index(list, sensor, count, false);
 		count++;
+
 	}
 
 	// for each sensor node, read sensor data from shared buffer and update the sensor node
@@ -53,22 +54,29 @@ void* datamgr_parse_sensor_files(void* param){
 
 	// loop until the end-of-stream marker is detected
 	while(code != SBUFFER_END){
+		printf("datamgr: read from buffer\n");
 		code = sbuffer_remove(buffer,&data, CONSUMER_A);
 		// if the data has been read by consumer A, skip this iteration
 		if(code == SBUFFER_NO_DATA){
 			continue;
+			printf("datamgr: no data in buffer\n");
 		}else if(code == SBUFFER_FAILURE){
 			perror("datamgr: sbuffer_remove failed\n"); exit(EXIT_FAILURE);
 		}
-		// get index of the dplist sensor_t element per grabbed sensor data id
+		// get index of the dplist sensor_t element per grabbed sensor data id. skip if not found
 		int index = dpl_get_index_of_element(list, (void*) (&data.id));
+		if(index == -1){
+			continue;
+			printf("datamgr: sensor index not found per element\n"); 
+		}
 		// get the sensor element in the list
 		sensor_t* sensor = (sensor_t*) dpl_get_element_at_index(list,index);
 		if(sensor == NULL){
-			perror("datamgr: sensor not found\n"); exit(EXIT_FAILURE);
+			perror("datamgr: sensor element not found per index\n"); exit(EXIT_FAILURE);
 		}
 		// compare the grabbed id with the sensor id in the list
 		if(sensor->sensor_id == data.id){
+			printf("datamgr: sensor id match\n");
 			// set the read_by_a flag for the node in sbuffer to true
         	buffer->head->read_by_a = true;
 			// load the temp array val from sensor & cal avg
@@ -78,6 +86,7 @@ void* datamgr_parse_sensor_files(void* param){
 				sensor->temperatures[i] = sensor->temperatures[i-1];
 				sum += sensor->temperatures[i];
 			}
+			printf("datamgr: load new temp\n");
 			// load new temp
 			sensor->temperatures[0] = data.value;
 			sum += data.value;
@@ -90,13 +99,17 @@ void* datamgr_parse_sensor_files(void* param){
 				if (sem_wait(&pipe_lock) == -1){
 					perror("datamgr: sem_wait pipe_lock failed\n"); exit(EXIT_FAILURE);
 				}
+				printf("datamgr: lock pipe\n");
 				// write the sensor data to pipe
 				char buf[BUFF_SIZE];
 				if(sensor->running_avg < SET_MIN_TEMP){
+					printf("datamgr: too cold\n");
 					sprintf(buf, "Sensor node %hu reports it's too cold (avg temp = %lf)\n",(sensor->sensor_id),(sensor->running_avg));
 				}else if(sensor->running_avg > SET_MAX_TEMP){
+					printf("datamgr: too hot\n");
 					sprintf(buf, "Sensor node %hu reports it's too hot (avg temp = %lf)\n",(sensor->sensor_id),(sensor->running_avg));
 				}
+				printf("datamgr: write to pipe\n");
 				if (write(fd[WRITE_END], buf, sizeof(buf)) == -1){
 					perror("datamgr: write to pipe failed\n"); exit(EXIT_FAILURE);
 				}
@@ -107,6 +120,8 @@ void* datamgr_parse_sensor_files(void* param){
 			}
 		}
 	}
+
+	printf("datamgr: end of stream marker detected\n");
 
 	pthread_exit(NULL);
 }
@@ -168,7 +183,6 @@ void* element_copy(void* element) {
 	if(element == NULL){ return NULL; } // if element is null, no my_element_t will be on heap
 	sensor_t* copy = malloc(sizeof (sensor_t*)); // needs to be freed
 	sensor_t* sensor = (sensor_t*)element;
-	ERROR_HANDLER(copy != NULL,MEMORY_ERROR);
 	copy->sensor_id = sensor->sensor_id; // \deep copy
 	copy->room_id = sensor->room_id;
 	copy->running_avg = sensor->running_avg;
