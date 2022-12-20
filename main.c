@@ -82,11 +82,11 @@ int main(int argc, char *argv[]){
                 perror("main: failed to detach thread \n"); exit(EXIT_FAILURE);
             }else{
                 totalthread--;
-                printf(" main: threads in main left active: %d:",totalthread);
+                printf(" main: threads in main left active: %d:\n",totalthread);
             }
         }
 
-        printf("main: all threads terminated");
+        printf("main: all threads terminated\n");
         //set_termintate(true);
         terminate = true;
         sbuffer_free(&buffer);
@@ -97,6 +97,8 @@ int main(int argc, char *argv[]){
         fclose(map);
 
         return 0;
+        
+        exit(EXIT_SUCCESS);
 
     }
 	// child process: log process

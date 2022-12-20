@@ -75,8 +75,8 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t* data, int consumer_id) {
     while (buffer->head == NULL && buffer->end_of_stream == false){
         // pause the consumer thread and wait for the producer to insert data
         pthread_cond_wait(&buffer->cond, &buffer->mutex);
-        // sleep for 10 seconds
-        sleep(10);
+        // sleep for 5 seconds
+        sleep(5);
 
         printf("consumer %d is waiting for data\n", consumer_id);
     }
