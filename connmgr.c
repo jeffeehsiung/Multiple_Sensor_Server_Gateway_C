@@ -7,7 +7,9 @@
 #include "config.h"
 #include "sbuffer.h"
 
-#define MAX_CONN 4  // state the max. number of connections the server will handle before exiting
+#ifndef MAX_CONN
+#define MAX_CONN 3
+#endif
 
 // initialize global variables
 tcpsock_t *server,*client;
@@ -144,7 +146,7 @@ void* connmgr_start(void* server_port) {
     // wait for target threads to terminate
     while (conn_counter >  0) {
         pthread_join(clientthreads[conn_counter-1],NULL);
-        printf("connmgr joined thread number = %d \n",conn_counter);
+        printf("connmgr called for join thread number = %d \n",conn_counter);
         conn_counter--;
     }
  
