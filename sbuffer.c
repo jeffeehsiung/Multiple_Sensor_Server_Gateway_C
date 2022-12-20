@@ -133,7 +133,7 @@ int sbuffer_insert(sbuffer_t* buffer, sensor_data_t* data) {
     dummy->read_by_a = false;
     dummy->read_by_b = true; // set read_by_b to true for debugging
 
-    //printf("inserted data: %hu,%lf,%ld\n", dummy->data.id, dummy->data.value, dummy->data.ts);
+    printf("sbuffer_insert data: %hu,%lf,%ld\n", dummy->data.id, dummy->data.value, dummy->data.ts);
     
     if (buffer->tail == NULL) // buffer empty. buffer->head should also be NULL
     {
