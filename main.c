@@ -9,6 +9,7 @@
 #include <aio.h>
 #include "connmgr.h"
 #include "datamgr.h"
+#include "sensor_db.h"
 #include "sbuffer.h"
 
 
@@ -17,7 +18,7 @@ void print_help(void);
 // void set_termintate(bool term);
 // bool get_terminate(void);
 
-/* pipe varaibles */
+/* global varaibles */
 int fd[2]; 
 sem_t pipe_lock;
 sbuffer_t* buffer;
@@ -50,15 +51,7 @@ int main(int argc, char *argv[]){
 	if (pid > 0){
 
         int totalthread = 0;
-        void* serverptr = (void*) &server_port;
-        FILE* map = fopen("room_sensor.map", "r");
-        void* mapptr = (void*) map;
         pthread_t threads[MAX_RD + MAX_WRT];
-
-
-        if (map == NULL){
-            perror("map opening file failed\n"); exit(EXIT_FAILURE);
-        }
 
         if (sem_init(&pipe_lock, 0, 1) == -1){
             perror("sem_init failed\n"); exit(EXIT_FAILURE);
@@ -70,8 +63,9 @@ int main(int argc, char *argv[]){
 
         close(fd[READ_END]);
 
-        pthread_create(&threads[totalthread],NULL,connmgr_start,serverptr); totalthread++; 
-        pthread_create(&threads[totalthread],NULL,datamgr_parse_sensor_files,mapptr); totalthread++;
+        pthread_create(&threads[totalthread],NULL,connmgr_start,(void*) &server_port); totalthread++; 
+        pthread_create(&threads[totalthread],NULL,datamgr_start,(void*) buffer); totalthread++;
+        pthread_create(&threads[totalthread],NULL,sensor_db_start,(void*) buffer); totalthread++;
 
         
         while (totalthread >  0) {
@@ -98,11 +92,9 @@ int main(int argc, char *argv[]){
 
         sem_destroy(&pipe_lock);
 
-        fclose(map);
-
         return 0;
         
-        //exit(EXIT_SUCCESS);
+        exit(EXIT_SUCCESS);
 
     }
 	// child process: log process
@@ -110,10 +102,12 @@ int main(int argc, char *argv[]){
     {
         close(fd[WRITE_END]);
 
+        int seq_num = 0;
+
         while (terminate == false)
         {
 
-            FILE *log = fopen("gateway.log", "a");
+            FILE *log = fopen("gateway.log", "a+");
             if (log == NULL)
             {
                 perror("logger opening file failed\n");
@@ -134,8 +128,14 @@ int main(int argc, char *argv[]){
                 break;
             }
 
-            fprintf(log, "%s", read_msg);
+            // get the message from pipe, add a sequence number and a timestamp to it
+            // and write an ASCII message to the log file in the format: <seq_num> <timestamp> <message>
+            time_t t;
+            time(&t);
+            fprintf(log, "%d %s %s", seq_num, ctime(&t), read_msg);
             fflush(log);
+
+            seq_num++;
 
 
             if (fclose(log) != 0)

@@ -8,6 +8,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <pthread.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include "config.h"
@@ -33,34 +34,6 @@
  * an operation to close the csv file
  */
 
-/* fifo create */
-char* writer_create_fifo();
-
-/* open fifo and write to fifo*/
-void writer_open_and_write_fifo(char* myfifo, char* message);
-
-/*open fifo and read from fifo*/
-void writer_open_and_read_fifo(char* myfifo);
-
-
-/* open csv file with a given name, providing an indication
- * if the file should be overwritten if the file already exists,
- * if the data should be appended to the existing file,
- * if no file exist then we create a file */
-FILE* open_db(char* myfifo, char* filename, bool append);
-
-/* append  single sensor reading to the csv file */
-int insert_sensor(char* myfifo,sensor_id_t id, sensor_value_t value, sensor_ts_t ts);
-
-/* close the csv file */
-int close_db(char* myfifo, FILE* f);
-
-/* calculating the total rows in the csv */
-int get_total_rows_csv(FILE* f, int sizeofstruct);
-
-/* read sensor data from binary file fprint into a csv file */
-int storemgr_parse_sensordata_in_csv(char* myfifo, FILE* openedbinaryfile);
-
-int writer_get_fd();
+void* sensor_db_start(void* param);
 
 #endif /* _SENSOR_DB_H_ */

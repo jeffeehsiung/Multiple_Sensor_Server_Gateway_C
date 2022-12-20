@@ -4,7 +4,8 @@
         "stdbool.h": "c",
         "types.h": "c",
         "errno.h": "c",
-        "pthread.h": "c"
+        "pthread.h": "c",
+        "aio.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

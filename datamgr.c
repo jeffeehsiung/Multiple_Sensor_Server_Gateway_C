@@ -13,26 +13,29 @@
 
 extern int fd[2];
 extern sem_t pipe_lock;
-extern sbuffer_t* buffer;
 
 dplist_t* list;
-void* element_copy(void*);
-void element_free(void**);
-int element_compare(void*,void*);
 
 
-void* datamgr_parse_sensor_files(void* param){
+void* datamgr_start(void* param){
 
-	FILE* fp_sensor_map = (FILE*) param;
+	// typecast the param into sbufer_t
+	sbuffer_t* buffer = (sbuffer_t*) param;
+
+	// open the map file
+	FILE* map = fopen("room_sensor.map", "r");
+	if (map == NULL){
+        perror("map opening file failed\n"); exit(EXIT_FAILURE);
+    }
 
     list = dpl_create(element_copy,element_free,element_compare);
 
 	uint16_t roomidBuff;
     uint16_t sensoridBuff;
 
-	// read sensor map from text file and configure it with the sensor node in list
+	// read sensor map from file and configure it with the sensor node in list
 	int count = 0;
-	while(fscanf(fp_sensor_map, "%hu %hu", &roomidBuff, &sensoridBuff)>0){
+	while(fscanf(map, "%hu %hu", &roomidBuff, &sensoridBuff)>0){
 
 		sensor_t* sensor = malloc(sizeof(sensor_t)); //element on heap, to be freed by element free
 		ERROR_HANDLER(sensor == NULL, MEMORY_ERROR);
@@ -48,6 +51,9 @@ void* datamgr_parse_sensor_files(void* param){
 
 	}
 
+	// close the map file
+	fclose(map);
+	
 	// for each sensor node, read sensor data from shared buffer and update the sensor node
 	sensor_data_t data;
 	int code = SBUFFER_SUCCESS;
@@ -133,70 +139,18 @@ void* datamgr_parse_sensor_files(void* param){
 		}
 	}
 
-	printf("datamgr: end of stream marker detected. total removed: %d\n",count);
+	printf("datamgr: end of stream marker detected. total sensor processed: %d\n",count);
 
-	datamgr_free();
+	// free the list
+	dpl_free(&list, true);
 
 	pthread_exit(NULL);
 	return NULL;
 }
 
-void datamgr_free(){
-	dpl_free(&list,true);
-}
-
-sensor_t* datamgr_get_sensor_per_sensorid(sensor_id_t sensor_id){
-	sensor_t* sensor = NULL;
-	if(list != NULL){ // list has sensor data
-		for (int i = 0; i < dpl_size(list); i++){
-			if(((sensor_t*)dpl_get_element_at_index(list,i))->sensor_id == sensor_id){
-					sensor = (sensor_t*) dpl_get_element_at_index(list,i);
-					return sensor;
-			}
-		}
-		ERROR_HANDLER(sensor == NULL,INVALID_ERROR);
-	}
-	ERROR_HANDLER(list == NULL, INVALID_ERROR);
-	return NULL;
-}
-
-uint16_t datamgr_get_room_id(sensor_id_t sensor_id){
-	sensor_t* sensor = datamgr_get_sensor_per_sensorid(sensor_id);
-	if(sensor != NULL){
-		return sensor->room_id;
-	}
-	return 0;
-}
-
-sensor_value_t datamgr_get_avg(sensor_id_t sensor_id){
-	sensor_t* sensor = datamgr_get_sensor_per_sensorid(sensor_id);
-	sensor_value_t avg = 0;
-	if(sensor != NULL){
-		if(sensor->temperatures[RUN_AVG_LENGTH-1] != 0){
-		avg = sensor->running_avg;
-		}
-	}
-	return avg;
-}
-
-time_t datamgr_get_last_modified(sensor_id_t sensor_id){
-	sensor_t* sensor = datamgr_get_sensor_per_sensorid(sensor_id);
-	time_t time = 0;
-	if(sensor != NULL){
-		time = sensor->last_modified;
-		return time;
-	}
-	if(time == 0){perror("datamgr: last time modification is 0\n");exit(EXIT_FAILURE);}
-	return time;
-}
-
-int datamgr_get_total_sensors(){
-        return dpl_size(list);
-}
-
 void* element_copy(void* element) {
 	if(element == NULL){ return NULL; } // if element is null, no my_element_t will be on heap
-	sensor_t* copy = malloc(sizeof (sensor_t*)); // needs to be freed
+	sensor_t* copy = malloc(sizeof (sensor_t)); // needs to be freed
 	sensor_t* sensor = (sensor_t*)element;
 	copy->sensor_id = sensor->sensor_id; // \deep copy
 	copy->room_id = sensor->room_id;

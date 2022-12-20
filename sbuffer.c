@@ -21,7 +21,7 @@ int sbuffer_init(sbuffer_t** buffer) {
     (*buffer)->tail = NULL;
     (*buffer)->end_of_stream = false;
 
-    csv = fopen("sensor_data_out.csv", "a");
+    csv = fopen("sensor_data_out.csv", "a+");
 
     if(ferror(csv)){
         perror("error opening csv\n"); exit(EXIT_FAILURE);
@@ -89,9 +89,9 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t* data, int consumer_id) {
     *data = (buffer->head->data);
     fprintf(csv,"%hu,%lf,%ld\n", (data)->id, (data)->value, (data)->ts);
 
-    if (consumer_id == 0){
+    if (consumer_id == CONSUMER_A){
         buffer->head->read_by_a = true;
-    } else if (consumer_id == 1){
+    } else if (consumer_id == CONSUMER_B){
         buffer->head->read_by_b = true;
     }
 
@@ -116,6 +116,7 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t* data, int consumer_id) {
     return SBUFFER_SUCCESS;
 }
 
+// sbuffer_insert function that takes a pointer to the buffer and a pointer to the data to be inserted
 int sbuffer_insert(sbuffer_t* buffer, sensor_data_t* data) {
 
     if (buffer == NULL) return SBUFFER_FAILURE;
@@ -125,7 +126,7 @@ int sbuffer_insert(sbuffer_t* buffer, sensor_data_t* data) {
     dummy->data = *data;
     dummy->next = NULL;
     dummy->read_by_a = false;
-    dummy->read_by_b = true; // set read_by_b to true for debugging
+    dummy->read_by_b = false; // set read_by_b to true for debugging
     
     // lock to secure the buffer->tail
     sem_wait(&wrt);

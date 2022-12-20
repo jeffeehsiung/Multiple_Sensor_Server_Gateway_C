@@ -8,11 +8,10 @@
 #include "sbuffer.h"
 
 #ifndef MAX_CONN
-#define MAX_CONN 3
+#define MAX_CONN 5
 #endif
 
 // initialize global variables
-tcpsock_t *server,*client;
 extern int fd[2];
 extern sem_t pipe_lock;
 extern sbuffer_t* buffer;
@@ -108,6 +107,8 @@ void* client_handler (void* param) {
  * Implements a sequential test server (only one connection at the same time)
  */
 void* connmgr_start(void* server_port) {
+
+    tcpsock_t *server,*client;
     
     // typcast the void* to int*
     int* port = (int*) server_port;
@@ -146,8 +147,8 @@ void* connmgr_start(void* server_port) {
     // wait for target threads to terminate
     while (conn_counter >  0) {
         pthread_join(clientthreads[conn_counter-1],NULL);
-        printf("connmgr called for join thread number = %d \n",conn_counter);
         conn_counter--;
+        printf("connmgr called for join thread number = %d \n",conn_counter);
     }
  
     // mark end_of_stream of sbuffer as true
