@@ -71,6 +71,19 @@ void* datamgr_parse_sensor_files(void* param){
 		// get index of the dplist sensor_t element per grabbed sensor data id. skip if not found
 		int index = dpl_get_index_of_element(list, (void*) &(data));
 		if(index == -1){
+			char buf[BUFF_SIZE];
+			sprintf(buf, "Received sensor data with invalid sensor node ID %hu\n",data.id);
+			//lock the semaphore of pipe access
+			if (sem_wait(&pipe_lock) == -1){
+				perror("datamgr: sem_wait pipe_lock failed\n"); exit(EXIT_FAILURE);
+			}
+			if (write(fd[WRITE_END], buf, sizeof(buf)) == -1){
+				perror("datamgr: write to pipe failed\n"); exit(EXIT_FAILURE);
+			}
+			//unlock the semaphore of pipe access
+			if (sem_post(&pipe_lock) == -1){
+				perror("datamgr: sem_post pipe_lock failed\n"); exit(EXIT_FAILURE);
+			}
 			continue;
 		}
 
