@@ -74,10 +74,7 @@ int main(int argc, char *argv[]){
         pthread_create(&threads[totalthread],NULL,datamgr_parse_sensor_files,mapptr); totalthread++;
 
         
-        printf("main: total threads: %d\n",totalthread);
-        
         while (totalthread >  0) {
-            printf("main: waiting for thread to terminate\n");
             if(pthread_join(threads[totalthread-1],NULL) != 0){
                 perror("main: failed to detach thread \n"); exit(EXIT_FAILURE);
             }else{
@@ -89,16 +86,23 @@ int main(int argc, char *argv[]){
         printf("main: all threads terminated\n");
         //set_termintate(true);
         terminate = true;
+
         sbuffer_free(&buffer);
+        printf("main: sbuffer freed\n");
 
         wait(NULL);
 
+        printf("main: logger process terminated\n");
+
 	    close(fd[WRITE_END]);
+
+        sem_destroy(&pipe_lock);
+
         fclose(map);
 
         return 0;
         
-        exit(EXIT_SUCCESS);
+        //exit(EXIT_SUCCESS);
 
     }
 	// child process: log process
@@ -132,6 +136,7 @@ int main(int argc, char *argv[]){
 
             fprintf(log, "%s", read_msg);
             fflush(log);
+
 
             if (fclose(log) != 0)
             {

@@ -56,13 +56,17 @@ clean:
 clean-all: clean
 	rm -rf lib/*.so
 
+clean-file:
+	rm gateway.log
+	rm sensor_data_out.csv
+
 run : sensor_gateway sensor_node
 	./sensor_gateway 1234 
 	sleep 2
 	./sensor_node 15 1 127.0.0.1 1234 
-	./sensor_node 21 3 127.0.0.1 1234 
-	./sensor_node 37 2 127.0.0.1 1234
-	./sensor_node 49 4 127.0.0.1 1234 
+	./sensor_node 21 2 127.0.0.1 1234 
+	./sensor_node 37 1 127.0.0.1 1234
+	./sensor_node 49 2 127.0.0.1 1234 
 
 zip:
 	zip lab_final.zip main.c connmgr.c connmgr.h datamgr.c datamgr.h sbuffer.c sbuffer.h sensor_db.c sensor_db.h config.h lib/dplist.c lib/dplist.h lib/tcpsock.c lib/tcpsock.h

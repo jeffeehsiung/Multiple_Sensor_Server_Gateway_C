@@ -96,12 +96,10 @@ dplist_t* dpl_insert_at_index(dplist_t* list, void* element, int index, bool ins
 		list_node->element = element;
 	} // on heap: list_node, my_element_t* copy = list_node->element
 	if (list->head == NULL) { // covers case 1, empty, free bird
-		printf("inserting into empty list\n");
 		list_node->prev = NULL;
 		list_node->next = NULL;
 		list->head = list_node;
 	} else if (index <= 0) { // covers case 2, insert into beginning
-		printf("inserting into beginning of list\n");
 		list_node->prev = NULL;
 		list_node->next = list->head;
 		list->head->prev = list_node;

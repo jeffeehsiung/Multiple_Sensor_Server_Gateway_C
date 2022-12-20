@@ -7,6 +7,7 @@
 
 
 #include <pthread.h>
+#include <semaphore.h>
 #include <errno.h>
 #include <unistd.h>
 #include <fcntl.h>
