@@ -144,7 +144,8 @@ int sbuffer_insert(sbuffer_t* buffer, sensor_data_t* data) {
         buffer->tail = buffer->tail->next; // point tail to the inserted end
     }
     // signal the consumer threads that new data is available
-    pthread_cond_broadcast(&(buffer->cond));
+    pthread_cond_signal(&buffer->cond);
+    //pthread_cond_broadcast(&(buffer->cond));
 
     // unlock the mutex
     //pthread_mutex_unlock(&(buffer->mutex));
