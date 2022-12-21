@@ -33,50 +33,86 @@ void* client_handler (void* param) {
 
     // read data from the client and write to the pipe. 
     // If the sensor node has not sent new data within the defined timeout, the server closes the client socket and exits the thread
-    while (result == TCP_NO_ERROR){
+    while (result == TCP_NO_ERROR) {
         // get the timestamp of the server start waiting for data
         time_t start = time(NULL);
 
         // read sensor ID
         bytes = sizeof(data.id);
-        result = tcp_receive(client, (void *) &data.id, &bytes);
+        if((result = tcp_receive(client, (void *) &data.id, &bytes)) != TCP_NO_ERROR){
+            break;
+        }
         // read temperature
         bytes = sizeof(data.value);
-        result = tcp_receive(client, (void *) &data.value, &bytes);
+        if((result = tcp_receive(client, (void *) &data.value, &bytes)) != TCP_NO_ERROR){
+            break;
+        }
         // read timestamp
         bytes = sizeof(data.ts);
-        result = tcp_receive(client, (void *) &data.ts, &bytes);
+        if((result = tcp_receive(client, (void *) &data.ts, &bytes)) != TCP_NO_ERROR){
+            break;
+        }
         
-        if ((result == TCP_NO_ERROR) && bytes) {
-            // get the timestamp of the server end waiting for data
-            time_t end = time(NULL);
+        // if ((result == TCP_NO_ERROR) && bytes) {
+        //     // get the timestamp of the server end waiting for data
+        //     time_t end = time(NULL);
 
-            // insert the data into the buffer
-            if(sbuffer_insert(buffer,&data) == SBUFFER_SUCCESS){
-                counter++;
+        //     // insert the data into the buffer
+        //     if(sbuffer_insert(buffer,&data) == SBUFFER_SUCCESS){
+        //         counter++;
+        //     }
+        //     // write to pipe
+        //     if(counter == 1){
+        //         // lock the semaphore of data access
+        //         if (sem_wait(&pipe_lock) == -1){
+        //             perror("sem_wait failed\n"); exit(EXIT_FAILURE);
+        //         }
+        //         char buf[BUFF_SIZE];
+        //         sprintf(buf,"Sensor node %d has opened a new connection\n",data.id);
+        //         write(fd[WRITE_END],buf,sizeof(buf));
+        //         // unlock the semaphore of data access
+        //         if (sem_post(&pipe_lock) == -1){
+        //             perror("sem_post failed\n"); exit(EXIT_FAILURE);
+        //         }
+        //     }
+        //     // if the sensor node has not sent new data within the defined timeout, the server closes the client socket and breaks the loop
+        //     if (end - start > TIMEOUT){
+        //         printf("The sensor node %d has not sent new data within the defined timeout.\n", data.id);
+        //         tcp_close(&client);
+        //         result = TCP_CONNECTION_CLOSED;
+        //         break;
+        //     }
+        // }
+
+        // get the timestamp of the server end waiting for data
+        time_t end = time(NULL);
+
+        // insert the data into the buffer
+        if(sbuffer_insert(buffer,&data) == SBUFFER_SUCCESS){
+            counter++;
+        }
+        // write to pipe
+        if(counter == 1){
+            // lock the semaphore of data access
+            if (sem_wait(&pipe_lock) == -1){
+                perror("sem_wait failed\n"); exit(EXIT_FAILURE);
             }
-            // write to pipe
-            if(counter == 1){
-                // lock the semaphore of data access
-                if (sem_wait(&pipe_lock) == -1){
-                    perror("sem_wait failed\n"); exit(EXIT_FAILURE);
-                }
-                char buf[BUFF_SIZE];
-                sprintf(buf,"Sensor node %d has opened a new connection\n",data.id);
-                write(fd[WRITE_END],buf,sizeof(buf));
-                // unlock the semaphore of data access
-                if (sem_post(&pipe_lock) == -1){
-                    perror("sem_post failed\n"); exit(EXIT_FAILURE);
-                }
-            }
-            // if the sensor node has not sent new data within the defined timeout, the server closes the client socket and breaks the loop
-            if (end - start > TIMEOUT){
-                printf("The sensor node %d has not sent new data within the defined timeout.\n", data.id);
-                tcp_close(&client);
-                result = TCP_CONNECTION_CLOSED;
-                break;
+            char buf[BUFF_SIZE];
+            sprintf(buf,"Sensor node %d has opened a new connection\n",data.id);
+            write(fd[WRITE_END],buf,sizeof(buf));
+            // unlock the semaphore of data access
+            if (sem_post(&pipe_lock) == -1){
+                perror("sem_post failed\n"); exit(EXIT_FAILURE);
             }
         }
+        // if the sensor node has not sent new data within the defined timeout, the server closes the client socket and breaks the loop
+        if (end - start > TIMEOUT){
+            printf("The sensor node %d has not sent new data within the defined timeout.\n", data.id);
+            tcp_close(&client);
+            result = TCP_CONNECTION_CLOSED;
+            break;
+        }
+        
     }
 
     if (result == TCP_CONNECTION_CLOSED){
@@ -92,8 +128,9 @@ void* client_handler (void* param) {
         if (sem_post(&pipe_lock) == -1){
             perror("sem_post failed\n"); exit(EXIT_FAILURE);
         }
+    }else{
+        perror("Error occured on connection to peer\n"); exit(EXIT_FAILURE);
     }
-    else{perror("Error occured on connection to peer\n");}
 
     printf("connmgr closed thread number = %d, total inserted: %d \n",data.id, counter);
     // close the client socket
@@ -101,6 +138,8 @@ void* client_handler (void* param) {
 
     // exit the thread
     pthread_exit(NULL);
+    // return to connmgr_start
+    return NULL;
 }
 
 /**

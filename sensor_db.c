@@ -48,7 +48,7 @@ void* sensor_db_start(void* param){
 	// loop until the buffer is empty
 	while (code != SBUFFER_END)
 	{
-		code = sbuffer_remove(buffer, &data, CONSUMER_B);
+		code = sbuffer_remove(buffer, &data,CONSUMER_B);
 		if(code == SBUFFER_SUCCESS){
 			count++;
 		}

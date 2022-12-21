@@ -62,7 +62,7 @@ void* datamgr_start(void* param){
 	// loop until the end-of-stream marker is detected
 	while(code != SBUFFER_END){
 		
-		code = sbuffer_remove(buffer,&data, CONSUMER_A);
+		code = sbuffer_remove(buffer,&data,CONSUMER_A);
 		if(code == SBUFFER_SUCCESS){
 			count++;
 		}

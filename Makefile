@@ -58,7 +58,9 @@ clean-all: clean
 clean-file:
 	rm gateway.log
 	rm sensor_data_out.csv
-
+	rm room_sensor.map
+	rm data.csv
+	
 run : sensor_gateway sensor_node
 	./sensor_gateway 1234 
 	sleep 2

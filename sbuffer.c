@@ -66,11 +66,10 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t* data, int consumer_id) {
     // lock to secure the buffer->head and readercount
     pthread_mutex_lock(&(buffer->mutex));
 
-    // critical section
     // buufer empty, blocking wait for the producer to insert data
     while ((buffer->head == NULL) && (buffer->end_of_stream == false)){
         pthread_cond_wait(&(buffer->cond), &(buffer->mutex));
-        sleep(5);
+        sleep(3);
     }
 
     // buffer is empty and end of stream
@@ -78,7 +77,7 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t* data, int consumer_id) {
         pthread_mutex_unlock(&(buffer->mutex));
         return SBUFFER_END;
     }
-    
+
     // buffer is not empty
     if ((consumer_id == CONSUMER_A && buffer->head->read_by_a) || 
         (consumer_id == CONSUMER_B && buffer->head->read_by_b)){
@@ -86,11 +85,13 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t* data, int consumer_id) {
         return SBUFFER_NO_DATA;
     }
     
+    // read data from buffer
     *data = (buffer->head->data);
     fprintf(csv,"%hu,%lf,%ld\n", (data)->id, (data)->value, (data)->ts);
 
     if (consumer_id == CONSUMER_A){
         buffer->head->read_by_a = true;
+
     } else if (consumer_id == CONSUMER_B){
         buffer->head->read_by_b = true;
     }
@@ -107,7 +108,8 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t* data, int consumer_id) {
         }
 
         free(dummy);
-    } 
+    }
+
     // end of critical section
 
     // release mutex lock
@@ -126,7 +128,7 @@ int sbuffer_insert(sbuffer_t* buffer, sensor_data_t* data) {
     dummy->data = *data;
     dummy->next = NULL;
     dummy->read_by_a = false;
-    dummy->read_by_b = false; // set read_by_b to true for debugging
+    dummy->read_by_b = false;
     
     // lock to secure the buffer->tail
     sem_wait(&wrt);
@@ -142,8 +144,8 @@ int sbuffer_insert(sbuffer_t* buffer, sensor_data_t* data) {
 
     // unlock the mutex
     // signal the consumer threads that new data is available
-    sem_post(&wrt);
     pthread_cond_broadcast(&(buffer->cond));
+    sem_post(&wrt);
 
     return SBUFFER_SUCCESS;
 }

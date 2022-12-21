@@ -1,916 +1,832 @@
-0 Tue Dec 20 21:23:12 2022
+0 Wed Dec 21 14:39:13 2022
  A new data.csv file has been created
-1 Tue Dec 20 21:23:54 2022
- Sensor node 37 has opened a new connection
-2 Tue Dec 20 21:23:59 2022
- Data insertion from sensor 37 succeeded.
-3 Tue Dec 20 21:24:04 2022
- Sensor node 37 reports it's too cold (avg temp = 4.049748)
-4 Tue Dec 20 21:24:04 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-5 Tue Dec 20 21:24:04 2022
- Data insertion from sensor 37 succeeded.
-6 Tue Dec 20 21:24:04 2022
- Data insertion from sensor 37 succeeded.
-7 Tue Dec 20 21:24:04 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-8 Tue Dec 20 21:24:04 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-9 Tue Dec 20 21:24:04 2022
- Data insertion from sensor 37 succeeded.
-10 Tue Dec 20 21:24:04 2022
- Data insertion from sensor 37 succeeded.
-11 Tue Dec 20 21:24:04 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-12 Tue Dec 20 21:24:04 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-13 Tue Dec 20 21:24:04 2022
- Data insertion from sensor 37 succeeded.
-14 Tue Dec 20 21:24:04 2022
- Data insertion from sensor 37 succeeded.
-15 Tue Dec 20 21:24:04 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-16 Tue Dec 20 21:24:04 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-17 Tue Dec 20 21:24:04 2022
- Data insertion from sensor 37 succeeded.
-18 Tue Dec 20 21:24:04 2022
- Data insertion from sensor 37 succeeded.
-19 Tue Dec 20 21:24:04 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-20 Tue Dec 20 21:24:04 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-21 Tue Dec 20 21:24:04 2022
- Data insertion from sensor 37 succeeded.
-22 Tue Dec 20 21:24:09 2022
- Data insertion from sensor 37 succeeded.
-23 Tue Dec 20 21:24:14 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-24 Tue Dec 20 21:24:14 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-25 Tue Dec 20 21:24:14 2022
- Data insertion from sensor 37 succeeded.
-26 Tue Dec 20 21:24:14 2022
- Data insertion from sensor 37 succeeded.
-27 Tue Dec 20 21:24:14 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-28 Tue Dec 20 21:24:14 2022
- Data insertion from sensor 37 succeeded.
-29 Tue Dec 20 21:24:14 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-30 Tue Dec 20 21:24:14 2022
- Data insertion from sensor 37 succeeded.
-31 Tue Dec 20 21:24:14 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-32 Tue Dec 20 21:24:14 2022
- Data insertion from sensor 37 succeeded.
-33 Tue Dec 20 21:24:14 2022
- Data insertion from sensor 37 succeeded.
-34 Tue Dec 20 21:24:14 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-35 Tue Dec 20 21:24:14 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-36 Tue Dec 20 21:24:14 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-37 Tue Dec 20 21:24:14 2022
- Data insertion from sensor 37 succeeded.
-38 Tue Dec 20 21:24:14 2022
- Data insertion from sensor 37 succeeded.
-39 Tue Dec 20 21:24:14 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-40 Tue Dec 20 21:24:14 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-41 Tue Dec 20 21:24:14 2022
- Data insertion from sensor 37 succeeded.
-42 Tue Dec 20 21:24:20 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-43 Tue Dec 20 21:24:22 2022
- Sensor node 112 has opened a new connection
-44 Tue Dec 20 21:24:25 2022
- Data insertion from sensor 37 succeeded.
-45 Tue Dec 20 21:24:25 2022
- Data insertion from sensor 37 succeeded.
-46 Tue Dec 20 21:24:25 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-47 Tue Dec 20 21:24:25 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-48 Tue Dec 20 21:24:25 2022
- Data insertion from sensor 37 succeeded.
-49 Tue Dec 20 21:24:25 2022
- Data insertion from sensor 37 succeeded.
-50 Tue Dec 20 21:24:25 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-51 Tue Dec 20 21:24:25 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-52 Tue Dec 20 21:24:25 2022
- Data insertion from sensor 37 succeeded.
-53 Tue Dec 20 21:24:25 2022
- Data insertion from sensor 37 succeeded.
-54 Tue Dec 20 21:24:25 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-55 Tue Dec 20 21:24:25 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-56 Tue Dec 20 21:24:25 2022
- Data insertion from sensor 37 succeeded.
-57 Tue Dec 20 21:24:25 2022
- Sensor node 37 reports it's too cold (avg temp = 8.094336)
-58 Tue Dec 20 21:24:25 2022
- Data insertion from sensor 37 succeeded.
-59 Tue Dec 20 21:24:25 2022
- Data insertion from sensor 112 succeeded.
-60 Tue Dec 20 21:24:25 2022
- Sensor node 112 reports it's too cold (avg temp = 3.987994)
-61 Tue Dec 20 21:24:25 2022
- Data insertion from sensor 37 succeeded.
-62 Tue Dec 20 21:24:25 2022
- Sensor node 112 reports it's too cold (avg temp = 3.987994)
-63 Tue Dec 20 21:24:25 2022
- Sensor node 112 reports it's too cold (avg temp = 3.987994)
-64 Tue Dec 20 21:24:25 2022
- Data insertion from sensor 37 succeeded.
-65 Tue Dec 20 21:24:30 2022
- Data insertion from sensor 37 succeeded.
-66 Tue Dec 20 21:24:35 2022
- Sensor node 112 reports it's too cold (avg temp = 3.987994)
-67 Tue Dec 20 21:24:35 2022
- Sensor node 112 reports it's too cold (avg temp = 3.987994)
-68 Tue Dec 20 21:24:35 2022
- Data insertion from sensor 37 succeeded.
-69 Tue Dec 20 21:24:35 2022
- Data insertion from sensor 112 succeeded.
-70 Tue Dec 20 21:24:35 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-71 Tue Dec 20 21:24:35 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-72 Tue Dec 20 21:24:35 2022
- Data insertion from sensor 37 succeeded.
-73 Tue Dec 20 21:24:35 2022
- Data insertion from sensor 37 succeeded.
-74 Tue Dec 20 21:24:35 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-75 Tue Dec 20 21:24:35 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-76 Tue Dec 20 21:24:35 2022
- Data insertion from sensor 37 succeeded.
-77 Tue Dec 20 21:24:35 2022
- Data insertion from sensor 37 succeeded.
-78 Tue Dec 20 21:24:35 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-79 Tue Dec 20 21:24:35 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-80 Tue Dec 20 21:24:35 2022
- Data insertion from sensor 112 succeeded.
-81 Tue Dec 20 21:24:35 2022
- Data insertion from sensor 37 succeeded.
-82 Tue Dec 20 21:24:35 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-83 Tue Dec 20 21:24:35 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-84 Tue Dec 20 21:24:35 2022
- Data insertion from sensor 37 succeeded.
-85 Tue Dec 20 21:24:35 2022
- Data insertion from sensor 37 succeeded.
-86 Tue Dec 20 21:24:35 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-87 Tue Dec 20 21:24:35 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-88 Tue Dec 20 21:24:35 2022
- Data insertion from sensor 37 succeeded.
-89 Tue Dec 20 21:24:35 2022
- Data insertion from sensor 112 succeeded.
-90 Tue Dec 20 21:24:35 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-91 Tue Dec 20 21:24:40 2022
- Data insertion from sensor 37 succeeded.
-92 Tue Dec 20 21:24:45 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-93 Tue Dec 20 21:24:45 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-94 Tue Dec 20 21:24:45 2022
- Data insertion from sensor 37 succeeded.
-95 Tue Dec 20 21:24:45 2022
- Data insertion from sensor 37 succeeded.
-96 Tue Dec 20 21:24:45 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-97 Tue Dec 20 21:24:45 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-98 Tue Dec 20 21:24:45 2022
- Data insertion from sensor 37 succeeded.
-99 Tue Dec 20 21:24:45 2022
- Data insertion from sensor 112 succeeded.
-100 Tue Dec 20 21:24:45 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-101 Tue Dec 20 21:24:45 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-102 Tue Dec 20 21:24:45 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-103 Tue Dec 20 21:24:45 2022
- Data insertion from sensor 37 succeeded.
-104 Tue Dec 20 21:24:45 2022
- Data insertion from sensor 37 succeeded.
-105 Tue Dec 20 21:24:45 2022
- Data insertion from sensor 37 succeeded.
-106 Tue Dec 20 21:24:45 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-107 Tue Dec 20 21:24:45 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-108 Tue Dec 20 21:24:45 2022
- Data insertion from sensor 37 succeeded.
-109 Tue Dec 20 21:24:45 2022
- Data insertion from sensor 112 succeeded.
-110 Tue Dec 20 21:24:45 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-111 Tue Dec 20 21:24:45 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-112 Tue Dec 20 21:24:45 2022
- Data insertion from sensor 37 succeeded.
-113 Tue Dec 20 21:24:45 2022
- Data insertion from sensor 37 succeeded.
-114 Tue Dec 20 21:24:45 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-115 Tue Dec 20 21:24:48 2022
- Sensor node 49 has opened a new connection
-116 Tue Dec 20 21:24:50 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-117 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 37 succeeded.
-118 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 37 succeeded.
-119 Tue Dec 20 21:24:55 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-120 Tue Dec 20 21:24:55 2022
- Sensor node 112 reports it's too cold (avg temp = 7.943683)
-121 Tue Dec 20 21:24:55 2022
- Sensor node 37 reports it's too hot (avg temp = 20.051286)
-122 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 112 succeeded.
-123 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 37 succeeded.
-124 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 37 succeeded.
-125 Tue Dec 20 21:24:55 2022
- Sensor node 37 reports it's too hot (avg temp = 20.108472)
-126 Tue Dec 20 21:24:55 2022
- Sensor node 49 reports it's too cold (avg temp = 3.952080)
-127 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 49 succeeded.
-128 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 37 succeeded.
-129 Tue Dec 20 21:24:55 2022
- Sensor node 37 reports it's too hot (avg temp = 20.173812)
-130 Tue Dec 20 21:24:55 2022
- Sensor node 49 reports it's too cold (avg temp = 7.903790)
-131 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 49 succeeded.
-132 Tue Dec 20 21:24:55 2022
- Sensor node 37 reports it's too hot (avg temp = 20.186467)
-133 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 37 succeeded.
-134 Tue Dec 20 21:24:55 2022
- Sensor node 37 reports it's too hot (avg temp = 20.186467)
-135 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 49 succeeded.
-136 Tue Dec 20 21:24:55 2022
- Sensor node 37 reports it's too hot (avg temp = 20.186467)
-137 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 112 succeeded.
-138 Tue Dec 20 21:24:55 2022
- Sensor node 37 reports it's too hot (avg temp = 20.165203)
-139 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 37 succeeded.
-140 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 49 succeeded.
-141 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 37 succeeded.
-142 Tue Dec 20 21:24:55 2022
- Sensor node 37 reports it's too hot (avg temp = 20.165203)
-143 Tue Dec 20 21:24:55 2022
- Sensor node 37 reports it's too hot (avg temp = 20.163074)
-144 Tue Dec 20 21:24:55 2022
- Sensor node 37 reports it's too hot (avg temp = 20.163074)
-145 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 49 succeeded.
-146 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 37 succeeded.
-147 Tue Dec 20 21:24:55 2022
- Sensor node 37 reports it's too hot (avg temp = 20.211350)
-148 Tue Dec 20 21:24:55 2022
- Sensor node 37 reports it's too hot (avg temp = 20.211350)
-149 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 49 succeeded.
-150 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 37 succeeded.
-151 Tue Dec 20 21:24:55 2022
- Sensor node 37 reports it's too hot (avg temp = 20.182473)
-152 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 49 succeeded.
-153 Tue Dec 20 21:24:55 2022
- Sensor node 37 reports it's too hot (avg temp = 20.182473)
-154 Tue Dec 20 21:24:55 2022
- Sensor node 37 reports it's too hot (avg temp = 20.182473)
-155 Tue Dec 20 21:24:55 2022
- Data insertion from sensor 112 succeeded.
-156 Tue Dec 20 21:25:00 2022
- Sensor node 37 reports it's too hot (avg temp = 20.157862)
-157 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 37 succeeded.
-158 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 49 succeeded.
-159 Tue Dec 20 21:25:05 2022
- Sensor node 49 reports it's too hot (avg temp = 20.035965)
-160 Tue Dec 20 21:25:05 2022
- Sensor node 37 reports it's too hot (avg temp = 20.188782)
-161 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 37 succeeded.
-162 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 49 succeeded.
-163 Tue Dec 20 21:25:05 2022
- Sensor node 49 reports it's too hot (avg temp = 20.087001)
-164 Tue Dec 20 21:25:05 2022
- Sensor node 37 reports it's too hot (avg temp = 20.221193)
-165 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 37 succeeded.
-166 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 49 succeeded.
-167 Tue Dec 20 21:25:05 2022
- Sensor node 49 reports it's too hot (avg temp = 20.158646)
-168 Tue Dec 20 21:25:05 2022
- Sensor node 37 reports it's too hot (avg temp = 20.207597)
-169 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 37 succeeded.
-170 Tue Dec 20 21:25:05 2022
- Sensor node 49 reports it's too hot (avg temp = 20.216961)
-171 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 49 succeeded.
-172 Tue Dec 20 21:25:05 2022
- Sensor node 49 reports it's too hot (avg temp = 20.216961)
-173 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 112 succeeded.
-174 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 37 succeeded.
-175 Tue Dec 20 21:25:05 2022
- Sensor node 37 reports it's too hot (avg temp = 20.246462)
-176 Tue Dec 20 21:25:05 2022
- Sensor node 49 reports it's too hot (avg temp = 20.303138)
-177 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 49 succeeded.
-178 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 37 succeeded.
-179 Tue Dec 20 21:25:05 2022
- Sensor node 37 reports it's too hot (avg temp = 20.262267)
-180 Tue Dec 20 21:25:05 2022
- Sensor node 49 reports it's too hot (avg temp = 20.376934)
-181 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 49 succeeded.
-182 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 37 succeeded.
-183 Tue Dec 20 21:25:05 2022
- Sensor node 37 reports it's too hot (avg temp = 20.261027)
-184 Tue Dec 20 21:25:05 2022
- Sensor node 49 reports it's too hot (avg temp = 20.449736)
-185 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 49 succeeded.
-186 Tue Dec 20 21:25:05 2022
- Sensor node 37 reports it's too hot (avg temp = 20.229857)
-187 Tue Dec 20 21:25:05 2022
- Sensor node 49 reports it's too hot (avg temp = 20.532235)
-188 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 37 succeeded.
-189 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 49 succeeded.
-190 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 112 succeeded.
-191 Tue Dec 20 21:25:05 2022
- Sensor node 49 reports it's too hot (avg temp = 20.532235)
-192 Tue Dec 20 21:25:05 2022
- Sensor node 37 reports it's too hot (avg temp = 20.230858)
-193 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 37 succeeded.
-194 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 49 succeeded.
-195 Tue Dec 20 21:25:05 2022
- Sensor node 49 reports it's too hot (avg temp = 20.600977)
-196 Tue Dec 20 21:25:05 2022
- Sensor node 37 reports it's too hot (avg temp = 20.196047)
-197 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 37 succeeded.
-198 Tue Dec 20 21:25:05 2022
- Sensor node 49 reports it's too hot (avg temp = 20.582163)
-199 Tue Dec 20 21:25:05 2022
- Data insertion from sensor 49 succeeded.
-200 Tue Dec 20 21:25:10 2022
- Data insertion from sensor 37 succeeded.
-201 Tue Dec 20 21:25:15 2022
- Sensor node 37 reports it's too hot (avg temp = 20.140785)
-202 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.547396)
-203 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 49 succeeded.
-204 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 37 succeeded.
-205 Tue Dec 20 21:25:15 2022
- Sensor node 37 reports it's too hot (avg temp = 20.028137)
-206 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.468568)
-207 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 49 succeeded.
-208 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 112 succeeded.
-209 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.468568)
-210 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.468568)
-211 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 37 succeeded.
-212 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 49 succeeded.
-213 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.372120)
-214 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.372120)
-215 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 37 succeeded.
-216 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 49 succeeded.
-217 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.308568)
-218 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.308568)
-219 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 37 succeeded.
-220 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.277009)
-221 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 49 succeeded.
-222 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.277009)
-223 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 37 succeeded.
-224 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 49 succeeded.
-225 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.231888)
-226 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.231888)
-227 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 112 succeeded.
-228 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 37 succeeded.
-229 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.231888)
-230 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.271948)
-231 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 49 succeeded.
-232 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 37 succeeded.
-233 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.271948)
-234 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.291450)
-235 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 49 succeeded.
-236 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 37 succeeded.
-237 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 49 succeeded.
-238 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.291450)
-239 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.251331)
-240 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.251331)
-241 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 37 succeeded.
-242 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 49 succeeded.
-243 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.270480)
-244 Tue Dec 20 21:25:15 2022
- Sensor node 49 reports it's too hot (avg temp = 20.270480)
-245 Tue Dec 20 21:25:15 2022
- Data insertion from sensor 112 succeeded.
-246 Tue Dec 20 21:25:20 2022
- Sensor node 49 reports it's too hot (avg temp = 20.270480)
-247 Tue Dec 20 21:25:23 2022
+1 Wed Dec 21 14:39:16 2022
  Sensor node 130 has opened a new connection
-248 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 37 succeeded.
-249 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.306658)
-250 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 49 succeeded.
-251 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 37 succeeded.
-252 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.306658)
-253 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.263576)
-254 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.263576)
-255 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 49 succeeded.
-256 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 37 succeeded.
-257 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.193483)
-258 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 49 succeeded.
-259 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 37 succeeded.
-260 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.193483)
-261 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.165109)
-262 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 49 succeeded.
-263 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 112 succeeded.
-264 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.165109)
-265 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.165109)
-266 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 37 succeeded.
-267 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 49 succeeded.
-268 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.108373)
-269 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.108373)
-270 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 37 succeeded.
-271 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 49 succeeded.
-272 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.048212)
-273 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.048212)
-274 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 37 succeeded.
-275 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 49 succeeded.
-276 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.067919)
-277 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.067919)
-278 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.120545)
-279 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 37 succeeded.
-280 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 49 succeeded.
-281 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 112 succeeded.
-282 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.120545)
-283 Tue Dec 20 21:25:25 2022
- Received sensor data with invalid sensor node ID 130
-284 Tue Dec 20 21:25:25 2022
+2 Wed Dec 21 14:39:19 2022
+ Sensor node 49 has opened a new connection
+3 Wed Dec 21 14:39:19 2022
  Data insertion from sensor 130 succeeded.
-285 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 37 succeeded.
-286 Tue Dec 20 21:25:25 2022
- Received sensor data with invalid sensor node ID 130
-287 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.193255)
-288 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 49 succeeded.
-289 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 37 succeeded.
-290 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.193255)
-291 Tue Dec 20 21:25:25 2022
- Sensor node 49 reports it's too hot (avg temp = 20.266146)
-292 Tue Dec 20 21:25:25 2022
- Data insertion from sensor 49 succeeded.
-293 Tue Dec 20 21:25:30 2022
- Data insertion from sensor 37 succeeded.
-294 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.266146)
-295 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.392828)
-296 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 49 succeeded.
-297 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 37 succeeded.
-298 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.392828)
-299 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.392828)
-300 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 112 succeeded.
-301 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 49 succeeded.
-302 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 130 succeeded.
-303 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.466193)
-304 Tue Dec 20 21:25:35 2022
- Received sensor data with invalid sensor node ID 130
-305 Tue Dec 20 21:25:35 2022
- Received sensor data with invalid sensor node ID 130
-306 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 37 succeeded.
-307 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 49 succeeded.
-308 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.552659)
-309 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.552659)
-310 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 37 succeeded.
-311 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.594622)
-312 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 49 succeeded.
-313 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.594622)
-314 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 37 succeeded.
-315 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.614438)
-316 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 49 succeeded.
-317 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.614438)
-318 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 37 succeeded.
-319 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.614438)
-320 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 112 succeeded.
-321 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.556751)
-322 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 49 succeeded.
-323 Tue Dec 20 21:25:35 2022
- Received sensor data with invalid sensor node ID 130
-324 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 130 succeeded.
-325 Tue Dec 20 21:25:35 2022
- Received sensor data with invalid sensor node ID 130
-326 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 37 succeeded.
-327 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.556247)
-328 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 49 succeeded.
-329 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.556247)
-330 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 37 succeeded.
-331 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.498558)
-332 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 49 succeeded.
-333 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 37 succeeded.
-334 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 49 succeeded.
-335 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.498558)
-336 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.482349)
-337 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.482349)
-338 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 37 succeeded.
-339 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 112 succeeded.
-340 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.482349)
-341 Tue Dec 20 21:25:35 2022
- Sensor node 49 reports it's too hot (avg temp = 20.437864)
-342 Tue Dec 20 21:25:35 2022
- Received sensor data with invalid sensor node ID 130
-343 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 49 succeeded.
-344 Tue Dec 20 21:25:35 2022
- Data insertion from sensor 130 succeeded.
-345 Tue Dec 20 21:25:40 2022
- Received sensor data with invalid sensor node ID 130
-346 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 37 succeeded.
-347 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 49 succeeded.
-348 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.463790)
-349 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.463790)
-350 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 37 succeeded.
-351 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 49 succeeded.
-352 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.473765)
-353 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.473765)
-354 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 37 succeeded.
-355 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 49 succeeded.
-356 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.497078)
-357 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.497078)
-358 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 37 succeeded.
-359 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 112 succeeded.
-360 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.497078)
-361 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.490008)
-362 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 49 succeeded.
-363 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 130 succeeded.
-364 Tue Dec 20 21:25:46 2022
- Received sensor data with invalid sensor node ID 130
-365 Tue Dec 20 21:25:46 2022
- Received sensor data with invalid sensor node ID 130
-366 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 37 succeeded.
-367 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 49 succeeded.
-368 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.520641)
-369 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.520641)
-370 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 37 succeeded.
-371 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 49 succeeded.
-372 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.510385)
-373 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.510385)
-374 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 37 succeeded.
-375 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 49 succeeded.
-376 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.507438)
-377 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.507438)
-378 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 37 succeeded.
-379 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 112 succeeded.
-380 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.507438)
-381 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.513451)
-382 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 49 succeeded.
-383 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 130 succeeded.
-384 Tue Dec 20 21:25:46 2022
- Received sensor data with invalid sensor node ID 130
-385 Tue Dec 20 21:25:46 2022
- Received sensor data with invalid sensor node ID 130
-386 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 37 succeeded.
-387 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 49 succeeded.
-388 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.548380)
-389 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.548380)
-390 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 37 succeeded.
-391 Tue Dec 20 21:25:46 2022
- Data insertion from sensor 49 succeeded.
-392 Tue Dec 20 21:25:46 2022
- Sensor node 49 reports it's too hot (avg temp = 20.567443)
-393 Tue Dec 20 21:25:46 2022
+4 Wed Dec 21 14:39:21 2022
  Sensor node 129 has opened a new connection
-394 Tue Dec 20 21:25:51 2022
- Data insertion from sensor 37 succeeded.
-395 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.567443)
-396 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.565386)
-397 Tue Dec 20 21:25:56 2022
+5 Wed Dec 21 14:39:22 2022
+ Received sensor data with invalid sensor node ID 130
+6 Wed Dec 21 14:39:22 2022
+ Sensor node 49 reports it's too cold (avg temp = 4.009090)
+7 Wed Dec 21 14:39:22 2022
  Data insertion from sensor 49 succeeded.
-398 Tue Dec 20 21:25:56 2022
+8 Wed Dec 21 14:39:22 2022
+ Data insertion from sensor 49 succeeded.
+9 Wed Dec 21 14:39:22 2022
+ Sensor node 49 reports it's too cold (avg temp = 7.981281)
+10 Wed Dec 21 14:39:22 2022
+ Received sensor data with invalid sensor node ID 130
+11 Wed Dec 21 14:39:22 2022
+ Data insertion from sensor 130 succeeded.
+12 Wed Dec 21 14:39:22 2022
+ Data insertion from sensor 49 succeeded.
+13 Wed Dec 21 14:39:22 2022
+ Received sensor data with invalid sensor node ID 130
+14 Wed Dec 21 14:39:22 2022
+ Sensor node 129 reports it's too cold (avg temp = 3.983251)
+15 Wed Dec 21 14:39:22 2022
  Data insertion from sensor 129 succeeded.
-399 Tue Dec 20 21:25:56 2022
- Sensor node 129 reports it's too cold (avg temp = 4.002733)
-400 Tue Dec 20 21:25:56 2022
- Sensor node 129 reports it's too cold (avg temp = 4.002733)
-401 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 37 succeeded.
-402 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 112 succeeded.
-403 Tue Dec 20 21:25:56 2022
- Sensor node 129 reports it's too cold (avg temp = 4.002733)
-404 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.531955)
-405 Tue Dec 20 21:25:56 2022
+16 Wed Dec 21 14:39:22 2022
  Data insertion from sensor 49 succeeded.
-406 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 130 succeeded.
-407 Tue Dec 20 21:25:56 2022
- Received sensor data with invalid sensor node ID 130
-408 Tue Dec 20 21:25:56 2022
- Received sensor data with invalid sensor node ID 130
-409 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 37 succeeded.
-410 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 49 succeeded.
-411 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.479426)
-412 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 37 succeeded.
-413 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.479426)
-414 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 49 succeeded.
-415 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.407727)
-416 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 37 succeeded.
-417 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 49 succeeded.
-418 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.407727)
-419 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.365385)
-420 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.365385)
-421 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 37 succeeded.
-422 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 112 succeeded.
-423 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.365385)
-424 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 49 succeeded.
-425 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.367902)
-426 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 129 succeeded.
-427 Tue Dec 20 21:25:56 2022
- Sensor node 129 reports it's too cold (avg temp = 7.991721)
-428 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 130 succeeded.
-429 Tue Dec 20 21:25:56 2022
- Received sensor data with invalid sensor node ID 130
-430 Tue Dec 20 21:25:56 2022
- Received sensor data with invalid sensor node ID 130
-431 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 37 succeeded.
-432 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 49 succeeded.
-433 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.328999)
-434 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.328999)
-435 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 37 succeeded.
-436 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 49 succeeded.
-437 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.377974)
-438 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.377974)
-439 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 37 succeeded.
-440 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.455617)
-441 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.455617)
-442 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 49 succeeded.
-443 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 37 succeeded.
-444 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 112 succeeded.
-445 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.455617)
-446 Tue Dec 20 21:25:56 2022
- Sensor node 49 reports it's too hot (avg temp = 20.496253)
-447 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 49 succeeded.
-448 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 130 succeeded.
-449 Tue Dec 20 21:25:56 2022
- Received sensor data with invalid sensor node ID 130
-450 Tue Dec 20 21:25:56 2022
- Received sensor data with invalid sensor node ID 130
-451 Tue Dec 20 21:25:56 2022
- Data insertion from sensor 130 succeeded.
-452 Tue Dec 20 21:25:56 2022
- The data.csv has been closed.
-453 Tue Dec 20 21:26:19 2022
- Sensor node 49 has closed the connection
-454 Tue Dec 20 21:26:24 2022
+17 Wed Dec 21 14:39:22 2022
+ Sensor node 129 reports it's too cold (avg temp = 3.983251)
+18 Wed Dec 21 14:39:26 2022
+ Sensor node 49 reports it's too hot (avg temp = 20.049489)
+19 Wed Dec 21 14:39:27 2022
  Sensor node 129 has closed the connection
-455 Tue Dec 20 21:26:36 2022
- Sensor node 130 has closed the connection
-456 Tue Dec 20 21:26:40 2022
+20 Wed Dec 21 14:39:28 2022
+ Sensor node 37 has opened a new connection
+21 Wed Dec 21 14:39:29 2022
+ Data insertion from sensor 49 succeeded.
+22 Wed Dec 21 14:39:29 2022
+ Data insertion from sensor 49 succeeded.
+23 Wed Dec 21 14:39:29 2022
+ Sensor node 49 reports it's too hot (avg temp = 20.011190)
+24 Wed Dec 21 14:39:29 2022
+ Received sensor data with invalid sensor node ID 130
+25 Wed Dec 21 14:39:29 2022
+ Data insertion from sensor 130 succeeded.
+26 Wed Dec 21 14:39:29 2022
+ Data insertion from sensor 49 succeeded.
+27 Wed Dec 21 14:39:29 2022
+ Received sensor data with invalid sensor node ID 130
+28 Wed Dec 21 14:39:29 2022
+ Received sensor data with invalid sensor node ID 130
+29 Wed Dec 21 14:39:29 2022
+ Data insertion from sensor 49 succeeded.
+30 Wed Dec 21 14:39:29 2022
+ Data insertion from sensor 129 succeeded.
+31 Wed Dec 21 14:39:29 2022
+ Sensor node 129 reports it's too cold (avg temp = 7.970520)
+32 Wed Dec 21 14:39:29 2022
+ Sensor node 129 reports it's too cold (avg temp = 7.970520)
+33 Wed Dec 21 14:39:29 2022
+ Data insertion from sensor 49 succeeded.
+34 Wed Dec 21 14:39:29 2022
+ Data insertion from sensor 49 succeeded.
+35 Wed Dec 21 14:39:29 2022
+ Sensor node 129 reports it's too cold (avg temp = 7.970520)
+36 Wed Dec 21 14:39:29 2022
+ Sensor node 37 reports it's too cold (avg temp = 3.992812)
+37 Wed Dec 21 14:39:29 2022
+ Data insertion from sensor 37 succeeded.
+38 Wed Dec 21 14:39:29 2022
+ Data insertion from sensor 130 succeeded.
+39 Wed Dec 21 14:39:29 2022
+ Received sensor data with invalid sensor node ID 130
+40 Wed Dec 21 14:39:32 2022
+ Data insertion from sensor 49 succeeded.
+41 Wed Dec 21 14:39:35 2022
+ Received sensor data with invalid sensor node ID 130
+42 Wed Dec 21 14:39:35 2022
+ Sensor node 37 reports it's too cold (avg temp = 7.982856)
+43 Wed Dec 21 14:39:35 2022
+ Data insertion from sensor 37 succeeded.
+44 Wed Dec 21 14:39:35 2022
+ Data insertion from sensor 49 succeeded.
+45 Wed Dec 21 14:39:35 2022
+ Sensor node 37 reports it's too cold (avg temp = 7.982856)
+46 Wed Dec 21 14:39:35 2022
+ Sensor node 37 reports it's too cold (avg temp = 7.982856)
+47 Wed Dec 21 14:39:35 2022
+ Data insertion from sensor 37 succeeded.
+48 Wed Dec 21 14:39:35 2022
+ Data insertion from sensor 49 succeeded.
+49 Wed Dec 21 14:39:35 2022
+ Sensor node 37 reports it's too cold (avg temp = 7.982856)
+50 Wed Dec 21 14:39:35 2022
+ Sensor node 37 reports it's too cold (avg temp = 7.982856)
+51 Wed Dec 21 14:39:35 2022
+ Data insertion from sensor 37 succeeded.
+52 Wed Dec 21 14:39:35 2022
+ Data insertion from sensor 49 succeeded.
+53 Wed Dec 21 14:39:35 2022
+ Sensor node 37 reports it's too cold (avg temp = 7.982856)
+54 Wed Dec 21 14:39:35 2022
+ Sensor node 37 reports it's too hot (avg temp = 20.025733)
+55 Wed Dec 21 14:39:35 2022
+ Data insertion from sensor 37 succeeded.
+56 Wed Dec 21 14:39:35 2022
+ Data insertion from sensor 130 succeeded.
+57 Wed Dec 21 14:39:35 2022
+ Received sensor data with invalid sensor node ID 130
+58 Wed Dec 21 14:39:35 2022
+ Received sensor data with invalid sensor node ID 130
+59 Wed Dec 21 14:39:35 2022
+ Data insertion from sensor 49 succeeded.
+60 Wed Dec 21 14:39:35 2022
+ Data insertion from sensor 37 succeeded.
+61 Wed Dec 21 14:39:35 2022
+ Received sensor data with invalid sensor node ID 130
+62 Wed Dec 21 14:39:35 2022
+ Received sensor data with invalid sensor node ID 130
+63 Wed Dec 21 14:39:35 2022
+ Data insertion from sensor 49 succeeded.
+64 Wed Dec 21 14:39:35 2022
+ Data insertion from sensor 37 succeeded.
+65 Wed Dec 21 14:39:35 2022
+ Received sensor data with invalid sensor node ID 130
+66 Wed Dec 21 14:39:38 2022
+ Data insertion from sensor 49 succeeded.
+67 Wed Dec 21 14:39:41 2022
+ Received sensor data with invalid sensor node ID 130
+68 Wed Dec 21 14:39:41 2022
+ Received sensor data with invalid sensor node ID 130
+69 Wed Dec 21 14:39:41 2022
+ Data insertion from sensor 37 succeeded.
+70 Wed Dec 21 14:39:41 2022
+ Data insertion from sensor 49 succeeded.
+71 Wed Dec 21 14:39:41 2022
+ Received sensor data with invalid sensor node ID 130
+72 Wed Dec 21 14:39:41 2022
+ Received sensor data with invalid sensor node ID 130
+73 Wed Dec 21 14:39:41 2022
+ Data insertion from sensor 37 succeeded.
+74 Wed Dec 21 14:39:41 2022
+ Data insertion from sensor 130 succeeded.
+75 Wed Dec 21 14:39:41 2022
+ Received sensor data with invalid sensor node ID 130
+76 Wed Dec 21 14:39:41 2022
+ Received sensor data with invalid sensor node ID 130
+77 Wed Dec 21 14:39:41 2022
+ Data insertion from sensor 49 succeeded.
+78 Wed Dec 21 14:39:41 2022
+ Data insertion from sensor 37 succeeded.
+79 Wed Dec 21 14:39:41 2022
+ Received sensor data with invalid sensor node ID 130
+80 Wed Dec 21 14:39:41 2022
+ Received sensor data with invalid sensor node ID 130
+81 Wed Dec 21 14:39:41 2022
+ Data insertion from sensor 49 succeeded.
+82 Wed Dec 21 14:39:41 2022
+ Data insertion from sensor 37 succeeded.
+83 Wed Dec 21 14:39:41 2022
+ Received sensor data with invalid sensor node ID 130
+84 Wed Dec 21 14:39:41 2022
+ Received sensor data with invalid sensor node ID 130
+85 Wed Dec 21 14:39:41 2022
+ Data insertion from sensor 49 succeeded.
+86 Wed Dec 21 14:39:41 2022
+ Data insertion from sensor 37 succeeded.
+87 Wed Dec 21 14:39:41 2022
+ Received sensor data with invalid sensor node ID 130
+88 Wed Dec 21 14:39:41 2022
+ Received sensor data with invalid sensor node ID 130
+89 Wed Dec 21 14:39:41 2022
+ Data insertion from sensor 49 succeeded.
+90 Wed Dec 21 14:39:41 2022
+ Data insertion from sensor 37 succeeded.
+91 Wed Dec 21 14:39:41 2022
+ Received sensor data with invalid sensor node ID 130
+92 Wed Dec 21 14:39:41 2022
+ Received sensor data with invalid sensor node ID 130
+93 Wed Dec 21 14:39:41 2022
+ Data insertion from sensor 130 succeeded.
+94 Wed Dec 21 14:39:44 2022
+ Received sensor data with invalid sensor node ID 130
+95 Wed Dec 21 14:39:47 2022
+ Data insertion from sensor 49 succeeded.
+96 Wed Dec 21 14:39:47 2022
+ Data insertion from sensor 37 succeeded.
+97 Wed Dec 21 14:39:47 2022
+ Received sensor data with invalid sensor node ID 130
+98 Wed Dec 21 14:39:47 2022
+ Received sensor data with invalid sensor node ID 130
+99 Wed Dec 21 14:39:47 2022
+ Data insertion from sensor 49 succeeded.
+100 Wed Dec 21 14:39:47 2022
+ Data insertion from sensor 37 succeeded.
+101 Wed Dec 21 14:39:47 2022
+ Received sensor data with invalid sensor node ID 130
+102 Wed Dec 21 14:39:47 2022
+ Received sensor data with invalid sensor node ID 130
+103 Wed Dec 21 14:39:47 2022
+ Data insertion from sensor 49 succeeded.
+104 Wed Dec 21 14:39:47 2022
+ Data insertion from sensor 37 succeeded.
+105 Wed Dec 21 14:39:47 2022
+ Received sensor data with invalid sensor node ID 130
+106 Wed Dec 21 14:39:47 2022
+ Received sensor data with invalid sensor node ID 130
+107 Wed Dec 21 14:39:47 2022
+ Data insertion from sensor 49 succeeded.
+108 Wed Dec 21 14:39:47 2022
+ Data insertion from sensor 37 succeeded.
+109 Wed Dec 21 14:39:47 2022
+ Received sensor data with invalid sensor node ID 130
+110 Wed Dec 21 14:39:47 2022
+ Received sensor data with invalid sensor node ID 130
+111 Wed Dec 21 14:39:47 2022
+ Data insertion from sensor 130 succeeded.
+112 Wed Dec 21 14:39:47 2022
+ Data insertion from sensor 49 succeeded.
+113 Wed Dec 21 14:39:47 2022
+ Received sensor data with invalid sensor node ID 130
+114 Wed Dec 21 14:39:47 2022
+ Received sensor data with invalid sensor node ID 130
+115 Wed Dec 21 14:39:47 2022
+ Data insertion from sensor 37 succeeded.
+116 Wed Dec 21 14:39:47 2022
+ Data insertion from sensor 49 succeeded.
+117 Wed Dec 21 14:39:47 2022
+ Received sensor data with invalid sensor node ID 130
+118 Wed Dec 21 14:39:47 2022
+ Received sensor data with invalid sensor node ID 130
+119 Wed Dec 21 14:39:47 2022
+ Data insertion from sensor 37 succeeded.
+120 Wed Dec 21 14:39:47 2022
+ Data insertion from sensor 49 succeeded.
+121 Wed Dec 21 14:39:47 2022
+ Received sensor data with invalid sensor node ID 130
+122 Wed Dec 21 14:39:50 2022
+ Received sensor data with invalid sensor node ID 130
+123 Wed Dec 21 14:39:53 2022
+ Data insertion from sensor 37 succeeded.
+124 Wed Dec 21 14:39:53 2022
+ Data insertion from sensor 49 succeeded.
+125 Wed Dec 21 14:39:53 2022
+ Received sensor data with invalid sensor node ID 130
+126 Wed Dec 21 14:39:53 2022
+ Data insertion from sensor 130 succeeded.
+127 Wed Dec 21 14:39:53 2022
+ Received sensor data with invalid sensor node ID 130
+128 Wed Dec 21 14:39:53 2022
+ Received sensor data with invalid sensor node ID 130
+129 Wed Dec 21 14:39:53 2022
+ Data insertion from sensor 37 succeeded.
+130 Wed Dec 21 14:39:53 2022
+ Data insertion from sensor 49 succeeded.
+131 Wed Dec 21 14:39:53 2022
+ Received sensor data with invalid sensor node ID 130
+132 Wed Dec 21 14:39:53 2022
+ Received sensor data with invalid sensor node ID 130
+133 Wed Dec 21 14:39:53 2022
+ Data insertion from sensor 37 succeeded.
+134 Wed Dec 21 14:39:53 2022
+ Received sensor data with invalid sensor node ID 130
+135 Wed Dec 21 14:39:53 2022
+ Received sensor data with invalid sensor node ID 130
+136 Wed Dec 21 14:39:53 2022
+ Data insertion from sensor 49 succeeded.
+137 Wed Dec 21 14:39:53 2022
+ Data insertion from sensor 37 succeeded.
+138 Wed Dec 21 14:39:53 2022
+ Data insertion from sensor 49 succeeded.
+139 Wed Dec 21 14:39:53 2022
+ Received sensor data with invalid sensor node ID 130
+140 Wed Dec 21 14:39:53 2022
+ Received sensor data with invalid sensor node ID 130
+141 Wed Dec 21 14:39:53 2022
+ Data insertion from sensor 37 succeeded.
+142 Wed Dec 21 14:39:53 2022
+ Data insertion from sensor 49 succeeded.
+143 Wed Dec 21 14:39:53 2022
+ Received sensor data with invalid sensor node ID 130
+144 Wed Dec 21 14:39:53 2022
+ Received sensor data with invalid sensor node ID 130
+145 Wed Dec 21 14:39:53 2022
+ Data insertion from sensor 130 succeeded.
+146 Wed Dec 21 14:39:53 2022
+ Data insertion from sensor 37 succeeded.
+147 Wed Dec 21 14:39:53 2022
+ Received sensor data with invalid sensor node ID 130
+148 Wed Dec 21 14:39:53 2022
+ Received sensor data with invalid sensor node ID 130
+149 Wed Dec 21 14:39:53 2022
+ Data insertion from sensor 49 succeeded.
+150 Wed Dec 21 14:39:56 2022
+ Received sensor data with invalid sensor node ID 130
+151 Wed Dec 21 14:39:59 2022
+ Data insertion from sensor 37 succeeded.
+152 Wed Dec 21 14:39:59 2022
+ Data insertion from sensor 49 succeeded.
+153 Wed Dec 21 14:39:59 2022
+ Received sensor data with invalid sensor node ID 130
+154 Wed Dec 21 14:39:59 2022
+ Received sensor data with invalid sensor node ID 130
+155 Wed Dec 21 14:39:59 2022
+ Data insertion from sensor 37 succeeded.
+156 Wed Dec 21 14:39:59 2022
+ Data insertion from sensor 49 succeeded.
+157 Wed Dec 21 14:39:59 2022
+ Received sensor data with invalid sensor node ID 130
+158 Wed Dec 21 14:39:59 2022
+ Data insertion from sensor 37 succeeded.
+159 Wed Dec 21 14:39:59 2022
+ Received sensor data with invalid sensor node ID 130
+160 Wed Dec 21 14:39:59 2022
+ Received sensor data with invalid sensor node ID 130
+161 Wed Dec 21 14:39:59 2022
+ Data insertion from sensor 49 succeeded.
+162 Wed Dec 21 14:39:59 2022
+ Data insertion from sensor 130 succeeded.
+163 Wed Dec 21 14:39:59 2022
+ Received sensor data with invalid sensor node ID 130
+164 Wed Dec 21 14:39:59 2022
+ Received sensor data with invalid sensor node ID 130
+165 Wed Dec 21 14:39:59 2022
+ Data insertion from sensor 37 succeeded.
+166 Wed Dec 21 14:39:59 2022
+ Data insertion from sensor 49 succeeded.
+167 Wed Dec 21 14:39:59 2022
+ Received sensor data with invalid sensor node ID 130
+168 Wed Dec 21 14:39:59 2022
+ Received sensor data with invalid sensor node ID 130
+169 Wed Dec 21 14:39:59 2022
+ Data insertion from sensor 37 succeeded.
+170 Wed Dec 21 14:39:59 2022
+ Data insertion from sensor 49 succeeded.
+171 Wed Dec 21 14:39:59 2022
+ Received sensor data with invalid sensor node ID 130
+172 Wed Dec 21 14:39:59 2022
+ Received sensor data with invalid sensor node ID 130
+173 Wed Dec 21 14:39:59 2022
+ Data insertion from sensor 37 succeeded.
+174 Wed Dec 21 14:39:59 2022
+ Data insertion from sensor 49 succeeded.
+175 Wed Dec 21 14:39:59 2022
+ Received sensor data with invalid sensor node ID 130
+176 Wed Dec 21 14:40:02 2022
+ Data insertion from sensor 37 succeeded.
+177 Wed Dec 21 14:40:05 2022
+ Received sensor data with invalid sensor node ID 130
+178 Wed Dec 21 14:40:05 2022
+ Received sensor data with invalid sensor node ID 130
+179 Wed Dec 21 14:40:05 2022
+ Data insertion from sensor 49 succeeded.
+180 Wed Dec 21 14:40:05 2022
+ Data insertion from sensor 130 succeeded.
+181 Wed Dec 21 14:40:05 2022
+ Received sensor data with invalid sensor node ID 130
+182 Wed Dec 21 14:40:05 2022
+ Received sensor data with invalid sensor node ID 130
+183 Wed Dec 21 14:40:05 2022
+ Data insertion from sensor 37 succeeded.
+184 Wed Dec 21 14:40:05 2022
+ Data insertion from sensor 49 succeeded.
+185 Wed Dec 21 14:40:05 2022
+ Received sensor data with invalid sensor node ID 130
+186 Wed Dec 21 14:40:05 2022
+ Received sensor data with invalid sensor node ID 130
+187 Wed Dec 21 14:40:05 2022
+ Data insertion from sensor 37 succeeded.
+188 Wed Dec 21 14:40:05 2022
+ Data insertion from sensor 49 succeeded.
+189 Wed Dec 21 14:40:05 2022
+ Received sensor data with invalid sensor node ID 130
+190 Wed Dec 21 14:40:05 2022
+ Data insertion from sensor 37 succeeded.
+191 Wed Dec 21 14:40:05 2022
+ Received sensor data with invalid sensor node ID 130
+192 Wed Dec 21 14:40:05 2022
+ Data insertion from sensor 49 succeeded.
+193 Wed Dec 21 14:40:05 2022
+ Received sensor data with invalid sensor node ID 130
+194 Wed Dec 21 14:40:05 2022
+ Received sensor data with invalid sensor node ID 130
+195 Wed Dec 21 14:40:05 2022
+ Data insertion from sensor 37 succeeded.
+196 Wed Dec 21 14:40:05 2022
+ Data insertion from sensor 49 succeeded.
+197 Wed Dec 21 14:40:05 2022
+ Received sensor data with invalid sensor node ID 130
+198 Wed Dec 21 14:40:05 2022
+ Data insertion from sensor 130 succeeded.
+199 Wed Dec 21 14:40:05 2022
+ Data insertion from sensor 37 succeeded.
+200 Wed Dec 21 14:40:05 2022
+ Received sensor data with invalid sensor node ID 130
+201 Wed Dec 21 14:40:05 2022
+ Received sensor data with invalid sensor node ID 130
+202 Wed Dec 21 14:40:05 2022
+ Received sensor data with invalid sensor node ID 130
+203 Wed Dec 21 14:40:05 2022
+ Data insertion from sensor 49 succeeded.
+204 Wed Dec 21 14:40:08 2022
+ Data insertion from sensor 37 succeeded.
+205 Wed Dec 21 14:40:11 2022
+ Received sensor data with invalid sensor node ID 130
+206 Wed Dec 21 14:40:11 2022
+ Received sensor data with invalid sensor node ID 130
+207 Wed Dec 21 14:40:11 2022
+ Data insertion from sensor 49 succeeded.
+208 Wed Dec 21 14:40:11 2022
+ Data insertion from sensor 37 succeeded.
+209 Wed Dec 21 14:40:11 2022
+ Received sensor data with invalid sensor node ID 130
+210 Wed Dec 21 14:40:11 2022
+ Received sensor data with invalid sensor node ID 130
+211 Wed Dec 21 14:40:11 2022
+ Data insertion from sensor 49 succeeded.
+212 Wed Dec 21 14:40:11 2022
+ Data insertion from sensor 37 succeeded.
+213 Wed Dec 21 14:40:11 2022
+ Received sensor data with invalid sensor node ID 130
+214 Wed Dec 21 14:40:11 2022
+ Received sensor data with invalid sensor node ID 130
+215 Wed Dec 21 14:40:11 2022
+ Data insertion from sensor 49 succeeded.
+216 Wed Dec 21 14:40:11 2022
+ Data insertion from sensor 130 succeeded.
+217 Wed Dec 21 14:40:11 2022
+ Received sensor data with invalid sensor node ID 130
+218 Wed Dec 21 14:40:11 2022
+ Received sensor data with invalid sensor node ID 130
+219 Wed Dec 21 14:40:11 2022
+ Data insertion from sensor 37 succeeded.
+220 Wed Dec 21 14:40:11 2022
+ Data insertion from sensor 49 succeeded.
+221 Wed Dec 21 14:40:11 2022
+ Received sensor data with invalid sensor node ID 130
+222 Wed Dec 21 14:40:11 2022
+ Received sensor data with invalid sensor node ID 130
+223 Wed Dec 21 14:40:11 2022
+ Data insertion from sensor 37 succeeded.
+224 Wed Dec 21 14:40:11 2022
+ Data insertion from sensor 49 succeeded.
+225 Wed Dec 21 14:40:11 2022
+ Received sensor data with invalid sensor node ID 130
+226 Wed Dec 21 14:40:11 2022
+ Received sensor data with invalid sensor node ID 130
+227 Wed Dec 21 14:40:11 2022
+ Data insertion from sensor 37 succeeded.
+228 Wed Dec 21 14:40:11 2022
+ Data insertion from sensor 49 succeeded.
+229 Wed Dec 21 14:40:11 2022
+ Received sensor data with invalid sensor node ID 130
+230 Wed Dec 21 14:40:14 2022
+ Received sensor data with invalid sensor node ID 130
+231 Wed Dec 21 14:40:17 2022
+ Data insertion from sensor 37 succeeded.
+232 Wed Dec 21 14:40:17 2022
+ Data insertion from sensor 49 succeeded.
+233 Wed Dec 21 14:40:17 2022
+ Received sensor data with invalid sensor node ID 130
+234 Wed Dec 21 14:40:17 2022
+ Received sensor data with invalid sensor node ID 130
+235 Wed Dec 21 14:40:17 2022
+ Data insertion from sensor 130 succeeded.
+236 Wed Dec 21 14:40:17 2022
+ Data insertion from sensor 37 succeeded.
+237 Wed Dec 21 14:40:17 2022
+ Received sensor data with invalid sensor node ID 130
+238 Wed Dec 21 14:40:17 2022
+ Received sensor data with invalid sensor node ID 130
+239 Wed Dec 21 14:40:17 2022
+ Data insertion from sensor 49 succeeded.
+240 Wed Dec 21 14:40:17 2022
+ Data insertion from sensor 37 succeeded.
+241 Wed Dec 21 14:40:17 2022
+ Received sensor data with invalid sensor node ID 130
+242 Wed Dec 21 14:40:17 2022
+ Received sensor data with invalid sensor node ID 130
+243 Wed Dec 21 14:40:17 2022
+ Data insertion from sensor 49 succeeded.
+244 Wed Dec 21 14:40:17 2022
+ Data insertion from sensor 37 succeeded.
+245 Wed Dec 21 14:40:17 2022
+ Received sensor data with invalid sensor node ID 130
+246 Wed Dec 21 14:40:17 2022
+ Received sensor data with invalid sensor node ID 130
+247 Wed Dec 21 14:40:17 2022
+ Data insertion from sensor 49 succeeded.
+248 Wed Dec 21 14:40:17 2022
+ Data insertion from sensor 37 succeeded.
+249 Wed Dec 21 14:40:17 2022
+ Received sensor data with invalid sensor node ID 130
+250 Wed Dec 21 14:40:17 2022
+ Received sensor data with invalid sensor node ID 130
+251 Wed Dec 21 14:40:17 2022
+ Data insertion from sensor 49 succeeded.
+252 Wed Dec 21 14:40:17 2022
+ Data insertion from sensor 130 succeeded.
+253 Wed Dec 21 14:40:17 2022
+ Received sensor data with invalid sensor node ID 130
+254 Wed Dec 21 14:40:17 2022
+ Received sensor data with invalid sensor node ID 130
+255 Wed Dec 21 14:40:17 2022
+ Data insertion from sensor 37 succeeded.
+256 Wed Dec 21 14:40:17 2022
+ Data insertion from sensor 49 succeeded.
+257 Wed Dec 21 14:40:17 2022
+ Received sensor data with invalid sensor node ID 130
+258 Wed Dec 21 14:40:17 2022
+ Received sensor data with invalid sensor node ID 130
+259 Wed Dec 21 14:40:17 2022
+ Data insertion from sensor 37 succeeded.
+260 Wed Dec 21 14:40:21 2022
+ Data insertion from sensor 49 succeeded.
+261 Wed Dec 21 14:40:24 2022
+ Received sensor data with invalid sensor node ID 130
+262 Wed Dec 21 14:40:24 2022
+ Received sensor data with invalid sensor node ID 130
+263 Wed Dec 21 14:40:24 2022
+ Data insertion from sensor 37 succeeded.
+264 Wed Dec 21 14:40:24 2022
+ Data insertion from sensor 49 succeeded.
+265 Wed Dec 21 14:40:24 2022
+ Received sensor data with invalid sensor node ID 130
+266 Wed Dec 21 14:40:24 2022
+ Received sensor data with invalid sensor node ID 130
+267 Wed Dec 21 14:40:24 2022
+ Data insertion from sensor 37 succeeded.
+268 Wed Dec 21 14:40:24 2022
+ Data insertion from sensor 49 succeeded.
+269 Wed Dec 21 14:40:24 2022
+ Received sensor data with invalid sensor node ID 130
+270 Wed Dec 21 14:40:24 2022
+ Received sensor data with invalid sensor node ID 130
+271 Wed Dec 21 14:40:24 2022
+ Data insertion from sensor 130 succeeded.
+272 Wed Dec 21 14:40:24 2022
+ Data insertion from sensor 37 succeeded.
+273 Wed Dec 21 14:40:24 2022
+ Received sensor data with invalid sensor node ID 130
+274 Wed Dec 21 14:40:24 2022
+ Received sensor data with invalid sensor node ID 130
+275 Wed Dec 21 14:40:24 2022
+ Data insertion from sensor 49 succeeded.
+276 Wed Dec 21 14:40:24 2022
+ Data insertion from sensor 37 succeeded.
+277 Wed Dec 21 14:40:24 2022
+ Received sensor data with invalid sensor node ID 130
+278 Wed Dec 21 14:40:24 2022
+ Received sensor data with invalid sensor node ID 130
+279 Wed Dec 21 14:40:24 2022
+ Data insertion from sensor 49 succeeded.
+280 Wed Dec 21 14:40:24 2022
+ Data insertion from sensor 37 succeeded.
+281 Wed Dec 21 14:40:24 2022
+ Received sensor data with invalid sensor node ID 130
+282 Wed Dec 21 14:40:24 2022
+ Received sensor data with invalid sensor node ID 130
+283 Wed Dec 21 14:40:24 2022
+ Data insertion from sensor 49 succeeded.
+284 Wed Dec 21 14:40:24 2022
+ Data insertion from sensor 37 succeeded.
+285 Wed Dec 21 14:40:24 2022
+ Received sensor data with invalid sensor node ID 130
+286 Wed Dec 21 14:40:27 2022
+ Received sensor data with invalid sensor node ID 130
+287 Wed Dec 21 14:40:30 2022
+ Data insertion from sensor 49 succeeded.
+288 Wed Dec 21 14:40:30 2022
+ Data insertion from sensor 130 succeeded.
+289 Wed Dec 21 14:40:30 2022
+ Received sensor data with invalid sensor node ID 130
+290 Wed Dec 21 14:40:30 2022
+ Received sensor data with invalid sensor node ID 130
+291 Wed Dec 21 14:40:30 2022
+ Data insertion from sensor 37 succeeded.
+292 Wed Dec 21 14:40:30 2022
+ Data insertion from sensor 49 succeeded.
+293 Wed Dec 21 14:40:30 2022
+ Received sensor data with invalid sensor node ID 130
+294 Wed Dec 21 14:40:30 2022
+ Received sensor data with invalid sensor node ID 130
+295 Wed Dec 21 14:40:30 2022
+ Data insertion from sensor 37 succeeded.
+296 Wed Dec 21 14:40:30 2022
+ Data insertion from sensor 49 succeeded.
+297 Wed Dec 21 14:40:30 2022
+ Received sensor data with invalid sensor node ID 130
+298 Wed Dec 21 14:40:30 2022
+ Received sensor data with invalid sensor node ID 130
+299 Wed Dec 21 14:40:30 2022
+ Data insertion from sensor 37 succeeded.
+300 Wed Dec 21 14:40:30 2022
+ Data insertion from sensor 49 succeeded.
+301 Wed Dec 21 14:40:30 2022
+ Received sensor data with invalid sensor node ID 130
+302 Wed Dec 21 14:40:30 2022
+ Received sensor data with invalid sensor node ID 130
+303 Wed Dec 21 14:40:30 2022
+ Data insertion from sensor 37 succeeded.
+304 Wed Dec 21 14:40:30 2022
+ Data insertion from sensor 49 succeeded.
+305 Wed Dec 21 14:40:30 2022
+ Received sensor data with invalid sensor node ID 130
+306 Wed Dec 21 14:40:30 2022
+ Received sensor data with invalid sensor node ID 130
+307 Wed Dec 21 14:40:30 2022
+ Data insertion from sensor 130 succeeded.
+308 Wed Dec 21 14:40:30 2022
+ Data insertion from sensor 37 succeeded.
+309 Wed Dec 21 14:40:30 2022
+ Received sensor data with invalid sensor node ID 130
+310 Wed Dec 21 14:40:30 2022
+ Data insertion from sensor 49 succeeded.
+311 Wed Dec 21 14:40:30 2022
+ Received sensor data with invalid sensor node ID 130
+312 Wed Dec 21 14:40:30 2022
+ Data insertion from sensor 37 succeeded.
+313 Wed Dec 21 14:40:30 2022
+ Received sensor data with invalid sensor node ID 130
+314 Wed Dec 21 14:40:30 2022
+ Data insertion from sensor 49 succeeded.
+315 Wed Dec 21 14:40:30 2022
+ Received sensor data with invalid sensor node ID 130
+316 Wed Dec 21 14:40:33 2022
+ Data insertion from sensor 37 succeeded.
+317 Wed Dec 21 14:40:36 2022
+ Received sensor data with invalid sensor node ID 130
+318 Wed Dec 21 14:40:36 2022
+ Received sensor data with invalid sensor node ID 130
+319 Wed Dec 21 14:40:36 2022
+ Data insertion from sensor 49 succeeded.
+320 Wed Dec 21 14:40:36 2022
+ Data insertion from sensor 37 succeeded.
+321 Wed Dec 21 14:40:36 2022
+ Received sensor data with invalid sensor node ID 130
+322 Wed Dec 21 14:40:36 2022
+ Received sensor data with invalid sensor node ID 130
+323 Wed Dec 21 14:40:36 2022
+ Received sensor data with invalid sensor node ID 130
+324 Wed Dec 21 14:40:36 2022
+ Data insertion from sensor 49 succeeded.
+325 Wed Dec 21 14:40:36 2022
+ Data insertion from sensor 130 succeeded.
+326 Wed Dec 21 14:40:36 2022
+ Data insertion from sensor 37 succeeded.
+327 Wed Dec 21 14:40:36 2022
+ Received sensor data with invalid sensor node ID 130
+328 Wed Dec 21 14:40:36 2022
+ Received sensor data with invalid sensor node ID 130
+329 Wed Dec 21 14:40:36 2022
+ Data insertion from sensor 49 succeeded.
+330 Wed Dec 21 14:40:36 2022
+ Data insertion from sensor 37 succeeded.
+331 Wed Dec 21 14:40:36 2022
+ Received sensor data with invalid sensor node ID 130
+332 Wed Dec 21 14:40:36 2022
+ Received sensor data with invalid sensor node ID 130
+333 Wed Dec 21 14:40:36 2022
+ Data insertion from sensor 49 succeeded.
+334 Wed Dec 21 14:40:36 2022
+ Data insertion from sensor 37 succeeded.
+335 Wed Dec 21 14:40:36 2022
+ Received sensor data with invalid sensor node ID 130
+336 Wed Dec 21 14:40:36 2022
+ Received sensor data with invalid sensor node ID 130
+337 Wed Dec 21 14:40:36 2022
+ Data insertion from sensor 49 succeeded.
+338 Wed Dec 21 14:40:36 2022
+ Data insertion from sensor 37 succeeded.
+339 Wed Dec 21 14:40:36 2022
+ Received sensor data with invalid sensor node ID 130
+340 Wed Dec 21 14:40:36 2022
+ Received sensor data with invalid sensor node ID 130
+341 Wed Dec 21 14:40:36 2022
+ Data insertion from sensor 49 succeeded.
+342 Wed Dec 21 14:40:36 2022
+ Data insertion from sensor 130 succeeded.
+343 Wed Dec 21 14:40:36 2022
+ Received sensor data with invalid sensor node ID 130
+344 Wed Dec 21 14:40:40 2022
+ Data insertion from sensor 37 succeeded.
+345 Wed Dec 21 14:40:43 2022
+ Received sensor data with invalid sensor node ID 130
+346 Wed Dec 21 14:40:43 2022
+ Received sensor data with invalid sensor node ID 130
+347 Wed Dec 21 14:40:43 2022
+ Data insertion from sensor 49 succeeded.
+348 Wed Dec 21 14:40:43 2022
+ Data insertion from sensor 37 succeeded.
+349 Wed Dec 21 14:40:43 2022
+ Received sensor data with invalid sensor node ID 130
+350 Wed Dec 21 14:40:43 2022
+ Received sensor data with invalid sensor node ID 130
+351 Wed Dec 21 14:40:43 2022
+ Data insertion from sensor 49 succeeded.
+352 Wed Dec 21 14:40:43 2022
+ Data insertion from sensor 37 succeeded.
+353 Wed Dec 21 14:40:43 2022
+ Received sensor data with invalid sensor node ID 130
+354 Wed Dec 21 14:40:43 2022
+ Received sensor data with invalid sensor node ID 130
+355 Wed Dec 21 14:40:43 2022
+ Data insertion from sensor 49 succeeded.
+356 Wed Dec 21 14:40:43 2022
+ Data insertion from sensor 37 succeeded.
+357 Wed Dec 21 14:40:43 2022
+ Received sensor data with invalid sensor node ID 130
+358 Wed Dec 21 14:40:43 2022
+ Received sensor data with invalid sensor node ID 130
+359 Wed Dec 21 14:40:43 2022
+ Data insertion from sensor 49 succeeded.
+360 Wed Dec 21 14:40:43 2022
+ Data insertion from sensor 130 succeeded.
+361 Wed Dec 21 14:40:43 2022
+ Received sensor data with invalid sensor node ID 130
+362 Wed Dec 21 14:40:43 2022
+ Received sensor data with invalid sensor node ID 130
+363 Wed Dec 21 14:40:43 2022
+ Data insertion from sensor 37 succeeded.
+364 Wed Dec 21 14:40:43 2022
+ Data insertion from sensor 49 succeeded.
+365 Wed Dec 21 14:40:43 2022
+ Received sensor data with invalid sensor node ID 130
+366 Wed Dec 21 14:40:43 2022
+ Received sensor data with invalid sensor node ID 130
+367 Wed Dec 21 14:40:43 2022
+ Data insertion from sensor 37 succeeded.
+368 Wed Dec 21 14:40:43 2022
+ Data insertion from sensor 49 succeeded.
+369 Wed Dec 21 14:40:43 2022
+ Received sensor data with invalid sensor node ID 130
+370 Wed Dec 21 14:40:43 2022
+ Received sensor data with invalid sensor node ID 130
+371 Wed Dec 21 14:40:43 2022
+ Data insertion from sensor 37 succeeded.
+372 Wed Dec 21 14:40:46 2022
+ Data insertion from sensor 49 succeeded.
+373 Wed Dec 21 14:40:49 2022
+ Sensor node 112 has opened a new connection
+374 Wed Dec 21 14:40:49 2022
+ Received sensor data with invalid sensor node ID 130
+375 Wed Dec 21 14:40:49 2022
+ Received sensor data with invalid sensor node ID 130
+376 Wed Dec 21 14:40:49 2022
+ Data insertion from sensor 37 succeeded.
+377 Wed Dec 21 14:40:49 2022
+ Data insertion from sensor 49 succeeded.
+378 Wed Dec 21 14:40:49 2022
+ Received sensor data with invalid sensor node ID 130
+379 Wed Dec 21 14:40:49 2022
+ Received sensor data with invalid sensor node ID 130
+380 Wed Dec 21 14:40:49 2022
+ Data insertion from sensor 130 succeeded.
+381 Wed Dec 21 14:40:49 2022
+ Data insertion from sensor 37 succeeded.
+382 Wed Dec 21 14:40:49 2022
+ Received sensor data with invalid sensor node ID 130
+383 Wed Dec 21 14:40:49 2022
+ Received sensor data with invalid sensor node ID 130
+384 Wed Dec 21 14:40:49 2022
+ Data insertion from sensor 49 succeeded.
+385 Wed Dec 21 14:40:49 2022
+ Data insertion from sensor 37 succeeded.
+386 Wed Dec 21 14:40:49 2022
+ Received sensor data with invalid sensor node ID 130
+387 Wed Dec 21 14:40:49 2022
+ Received sensor data with invalid sensor node ID 130
+388 Wed Dec 21 14:40:49 2022
+ Data insertion from sensor 49 succeeded.
+389 Wed Dec 21 14:40:49 2022
+ Data insertion from sensor 37 succeeded.
+390 Wed Dec 21 14:40:49 2022
+ Received sensor data with invalid sensor node ID 130
+391 Wed Dec 21 14:40:49 2022
+ Received sensor data with invalid sensor node ID 130
+392 Wed Dec 21 14:40:49 2022
+ Data insertion from sensor 49 succeeded.
+393 Wed Dec 21 14:40:49 2022
+ Data insertion from sensor 37 succeeded.
+394 Wed Dec 21 14:40:49 2022
+ Received sensor data with invalid sensor node ID 130
+395 Wed Dec 21 14:40:49 2022
+ Received sensor data with invalid sensor node ID 130
+396 Wed Dec 21 14:40:49 2022
+ Data insertion from sensor 49 succeeded.
+397 Wed Dec 21 14:40:49 2022
+ Data insertion from sensor 130 succeeded.
+398 Wed Dec 21 14:40:49 2022
+ Received sensor data with invalid sensor node ID 130
+399 Wed Dec 21 14:40:49 2022
+ Received sensor data with invalid sensor node ID 130
+400 Wed Dec 21 14:40:49 2022
+ Data insertion from sensor 37 succeeded.
+401 Wed Dec 21 14:40:49 2022
+ Data insertion from sensor 112 succeeded.
+402 Wed Dec 21 14:40:49 2022
+ Sensor node 112 reports it's too cold (avg temp = 4.046311)
+403 Wed Dec 21 14:40:49 2022
+ Sensor node 112 reports it's too cold (avg temp = 4.046311)
+404 Wed Dec 21 14:40:49 2022
+ Data insertion from sensor 49 succeeded.
+405 Wed Dec 21 14:40:49 2022
+ Data insertion from sensor 49 succeeded.
+406 Wed Dec 21 14:40:49 2022
+ The data.csv has been closed.
+407 Wed Dec 21 14:40:49 2022
+ Sensor node 112 reports it's too cold (avg temp = 4.046311)
+408 Wed Dec 21 14:40:53 2022
  Sensor node 37 has closed the connection
-457 Tue Dec 20 21:26:43 2022
+409 Wed Dec 21 14:40:53 2022
+ Sensor node 112 has opened a new connection
+410 Wed Dec 21 14:40:55 2022
+ Sensor node 49 has closed the connection
+411 Wed Dec 21 14:40:57 2022
+ Sensor node 112 has opened a new connection
+412 Wed Dec 21 14:40:58 2022
+ Sensor node 130 has closed the connection
+413 Wed Dec 21 14:41:01 2022
+ Sensor node 112 has opened a new connection
+414 Wed Dec 21 14:41:05 2022
+ Sensor node 112 has opened a new connection
+415 Wed Dec 21 14:41:05 2022
  Sensor node 112 has closed the connection
