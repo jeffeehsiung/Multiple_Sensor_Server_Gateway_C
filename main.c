@@ -26,7 +26,6 @@ int main(int argc, char *argv[]){
 
     pid_t pid;
     int server_port;
-    // bool terminate = false;
 
     if (argc != 2) {
         print_help();
@@ -99,8 +98,6 @@ int main(int argc, char *argv[]){
         wait(NULL);
 
         printf("main: logger process terminated\n");
-        
-        // exit(EXIT_SUCCESS);
 
         printf("main: main process terminating\n");
 
