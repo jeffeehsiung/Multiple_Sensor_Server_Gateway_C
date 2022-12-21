@@ -74,7 +74,7 @@ int sbuffer_remove(sbuffer_t *buffer, sensor_data_t* data, int consumer_id);
  * \param data a pointer to sensor_data_t data, that will be copied into the buffer
  * \return SBUFFER_SUCCESS on success and SBUFFER_FAILURE if an error occured
 */
-int sbuffer_insert(sbuffer_t *buffer, sensor_data_t *data);
+int sbuffer_insert(sbuffer_t *buffer, const sensor_data_t *data);
 
 /**
  * set flags to check EOF

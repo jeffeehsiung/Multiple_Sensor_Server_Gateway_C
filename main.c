@@ -15,8 +15,6 @@
 
 
 void print_help(void);
-// void set_termintate(bool term);
-// bool get_terminate(void);
 
 /* global varaibles */
 int fd[2]; 
@@ -28,7 +26,7 @@ int main(int argc, char *argv[]){
 
     pid_t pid;
     int server_port;
-    bool terminate = false;
+    // bool terminate = false;
 
     if (argc != 2) {
         print_help();
@@ -52,6 +50,11 @@ int main(int argc, char *argv[]){
 
         int totalthread = 0;
         pthread_t threads[MAX_RD + MAX_WRT];
+        
+        // initialize joinable threads
+        pthread_attr_t attr;
+        pthread_attr_init(&attr);
+        pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_JOINABLE);
 
         if (sem_init(&pipe_lock, 0, 1) == -1){
             perror("sem_init failed\n"); exit(EXIT_FAILURE);
@@ -63,9 +66,9 @@ int main(int argc, char *argv[]){
 
         close(fd[READ_END]);
 
-        pthread_create(&threads[totalthread],NULL,connmgr_start,(void*) &server_port); totalthread++; 
-        pthread_create(&threads[totalthread],NULL,datamgr_start,(void*) buffer); totalthread++;
-        pthread_create(&threads[totalthread],NULL,sensor_db_start,(void*) buffer); totalthread++;
+        pthread_create(&threads[totalthread],&attr,connmgr_start,(void*) &server_port); totalthread++; 
+        pthread_create(&threads[totalthread],&attr,datamgr_start,(void*) buffer); totalthread++;
+        pthread_create(&threads[totalthread],&attr,sensor_db_start,(void*) buffer); totalthread++;
 
         
         while (totalthread >  0) {
@@ -77,24 +80,31 @@ int main(int argc, char *argv[]){
             }
         }
 
-        printf("main: all threads terminated\n");
-        //set_termintate(true);
-        terminate = true;
 
-        sbuffer_free(&buffer);
-        printf("main: sbuffer freed\n");
+        printf("main: all threads terminated\n");
+
+        if (sbuffer_free(&buffer) != SBUFFER_SUCCESS){
+            perror("sbuffer_free failed\n"); exit(EXIT_FAILURE);
+        }
+
+        if (sem_destroy(&pipe_lock) == -1){
+            perror("sem_destroy failed\n"); exit(EXIT_FAILURE);
+        }
+
+        close(fd[WRITE_END]);
+
+        // destroy the attribute
+        pthread_attr_destroy(&attr);
 
         wait(NULL);
 
         printf("main: logger process terminated\n");
+        
+        // exit(EXIT_SUCCESS);
 
-	    close(fd[WRITE_END]);
-
-        sem_destroy(&pipe_lock);
+        printf("main: main process terminating\n");
 
         return 0;
-        
-        exit(EXIT_SUCCESS);
 
     }
 	// child process: log process
@@ -103,52 +113,37 @@ int main(int argc, char *argv[]){
         close(fd[WRITE_END]);
 
         int seq_num = 0;
+        char read_msg[BUFF_SIZE];
 
-        while (terminate == false)
+        FILE *log = fopen("gateway.log", "a+");
+        if (log == NULL)
         {
+            perror("logger: opening file failed\n");
+            exit(EXIT_FAILURE);
+        }
 
-            FILE *log = fopen("gateway.log", "a+");
-            if (log == NULL)
-            {
-                perror("logger opening file failed\n");
-                exit(EXIT_FAILURE);
-            }
-
-            // read from the pipe
-            char read_msg[BUFF_SIZE];
-            int bytes_read = read(fd[READ_END], read_msg, sizeof(read_msg));
-            if (bytes_read == -1)
-            {
-                perror("logger reading from pipe failed\n");
-                exit(EXIT_FAILURE);
-            }
-            if (bytes_read == 0)
-            {
-                printf("logger read 0 bytes from pipe\n");
-                break;
-            }
-
-            // get the message from pipe, add a sequence number and a timestamp to it
-            // and write an ASCII message to the log file in the format: <seq_num> <timestamp> <message>
+        // read from the pipe
+        while ((read(fd[READ_END], read_msg, sizeof(read_msg))) > 0)
+        {
+            // write an ASCII message to the log file in the format: <seq_num> <timestamp> <message>
             time_t t;
             time(&t);
             fprintf(log, "%d %s %s", seq_num, ctime(&t), read_msg);
             fflush(log);
 
             seq_num++;
-
-
-            if (fclose(log) != 0)
-            {
-                perror("logger closing file falied\n");
-                exit(EXIT_FAILURE);
-            }
-
-        } 
+        }
+        printf("logger: read 0 bytes from pipe\n");
 
         close(fd[READ_END]);
 
-        printf("logger process terminated\n");
+        if (fclose(log) != 0)
+        {
+            perror("logger closing file falied\n");
+            exit(EXIT_FAILURE);
+        }
+
+        printf("logger: process terminated\n");
 
         exit(EXIT_SUCCESS);
     }

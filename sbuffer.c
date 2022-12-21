@@ -119,7 +119,7 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t* data, int consumer_id) {
 }
 
 // sbuffer_insert function that takes a pointer to the buffer and a pointer to the data to be inserted
-int sbuffer_insert(sbuffer_t* buffer, sensor_data_t* data) {
+int sbuffer_insert(sbuffer_t* buffer, const sensor_data_t* data) {
 
     if (buffer == NULL) return SBUFFER_FAILURE;
     

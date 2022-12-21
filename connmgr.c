@@ -52,37 +52,6 @@ void* client_handler (void* param) {
         if((result = tcp_receive(client, (void *) &data.ts, &bytes)) != TCP_NO_ERROR){
             break;
         }
-        
-        // if ((result == TCP_NO_ERROR) && bytes) {
-        //     // get the timestamp of the server end waiting for data
-        //     time_t end = time(NULL);
-
-        //     // insert the data into the buffer
-        //     if(sbuffer_insert(buffer,&data) == SBUFFER_SUCCESS){
-        //         counter++;
-        //     }
-        //     // write to pipe
-        //     if(counter == 1){
-        //         // lock the semaphore of data access
-        //         if (sem_wait(&pipe_lock) == -1){
-        //             perror("sem_wait failed\n"); exit(EXIT_FAILURE);
-        //         }
-        //         char buf[BUFF_SIZE];
-        //         sprintf(buf,"Sensor node %d has opened a new connection\n",data.id);
-        //         write(fd[WRITE_END],buf,sizeof(buf));
-        //         // unlock the semaphore of data access
-        //         if (sem_post(&pipe_lock) == -1){
-        //             perror("sem_post failed\n"); exit(EXIT_FAILURE);
-        //         }
-        //     }
-        //     // if the sensor node has not sent new data within the defined timeout, the server closes the client socket and breaks the loop
-        //     if (end - start > TIMEOUT){
-        //         printf("The sensor node %d has not sent new data within the defined timeout.\n", data.id);
-        //         tcp_close(&client);
-        //         result = TCP_CONNECTION_CLOSED;
-        //         break;
-        //     }
-        // }
 
         // get the timestamp of the server end waiting for data
         time_t end = time(NULL);
@@ -132,12 +101,16 @@ void* client_handler (void* param) {
         perror("Error occured on connection to peer\n"); exit(EXIT_FAILURE);
     }
 
-    printf("connmgr closed thread number = %d, total inserted: %d \n",data.id, counter);
+    printf("connmgr: closed thread number = %d, total inserted: %d \n",data.id, counter);
     // close the client socket
     tcp_close(&client);
+    // if ((result = tcp_close(&client)) != TCP_NO_ERROR){
+    //     printf("conn,gr: tcp_close failed. tcp error: %d\n",result); exit(EXIT_FAILURE);
+    // }
 
     // exit the thread
     pthread_exit(NULL);
+
     // return to connmgr_start
     return NULL;
 }
@@ -158,7 +131,8 @@ void* connmgr_start(void* server_port) {
     // initialize thread array
     pthread_t clientthreads[MAX_CONN];
 
-    // set the att of the thread to run into the background and release the resources when it terminates
+    // set the att of the thread to run into the background and release the resources when calling process terminates
+    // resource reference: https://www.youtube.com/watch?v=-i8Kzuwr4T4
     pthread_attr_t attr;
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_DETACHED);
@@ -171,7 +145,7 @@ void* connmgr_start(void* server_port) {
     sbuffer_set_end(buffer,false);
 
     // wait for client to connect and only accept MAX_CONN connections
-    while (conn_counter < MAX_CONN) {
+    while (conn_counter <= MAX_CONN) {
         if (tcp_wait_for_connection(server, &client) != TCP_NO_ERROR){
             perror("tcp_wait_for_connection failed\n"); exit(EXIT_FAILURE);
         }
@@ -179,23 +153,19 @@ void* connmgr_start(void* server_port) {
         if (pthread_create(&clientthreads[conn_counter], &attr, client_handler, (void*) client) != 0){
             perror("pthread_create failed\n"); exit(EXIT_FAILURE);
         }
-        printf("connmgr created thread number = %d \n",conn_counter);
+        printf("connmgr: created thread amount = %d. set to detach state. terminate with process.\n",conn_counter);
         conn_counter++;
     }
 
-    // wait for target threads to terminate
-    while (conn_counter >  0) {
-        pthread_join(clientthreads[conn_counter-1],NULL);
-        conn_counter--;
-        printf("connmgr called for join thread number = %d \n",conn_counter);
-    }
- 
     // mark end_of_stream of sbuffer as true
     sbuffer_set_end(buffer,true);
     
     // tcp close connection fail safe
-    if (tcp_close(&server) != TCP_NO_ERROR){exit(EXIT_FAILURE);}
+    if (tcp_close(&server) != TCP_NO_ERROR){perror("connmgr_start: tcp close failed\n"); exit(EXIT_FAILURE);}
     printf("Test server is shutting down\n");
+
+    // release the library resources
+    pthread_attr_destroy(&attr);
 
     // join main thread
     pthread_exit(NULL);
