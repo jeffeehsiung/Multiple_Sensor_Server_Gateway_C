@@ -78,6 +78,8 @@ void* datamgr_start(void* param){
 		int index = dpl_get_index_of_element(list, (void*) &(data));
 		if(index == -1){
 			char buf[BUFF_SIZE];
+			//initialize the buffer
+            memset(buf,0,BUFF_SIZE);
 			sprintf(buf, "Received sensor data with invalid sensor node ID %hu\n",data.id);
 			//lock the semaphore of pipe access
 			if (sem_wait(&pipe_lock) == -1){
@@ -120,6 +122,8 @@ void* datamgr_start(void* param){
 		if(sensor->running_avg != 0){
 			// write the sensor data to pipe
 			char buf[BUFF_SIZE];
+			//initialize the buffer
+            memset(buf,0,BUFF_SIZE);
 			if(sensor->running_avg < SET_MIN_TEMP){
 				sprintf(buf, "Sensor node %hu reports it's too cold (avg temp = %lf)\n",(sensor->sensor_id),(sensor->running_avg));
 			}else if(sensor->running_avg > SET_MAX_TEMP){

@@ -24,6 +24,8 @@ void* sensor_db_start(void* param){
 	FILE* csv = fopen(filename,"a+");
 	if(csv != NULL){
 		char buf[BUFF_SIZE];
+		//initialize the buffer
+        memset(buf,0,BUFF_SIZE);
 		sprintf(buf, "A new data.csv file has been created\n");
 		//lock the semaphore of pipe access
 		if (sem_wait(&pipe_lock) == -1){
