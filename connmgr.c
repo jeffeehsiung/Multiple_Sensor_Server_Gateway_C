@@ -93,7 +93,7 @@ void* client_handler (void* param) {
         }
         // write to pipe
         char buf[BUFF_SIZE];
-        sprintf(buf,"Sensor node %d has closed the connection\n",data.id);
+        sprintf(buf,"Sensor node %d has closed the connection. info logged \n",data.id);
         write(fd[WRITE_END],buf,sizeof(buf));
         // unlock the semaphore of data access
         if (sem_post(&pipe_lock) == -1){
@@ -155,7 +155,7 @@ void* connmgr_start(void* server_port) {
         if (pthread_create(&clientthreads[conn_counter], &attr, client_handler, (void*) client) != 0){
             perror("pthread_create failed\n"); exit(EXIT_FAILURE);
         }
-        printf("connmgr: created thread number = %d. set to detach state. will terminate with the calling process.\n",conn_counter);
+        printf("connmgr: created thread number = %d. set to detach state. will terminate with the main process.\n",conn_counter);
         conn_counter++;
     }
 
@@ -164,7 +164,7 @@ void* connmgr_start(void* server_port) {
     
     // tcp close connection fail safe
     if (tcp_close(&server) != TCP_NO_ERROR){perror("connmgr_start: tcp close failed\n"); exit(EXIT_FAILURE);}
-    printf("connmmgr: max conn %d is reached, no new conn allowed. server will shut down. wait for datamgr and storagemgr to finihsed. please hold\n",MAX_CONN);
+    printf("connmmgr: max conn %d is reached, no new conn allowed. server will shut down.\n wait for:\n A. datamgr and storagemgr to finish processing buffer.\n B. for each detached and still running client thread to timeout.\n if you use valgrind and do not kill the client node,\n you might need to hold for 6 mins.\n",MAX_CONN);
 
     // release the library resources
     pthread_attr_destroy(&attr);

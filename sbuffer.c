@@ -9,7 +9,7 @@
 
 /* instantiate variables */
 sem_t wrt;  // common writer threads
-FILE* csv;
+//FILE* csv;
 
 
 int sbuffer_init(sbuffer_t** buffer) {
@@ -21,11 +21,11 @@ int sbuffer_init(sbuffer_t** buffer) {
     (*buffer)->tail = NULL;
     (*buffer)->end_of_stream = false;
 
-    csv = fopen("sensor_data_out.csv", "a+");
+    //csv = fopen("sensor_data_out.csv", "a+");
 
-    if(ferror(csv)){
-        perror("error opening csv\n"); exit(EXIT_FAILURE);
-    }
+    // if(ferror(csv)){
+    //     perror("error opening csv\n"); exit(EXIT_FAILURE);
+    // }
     /* initialize the binary semaphore to 1 and set shared between threads */
     if(pthread_mutex_init(&((*buffer)->mutex), NULL) != 0){
         perror("mutex init failed\n"); exit(EXIT_FAILURE);
@@ -55,7 +55,7 @@ int sbuffer_free(sbuffer_t** buffer) {
     
     free(*buffer);
     *buffer = NULL;
-    fclose(csv);
+    // fclose(csv);
     return SBUFFER_SUCCESS;
 }
 
@@ -87,7 +87,7 @@ int sbuffer_remove(sbuffer_t* buffer, sensor_data_t* data, int consumer_id) {
     
     // read data from buffer
     *data = (buffer->head->data);
-    fprintf(csv,"%hu,%lf,%ld\n", (data)->id, (data)->value, (data)->ts);
+    //fprintf(csv,"%hu,%lf,%ld\n", (data)->id, (data)->value, (data)->ts);
 
     if (consumer_id == CONSUMER_A){
         buffer->head->read_by_a = true;
