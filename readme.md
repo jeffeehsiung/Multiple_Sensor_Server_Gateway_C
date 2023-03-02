@@ -1,33 +1,20 @@
-# OSC Lab repo
+# This is the individual coursework of Operating System Lab in KUL coached by Professors Jeroen Van Aken, Yuri Cauwets, Ludo Bruynseels, and Bert Lagaisse.
 
-A good practice is to make a clone of this repo for every lab. This way you have a folder on your hard drive with the code for every lab.
-For lab 1 and all the next labs, you could do :
-```bash
-git clone <git@yourrepoURL> clab1gcc
-cd clab1gcc
-git switch clab1gcc
-```
+# reference of code from external sources is cited in my code
 
-The last command in the clab1gcc folder `git switch clab1gcc` will switch to the clab1gcc branch in the repository.
+## Sensor Monitoring System
+The sensor monitoring system consists of client-side sensor nodes measuring the room temperature, and a central server-side sensor-gateway that acquires all sensor data from the sensor nodes. A sensor node uses a TCP connection to transfer the sensor data to the sensor gateway. The full system is depicted below.
 
-When some parts of the exercise work as expected, don't forget to commit and push your code to the gitlab server:
-```bash
-# view what files are altered
-git status
+<img width="433" alt="image" src="https://user-images.githubusercontent.com/100540403/222374835-a3176c0d-f7a1-48f7-bdbf-c62a747b9e56.png">
 
-# if needed add files to the repo
-git add main.c
+The sensor gateway may not assume a maximum amount of sensors at start up. In fact, the number of sensors connecting to the sensor gateway is not constant and may change over time.
 
-# commit all new and updated files (write meaningful comment for each commit)
-git commit
+Working with real embedded sensor nodes is not an option for this assignment. Therefore, sensor nodes will be simulated in software using a client-side sensor-node (see sensor_node.c from plab3, which you can use to test your server implementation).
 
-# push the updates to gitlab.groept.be
-git push
-```
+## Sensor Gateway
+A more detailed design of the sensor gateway is depicted below. 
+
+<img width="543" alt="image" src="https://user-images.githubusercontent.com/100540403/222375089-df535bc0-0ca3-4338-a7a8-5e4f5ec2fef0.png">
 
 ## note
 Every branch contains a `.gitignore` file that instructs git to automatically ignore `.a`, `.o`, `.so` files. Most of these are compiled files and don't belong in a repository. Besides these, `.zip` files probably include files that are already in your repo, so these are also ignored.
-
-A good habit is to put all compiled files in a `./build` folder (e.g. check the makefile in clab3lists). This folder is also included in `.gitignore`, this way no compiled files will go into your repository.
-
-You can change/update this `.gitignore` file in every branch, so it fits the needs for your lab assignment.
