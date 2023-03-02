@@ -1,6 +1,7 @@
-# This is the individual coursework of Operating System Lab in KUL coached by Professors Jeroen Van Aken, Yuri Cauwets, Ludo Bruynseels, and Bert Lagaisse.
+## Background
+This is the individual coursework of Operating System Lab in KUL coached by Professors Jeroen Van Aken, Yuri Cauwets, Ludo Bruynseels, and Bert Lagaisse.
 
-# reference of code from external sources is cited in my code
+reference of code from external sources is cited in my code
 
 ## Sensor Monitoring System
 The sensor monitoring system consists of client-side sensor nodes measuring the room temperature, and a central server-side sensor-gateway that acquires all sensor data from the sensor nodes. A sensor node uses a TCP connection to transfer the sensor data to the sensor gateway. The full system is depicted below.
